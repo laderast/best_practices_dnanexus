@@ -1,0 +1,266 @@
+# Project and File Management
+
+Successful project management at scale on the DNAnexus platform does require planning and though for how you will use the platform. 
+
+## Learning Objectives
+
+- **Explain** the role of organizations in project and member management
+- **Utilize** different management strategies for administering your data to users
+- **Describe** the roles that can be assigned to projects and how they interact with them
+- **Annotate** your data with essential metadata such as tags and properties
+
+## Checklist for Successful Project Management
+
+Based on past customers and how they interact with projects, I've tried to put together a checklist for new customers starting from scratch. 
+
+We assume that you will have multiple users, and that there is an administrator is in charge of the organization.
+
+|Task|Person Responsible|
+|----|------------------|
+|Creation of an Org|DNAnexus Support| 
+|Setting up billing for org|DNAnexus Support|
+|Assigning an Admin for the Org|Org Admin|
+|Enable Smart Reuse in Org|Org Admin|
+|Creating a base project for incoming data|Org Admin|
+|Uploading Data into base project|Org Admin/Uploader/Project Admin|
+|[Initial Portal Setup](https://documentation.dnanexus.com/admin/portal-config#initial-portal-setup-by-dnanexus)|xVantage Team|
+|[Enable Single Sign On](https://documentation.dnanexus.com/admin/single-sign-on)|DNAnexus Team|
+|Creating User Accounts for the Org|Org Admin|
+|Creating projects/Copying Data from the base project|Project Admin|
+|Setting Project Permissions (Downloads/Uploads/etc)|Project Admin|
+|Assigning Users to projects with Roles|Project Admin|
+
+:::{.callout-note}
+## Org/Project Terminology
+
+Here is a very useful link in case you get lost in terms of all of the terminology associated with projects and orgs: <https://documentation.dnanexus.com/getting-started/key-concepts/organizations#glossary-of-org-terms>
+:::
+
+## Starting Point: the Organization (or Org)
+
+Before anything, you will need to create or have an organization (also known as an *org*) created for your group. This is usually done through contacting support (support@dnanexus.com).  
+
+What is an organization on the platform? It is an entity on the platform that is associated with multiple users. There are a lot of operations at the Org level that make effective data and project management possible.
+
+Creating an org is important because an organization owns and administers the following:
+
+- Control membership within your organization and access levels
+- Set up for centralized Billing for your org
+- Default app access level in the organization
+- Default project access level in the organization
+- Enable Smart Reuse for Organization
+- Administer the [portal for your own organization]()
+- Access to files within projects administered by the org
+- [Creating an Audit Trail](https://documentation.dnanexus.com/admin/audit-trail) for the Organization
+
+The Org Administrator has power over all projects and members in the Org. They are able to: 
+
+- Add and remove members to an org and change their access level
+- Make themselves members of any project in the Org
+- Change the Spending Limit of the Org
+- Enable PHI Data Protections
+- Enable Smart Reuse
+
+## Org-owned projects
+
+In general, you will want to create projects within your org. This can be done by the org administrators. This simplifies billing for both file storage and compute. 
+
+Users can also create their own projects, but if they want to tie their project to the org's billing, they will need to transfer ownership to the organization.
+
+:::{.callout-note}
+## PHI, Projects, and Orgs
+
+There are many cases, especially when protected health information (PHI) is involved, where having a single organization doesn't make sense. 
+
+Controlling such data through its own organization may make much more sense for your group. For very large datasets, we recommend working with your Customer Success representative for implementation strategies.
+
+Additionally, project admins can [enable PHI Restrictions within a project](https://documentation.dnanexus.com/getting-started/key-concepts/projects#phi-data-protection).
+
+[Enabling an audit trail](https://documentation.dnanexus.com/admin/audit-trail) for the org also becomes very important, in order to be compliant with regulations such as 21 CFR Part 11. In short, an org admin will create a project for which the audit logs will be stored, 
+:::
+
+## A Base Project: A Data Project for All Your Org's Data
+
+:::{#fig-base-project}
+```{mermaid}
+flowchart LR
+  A(Admin) -- manages--> B[Base Project\ncontains all\ndata]
+  B --Dispensed\nby Admin-->C[Project A]
+  B --Dispensed\nby Admin-->D[Project B]
+  B --Dispensed\nby Admin-->E[Project C]
+  F(Uploader) --Uploads Data --> B
+```
+Using a base project to manage your Org's data. All other projects will be derived from this base project.
+:::
+
+One strategy for administering projects within your organization is to have a base project that contains all of your data (@fig-base-project). Tagging incoming data as they are uploaded can simplify project management. Then using these tags, you can copy the relevant data files to your separate projects. 
+
+The primary advantage of having a base project is that it allows for centralized data management. The org administrator / base project administrator controls access to all files within the org.
+
+A related advantage of using base projects has to do with file deletion. Once a file is deleted in a project, it is not recoverable, unless they are also in the base project. Thus, having a base project can provide an overall safety net for the underlying files. 
+
+One final advantage of having a base project is that you can grant *upload access* to specific users to the base project. This is really helpful for when you have a sequencing group that needs to get raw data into your project.
+
+## Uploading Batch Files with the Upload Agent
+
+Now that we've created a base project, we'll need to get our files into it. In our checklist, this can be done by the org admin, or an org user who has *uploader* access to the base project. 
+
+[The DNAnexus Upload Agent](https://documentation.dnanexus.com/user/objects/uploading-and-downloading-files/batch/upload-agent) software can be [downloaded, installed, and used](https://documentation.dnanexus.com/downloads#download-and-install) for automated batch uploading.
+
+The Upload Agent is recommended over `dx upload` for large sets of files, because it is multi-threaded, and supports resuming in case an upload is interrupted. It will upload 1000 files at a time. 
+
+In particular, when uploading batches of files, such as everything that is in a folder, we recommend using the `--tag` or `--property` options to [set metadata, such as tags](https://documentation.dnanexus.com/user/objects/uploading-and-downloading-files/batch/upload-agent#upload-with-metadata).  
+
+## Copying Files from One Project to Another
+
+[Figure Here]
+
+Copying has very specific definition on the DNAnexus platform: **it means copying a file from one project to another project.** Copying doesn't refer to duplicating a file within a project. You may be used to creating aliases or symbolic links within a project. 
+
+When we copy a file from one project to another, a new physical copy is not made. The reference to the original file is copied. The data is identical and points to the same location on the platform, and the metadata is copied to the new project.
+
+This is quite nice in that you are not doubly charged for storage on the platform within your org. You do have the ability to [clone files](https://documentation.dnanexus.com/developer/api/data-containers/cloning#specification) into a different project - that way a new physical copy of the data is created.   
+
+:::{.callout-note}
+## A Metadata Multiverse
+
+Once the metadata is copied into the new project, there is no syncing of the metadata between the two projects. 
+
+User 1 is free to modify the metadata in Project A and changes are not made to the metadata in Project B. However, the underlying data does not change.
+
+Remember that the metadata for file objects includes file names, so you can actually change the file name in project B for the file object that you copied. This is not recommended, but it is possible.
+
+Regardless, the underlying file id for the file object will remain the same. 
+:::
+
+:::{.callout-note}
+## Will I still be charged?
+
+What happens when you have two copies of a file in two different org owned projects? What happens when one of these projects is deleted?
+
+There is a process on the platform that is scans file-ids and whether they exist in a project for your org. If a reference to that file-id still exists in your project, then you will still be charged for it.
+
+This is also why having a file archiving strategy is important when managing costs on the platform. :::
+
+## Full Diagram
+
+```{mermaid}
+flowchart LR
+  A(Admin) -- manages--> B[Base Project\ncontains all\ndata]
+  B --Dispensed\nby Admin-->C[Project A]
+  B --Dispensed\nby Admin-->D[Project B]
+  B --Dispensed\nby Admin-->E[Project C]
+  C --viewer-->G(Person 1)
+  D --admin-->G
+  E --contributor-->H(Person 2)
+```
+
+
+## Some Rules of Thumb for Data Files in a Project
+
+Given this structure, you will want to avoid having too many files within a project. 
+
+A good rule of thumb is to shoot for around 10,000 file objects total in a project. Going larger than this may impact the speed of your file searches. 
+
+:::{.callout-note}
+## Destructive Processes on the DNAnexus platform
+
+There are certain operations on the platform that are destructive; that is, there is no ability to undo that operation:
+
+- File / App / Workflow deletion
+- Project deletion
+
+Making your org users aware of these operations is important. 
+
+There is also the option to *disallow deletion* within a project to avoid issues like this. This is recommended especially in audit log projects to insure integrity of the audit logs.
+
+:::
+
+# Project Administration
+
+In this section, we will talk about roles and what operations can be enabled/disabled in a project. 
+
+## Project Level Roles
+
+:::{#fig-project-roles}
+```{mermaid}
+flowchart LR
+  B[Base Project\ncontains all data] --Dispensed\nby Admin-->C[Project A]
+  B --Dispensed\nby Admin-->D[Project B]
+  B --Dispensed\nby Admin-->E[Project C]
+  C ---|viewer|G(Person 1)
+  D ---|admin|G
+  E ---|contributor|H(Person 2)
+```
+Possible roles within a project include *Admin*, *Contributor*, *Uploader*, and *Viewer*.
+:::
+
+There are multiple roles that can be assigned to members of a project. In order of access (with each role inheriting privileges of the ones above):
+
+|Role|Description|
+|--------|---------|
+|Viewer|Can View Files and Apps within a Project|
+|Uploader|Can upload files within a project; limited file management|
+|Contributor|Can manage files and run apps/workflows|
+|Admin|Top level - can manage membership and delete project|
+
+Project Administrators can also modify project-related flags for a project under the Settings Tab in a project. This includes:
+
+- [Enable PHI restrictions for a project](https://documentation.dnanexus.com/getting-started/key-concepts/projects#phi-data-protection), which supersedes any other flags set below
+- Enable / Disallow file operations, including copying, uploading, and downloading
+- Transfer Project Billing
+- Project Deletion
+
+## A Suggested Project Structure 
+
+The DNAnexus platform is an object-based filesystem. That technically means that folders aren't needed. However, they are extremely helpful in helping you group your work.
+
+For example, when I'm starting a project I usually have the following folder structure:
+
+```
+raw_data/    ## raw files
+outputs/     ## processed Files
+applets/     ## project-specific applets
+workflows/.  ## project-specific workflows
+notebooks/.  ## Jupyter Notebooks
+```
+
+# Tags: Know Them, Love Them, Use Them
+
+One of the ways to become a power user on the DNAnexus platform is to utilize tags when you generate output. This is important for reproducible analysis.  
+
+## `dx tag`
+
+Well, we've uploaded our files but forgot to tag them. We can apply tags to files using the `dx tag` command: 
+
+```
+% dx tag file-FpQKQk00FgkGV3Vb3jJ8xqGV blah
+```
+
+If we do a `dx describe`:
+
+```
+% dx describe file-FpQKQk00FgkGV3Vb3jJ8xqGV
+Result 1:
+ID                  file-FpQKQk00FgkGV3Vb3jJ8xqGV
+Tags:               blah
+```
+
+## Always Add a Project Context to your File IDs
+
+We've already discovered one way of selecting multiple files on the platform: `dx find data` (@sec-dx-find). This is our main tool for selecting files with metadata.
+
+When we work with files outside of our current project, we might reference it by using a bare file-id. In general, we need to be careful when we use bare file IDs!
+
+Why is this so? There is a search tree when we use a file ID that is not in our project and without a project context. [The search over metadata](https://documentation.dnanexus.com/user/projects/path-resolution) is looking for a file object based on just file ID. Usually, when we provide a bare file ID, this search goes like the following:
+
+1. Look for the file in the current project
+2. Look at all files across all other projects (Very computationally expensive)
+
+If you want to use the platform effectively, you want to avoid 2) at all costs, especially when working with a lot of files. The metadata server will take much longer to find your files.
+
+The lesson here is *when using file-ids from a different project, it is much safer (and faster overall) to put the project-id in front of your file id* such as below:
+
+```
+project-XXXXX:file-YYYYYYYYY
+```

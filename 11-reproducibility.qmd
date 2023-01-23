@@ -1,0 +1,56 @@
+---
+title: "Reproducible Analysis on DNAnexus"
+---
+
+Reproducible analysis is a [non-trivial pursuit](https://the-turing-way.netlify.app/reproducible-research/reproducible-research.html), especially when coupled with cloud-based computing. 
+
+The goal of these blog posts and lessons is to highlight a framework for conducting reproducible analysis. 
+
+### Doing Stuff
+
+- **Plan** and **administer** multiple projects and **manage** data and results
+- **Utilize** metadata to process and manage files at scale using the DNAnexus platform, including the UKB Research Analysis Platform. 
+- **Explain** the role of applets and workflows on the platform in reproducible analysis
+- **Utilize** apps built into the platform to conduct GWAS
+- **Call Variants** using built in workflows
+- **Annotate Variants** using Variant Annotation Tools
+
+### Enabling Stuff
+
+- **Integrate** code repositories from GitHub or similar platforms into your analysis
+- **Build** reproducible applets on the DNAnexus platform using Docker
+- **Utilize** WDL for processing files using reproducible workflows
+
+## Defining Reproducibility
+
+The Turing Institute, in their [guide for reproducibility](https://the-turing-way.netlify.app/reproducible-research/overview/overview-definitions.html), defines reproducibillity as follows:
+
+> ... we define reproducible research as work that can be independently recreated from the same data and the same code that the original team used. Reproducible is distinct from replicable, robust and generalisable ....
+
+In other words, if you have my code, my software environment, my resources, and my data, you should be able to reproduce my analysis results. 
+
+## Reproducibility is a Horizon
+
+Full Reproducibility is hard to achieve. That doesn't mean that we shouldn't try to achieve aspects of it, but it's best to approach it as a learning journey for you and your organization. 
+
+|Aspect|Definition
+|--------------------|-------------------------|
+|Software Environment|Specify all versions of software packages (R versions, package versions)|
+|Reusable and tested modular code|Code whose analysis steps have been vetted and perhaps reused from another analysis|
+|External Resources|Any resources such as annotation databases|
+|FAIR Data|Findable, Accessible, Interoperable, Reusable data|
+
+## Reproducibility and Cloud Computing
+
+Because we have given up a portion of control when we do cloud computing, it might seem like it will be extra difficult to reproduce our analysis. 
+
+This isn't the case, as we have solved many of the issues when scaling our analysis to a large number of files:
+
+- Software Environment (executables used to run analysis, such as R, R Packages, etc.)
+- File manifest / Job execution log
+- Storage of intermediate results in a workflow
+
+
+## Reproduciblity and Open Science
+
+You may have also heard of Open Science. Projects involving patient data that belongs to people will nearly always have restricted access. 
