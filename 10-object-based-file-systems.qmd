@@ -125,10 +125,11 @@ The DNAnexus platform is only one example of an object-based filesystem. Other e
 - **Highly scalable.** This is the main reason given for using an object-based system. Given that unique identifier, the data part of the object can be very large.
 - **Fast Retrieval.** Object-based filesystems let us work with arbitrarily large file sizes, and we can actually stream files to and from workers.
 - **Improved search speed.** You can attach various database engines to a set of objects and rapidly search through them. An example of such an engine is Snowflake.
+- **File operations are simplified.** Compared to POSIX filesystems, there are only a few [object filesystem commands](https://www.enterprisestorageforum.com/management/object-storage-vs-posix-storage-something-in-the-middle-please/): PUT, GET, DELETE, POST, HEAD.
 
 ### Disadvantages of Object Based Filesystems
 
-Coming from folder based filesystems, it can be a bit of a mind-bender getting used to object-based filesystems.
+Coming from folder based filesystems, it can be a bit of a mind-bender getting used to object-based filesystems. Some of the disadvantages of Object Based Filesystems include:
 
 - **Objects are immutable**. You can't edit an object in place. If you modify a file on a worker, you can't overwrite the original file object. A new file object must be created. 
 - **You have to be careful when generating outputs**. You can end up with two different objects with the same filename, and it can be some work to disambiguate these objects.
@@ -138,7 +139,7 @@ Coming from folder based filesystems, it can be a bit of a mind-bender getting u
 
 ## Always add project IDs to your File IDs
 
-We've already discovered one way of working with files on the platform: `dx find data` (@sec-dx-find). This is our main tool for selecting files with metadata.
+In Bash for Bioinformatics, we already discovered one way of working with files on the platform: `dx find data` (@sec-dx-find). This is our main tool for selecting files with metadata.
 
 When we work with files outside of our current project, we might reference it by a file-id. Using file IDs by themselves are a global operation and we need to be careful when we use this!
 
@@ -189,12 +190,16 @@ Using the `dx find data/xargs/dx tag` combination with various input parameters 
 
 Let's do something concrete and useful in our project: tag files we no longer need for archiving.
 
-Say everything in the project 
+Say there are files we want to archive. We can use `dx tag` or the DNAnexus UI to tag these files with a specific tag, such as `to_archive`. This can be done by users.
+
+An administrator can then run a monthly job that archives the files with these tags using `dx api <project-id> archive --tag to_archive`.
 
 :::{.callout-note}
 ## What about dxFUSE?
 
-You might ask about the role of dxFUSE with the 
+You might ask about the role of dxFUSE with the Object Based Filesystem.
+
+In short, dxFUSE makes the Object Based Filesystem of DNAnexus act like a POSIX filesystem. Specifically, if there are multiple objects with the same name within a folder, it provides a way to specify these objects using file paths. 
 :::
 
 :::{.callout-note}

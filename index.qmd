@@ -2,14 +2,14 @@
 
 This is a companion book to Bash for Bioinformatics. In this book we attempt to highlight best practices on the DNAnexus platform given some previous knowledge:
 
-- **Explain** the object based filesystem on the DNAnexus platform and how it differs from Linux/Unix POSIX filesystems
-- **Explain** key differences of the UKB Research Analysis Platform and how it impacts your work
-- **Utilize** Projects and Organizations to effectively manage data for your group
-- **Use** Spark to connect, extract, and manipulate Apollo Datasets on the platform
-- **Utilize** Hail to load, query, model, annotate, and visualize large-scale genomics data such as the Exome Data on the UK Biobank Research Analysis Platform
-- **Build** native DNAnexus apps effectively that manage inputs, outputs, and work with batch mode
+- **Explain** the object based filesystem on the DNAnexus platform and how it differs from Linux/Unix POSIX filesystems.
+- **Explain** key details of the UKB Research Analysis Platform and how these details impact your work.
+- **Utilize** Projects and Organizations to effectively manage data for your group.
+- **Use** Spark to connect, extract, and manipulate Apollo Datasets on the platform.
+- **Utilize** Hail to load, query, model, annotate, and visualize large-scale genomics data such as the Exome Data on the UK Biobank Research Analysis Platform.
+- **Build** native DNAnexus apps effectively that manage inputs, outputs, and work with batch mode.
 - **Utilize** existing and **build** native DNAnexus workflows using Workflow Description Language (WDL).
-- **Execute** NextFlow pipelines on the DNAnexus Platform
+- **Execute** NextFlow pipelines on the DNAnexus Platform.
 
 Our goal is to bring information together in a task-oriented format to achieve things on the platform.
 
