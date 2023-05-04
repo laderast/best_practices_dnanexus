@@ -1,0 +1,162 @@
+---
+title: "Spark on the DNAnexus Platform"
+---
+
+In this Chapter, we will discuss some of the intricacies behind working with Spark and on the DNAnexus platform.
+
+I highly recommend that you go over the Cloud Computing Concepts chapter from Bash for Bioinformatics before you start tackling this. 
+
+## Do I need Spark?
+
+As we'll discover, Spark is made for working with very large datasets. The datasets themselves might be very *long* (have billions of rows), or very *wide* (millions of columns).
+
+A lot of datasets aren't this big. Especially with tools such as [Apache Arrow](https://arrow.apache.org/), interactive analysis can handle data in the billion row range. Arrow support exists for both R (within the `DBI`/`tidyverse`/`arrow` packages), and Python (Pandas 2.0 now uses Arrow for its backend).
+
+Genomic Data is often the exception for this. Whole Genome Sequencing outputs usually have hundreds of millions of variants, and with datasets such as UK Biobank, this is multiplied by a very large number of participants. We'll see in the next chapter that a framework exists for genomic analysis built on Spark called Hail.
+
+:::{.callout-note}
+## Spark/Hail on The Core Platform
+
+Please note that working with Spark requires an Apollo License if you are on the Core Platform. For more information, [please contact DNAnexus sales](mailto:sales@dnanexus.com).
+
+If you are on UKB RAP, the Pheno Data is stored as a Spark Database, so you do not have to have a license on RAP. You also have access to the Hail configurations of Spark JupyterLab as well.
+:::
+
+## Spark Concepts
+
+In this section, we will discuss the basic concepts that you need to know before using Spark successfully on the platform.
+
+On the platform, Spark is used to work with ingested Pheno Data either indirectly using the `dx extract_dataset` functionality, or by working directly with the Spark Database using Libraries such as `PySpark` (for Python) or `sparklyr` (for R), or using `Spark SQL` to query the contents of a database.
+
+:::{.callout-note}
+## Spark/Hail on UKB RAP
+
+
+:::
+
+### What is Spark?
+
+Apache Spark is a framework for working with large datasets that won't fit into memory on a single computer. Instead, we use what's called a Spark Cluster. Specifically, we request the Spark Cluster as part of a Spark JupyterLab configuration. 
+
+The main pieces of a Spark Cluster are the *Driver Node*, and the *executors*, which correspond to individual cores on a *Worker Node*. Individual worker nodes have processes known as *Executors* that will run on their portion of the data.
+
+Spark lets us analyse large datasets by *partitioning* the data into smaller pieces that are made available to the cluster via the Hadoop File System. Each executor gains access to a piece of the data, and executes *tasks* assigned to it on this piece of the data. 
+
+The Driver Node directs the individual executors by assigning *tasks*. These individual tasks are part of an overall execution plan.
+
+This link is a good introduction to [Spark Terminology](https://mageswaran1989.medium.com/spark-jargon-for-starters-af1fd8117ada).
+
+## Spark and Lazy Evaluation
+
+One thing that is extremely important to know is that Spark executes operations in a *Lazy* manner. This is opposed to something like R or Python which executes commands right away (a *greedy* manner).
+
+When we run Spark operations, we are usually building chains of operations. 
+
+## The Four Filesystems
+
+Using Spark on DNAnexus effectively requires us to be familiar with 4 different file systems (yes, you heard that right):
+
+- **dxFUSE** file system - used to directly access project storage. We access this using `file:///mnt/project/` in our scripts. For example, if we need to access a file named `chr1.tar.gz`, we refer to it as `file:///mnt/project/chr1.tar.gz`. Mounted at the start of JupyterLab; to access 
+- **Driver Node** File System - our waypoint for getting things into and out of the Hadoop File System and possibly into Project Storage. Since we run JupyterLab on the Driver Node, we use `hdfs://` to transfer from the Driver Node to the Hadoop File system (see below), and use `dxFUSE` to work with Project Storage files, and `dx upload` to transfer files back into project storage.
+- **Hadoop** File System (HDFS) - Distributed File System for the cluster. We access this using the `hdfs://` protocol.
+- **dnax** S3 Bucket - contains ingested data. This is a separate S3 bucket. We interact with ingested Pheno and Geno Data using a special protocol called `dnax://`. Ingested data that is stored here is accessed through connecting to the DNAX database that holds it. Part of why Cohort Browser works with very large data is that the ingested data is stored in this bucket.
+
+The TL;DR (too long; didn't read) to this all is:
+
+1. Try to avoid transfers through the Driver node (`hdfs dfs -get`/`dx upload`), as you are limited to the memory/disk space of the Driver node.
+2. When possible, use dxFUSE to directly stream files into HDFS (Spark Cluster Storage) from project storage by using `file:///mnt/project/` URLs. You will need to remount dxFUSE in the JupyterLab container to do this. 
+3. If you need to get files out of HDFS into Project Storage, use dxFUSE in `-limitedWrite` mode to write into project storage by passing in `file:///mnt/project/` URLs to the `.write()` methods in Spark/Hail.
+
+:::{.callout-note}
+## Accessing Spark Databases on DNAnexus
+
+One issue I see a lot of people get tripped up with is with Database Access. Databases cannot be moved from project to project. Once the data is ingested into a database object, it can't be copied to a new project.
+
+**For a user to access the data in a Spark Database, they must have at least VIEW level access to the project that contains it on the platform.** 
+
+Note that *Datasets* (not *Databases*) can be copied to new projects. However, to actually access the data in Cohort Browser, the project that contains the database needs to be viewable by the user.
+:::
+
+
+:::{.callout-note}
+## Spark Cluster JupyterLab vs. Spark Apps
+
+Our main way of using Spark on DNAnexus is using the [Spark JupyterLab app](https://documentation.dnanexus.com/user/jupyter-notebooks/dxjupyterlab-spark-cluster). This app will let you specify the instance types used in the Spark Cluster, the number of nodes in your Spark cluster, as well as additional features such as Hail or Variant Effect Predictor. This should be your main way of working with Spark DataFrames that have been ingested into Apollo.
+
+You can also build [Spark Applets](https://documentation.dnanexus.com/developer/apps/developing-spark-apps) that request a Spark Cluster. This is a more complicated venture, as it may require installing software on the worker nodes using a [bootstrapping script](https://documentation.dnanexus.com/developer/apps/developing-spark-apps#bootstrapping), distributing data using [`hdfs dfs -put`](https://documentation.dnanexus.com/developer/apps/developing-spark-apps#distributing-input-data), and submitting Spark Jobs using [`dx-spark-submit`](https://documentation.dnanexus.com/developer/apps/developing-spark-apps/dx-spark-submit-utility). 
+:::
+
+## Balancing Cores and Memory
+
+Central to both Spark and Hail is tuning the number of cores and memory in each of our instances. This also needs to be balanced with the partition size for our data. Data can be repartitioned, although this [may be an expensive operation](https://towardsdatascience.com/should-i-repartition-836f7842298c).
+
+In general, the number of data partitions should be greater than the number of cores. Why? If there are less partitions than cores, then the remaining cores will be unused. 
+
+There are a lot of other tuning considerations to keep in mind.
+
+## The Spark UI
+
+When you start up Spark JupyterLab, you will see that it will open at a particular url which has the format `https://JOB-ID.dnanexus.com`. To open the Spark UI, use that same URL, but with a `:8081` at the end of it. For example, the UI url would be `https://JOB-ID.dnanexus.com:8081`. 
+
+Note that the Spark UI is not launched until you connect to Spark or Hail. 
+
+The Spark UI is really helpful in understanding how Spark translates a series of operations into a Plan, and how it executes that plan. 
+
+## Extracting PhenoData with `dx extract_dataset`
+
+First of all, you may not need to use Spark JupyterLab if you just want to extract Pheno Data from a Dataset and you know the fields.
+
+There is a utility within dx-toolkit called `dx extract_dataset` that will retrieve pheno data in the form of a CSV. It uses Spark, but the Spark is executed by the Thrift Server (the same Spark Cluster that serves the data for Cohort Browser). 
+
+You will need a list of field ids to retrieve them.
+
+However, there are good reasons to work with the Spark Database directly. Number one is that your Cohort query will not run on the Thrift Server. If your query is complex and takes two minutes to execute, the Thrift Server will timeout. In that case, you need to run your own Spark JupyterLab cluster and extract the data using Spark itself.
+
+## Connecting with `PySpark` (For Python Users)
+
+The first thing we'll do to connect to the Spark database is connect to it by starting a Spark Session. Make sure you only do this once. If you try to connect twice, Spark will throw an error. 
+
+If this happens, make sure to restart your notebook kernel.
+
+```{{python}}
+import pyspark
+sc = pyspark.SparkContext()
+spark = pyspark.sql.SparkSession(sc)
+```
+
+### Running SparkSQL Queries in PySpark
+
+The basic template for running Spark Queries is this:
+
+```{{python}}
+retrieve_sql = 'select .... from .... '
+df = spark.sql(retrieve_sql)
+```
+
+### Koalas is the Pandas version of Spark
+
+If you are familiar with Pandas, the Koalas module (from Databricks) provides a Pandas-like interface to SparkSQL queries. This way, you don't have to execute native Spark commands or SparkSQL queries. 
+
+Once you have a Spark DataFrame, you can convert it to a Koalas one by using the `.to_koalas()` method. 
+
+```{{python}}
+df_koalas = df.to_koalas()
+```
+
+## Connecting with `sparklyr` (For R Users)
+
+You'll need to install the package `sparklyr` along with its dependencies to work with the Spark DataFrames directly with R.
+
+```{{r}}
+library(DBI)
+library(sparklyr)
+port <- Sys.getenv("SPARK_MASTER_PORT")
+master <- paste("spark://master:", port, sep = '')
+sc = spark_connect(master)
+```
+
+```{{r}}
+retrieve_sql <- 'select .... from .... '
+df = dbGetQuery(sc, retrieve_sql)
+```
+

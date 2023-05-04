@@ -2,13 +2,15 @@ project:
   type: book
 
 book:
-  title: "best_practices_dnanexus"
-  author: "Jane Doe"
+  title: "Best Practices on the DNAnexus Platform"
+  author: "Ted Laderas"
   date: "1/23/2023"
   chapters:
-    - index.qmd
-    - intro.qmd
-    - summary.qmd
+    - "index.qmd"
+    - "10-object-based-file-systems.qmd"
+    - "12-project_management.qmd"
+    - "13-spark-on-dnanexus.qmd"
+    - "14-hail-on-dnanexus.qmd"
     - references.qmd
 
 bibliography: references.bib

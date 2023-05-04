@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Best Practices on the DNAnexus Platform - 2&nbsp; Project and File Management</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./13-spark-on-dnanexus.html" rel="next">
+<link href="./10-object-based-file-systems.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Project and File Management</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Best Practices on the DNAnexus Platform</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-object-based-file-systems.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Object Based File Systems</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-project_management.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Project and File Management</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-spark-on-dnanexus.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Spark on the DNAnexus Platform</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-hail-on-dnanexus.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Hail on DNAnexus</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="toc-section-number">2.1</span>  Learning Objectives</a></li>
+  <li><a href="#checklist-for-successful-project-management" id="toc-checklist-for-successful-project-management" class="nav-link" data-scroll-target="#checklist-for-successful-project-management"><span class="toc-section-number">2.2</span>  Checklist for Successful Project Management</a></li>
+  <li><a href="#starting-point-the-organization-or-org" id="toc-starting-point-the-organization-or-org" class="nav-link" data-scroll-target="#starting-point-the-organization-or-org"><span class="toc-section-number">2.3</span>  Starting Point: the Organization (or Org)</a></li>
+  <li><a href="#org-owned-projects" id="toc-org-owned-projects" class="nav-link" data-scroll-target="#org-owned-projects"><span class="toc-section-number">2.4</span>  Org-owned projects</a></li>
+  <li><a href="#a-base-project-a-data-project-for-all-your-orgs-data" id="toc-a-base-project-a-data-project-for-all-your-orgs-data" class="nav-link" data-scroll-target="#a-base-project-a-data-project-for-all-your-orgs-data"><span class="toc-section-number">2.5</span>  A Base Project: A Data Project for All Your Org’s Data</a></li>
+  <li><a href="#uploading-batch-files-with-the-upload-agent" id="toc-uploading-batch-files-with-the-upload-agent" class="nav-link" data-scroll-target="#uploading-batch-files-with-the-upload-agent"><span class="toc-section-number">2.6</span>  Uploading Batch Files with the Upload Agent</a></li>
+  <li><a href="#copying-files-from-one-project-to-another" id="toc-copying-files-from-one-project-to-another" class="nav-link" data-scroll-target="#copying-files-from-one-project-to-another"><span class="toc-section-number">2.7</span>  Copying Files from One Project to Another</a></li>
+  <li><a href="#full-diagram" id="toc-full-diagram" class="nav-link" data-scroll-target="#full-diagram"><span class="toc-section-number">2.8</span>  Full Diagram</a></li>
+  <li><a href="#some-rules-of-thumb-for-data-files-in-a-project" id="toc-some-rules-of-thumb-for-data-files-in-a-project" class="nav-link" data-scroll-target="#some-rules-of-thumb-for-data-files-in-a-project"><span class="toc-section-number">2.9</span>  Some Rules of Thumb for Data Files in a Project</a></li>
+  <li><a href="#project-administration" id="toc-project-administration" class="nav-link" data-scroll-target="#project-administration"><span class="toc-section-number">3</span>  Project Administration</a>
+  <ul class="collapse">
+  <li><a href="#project-level-roles" id="toc-project-level-roles" class="nav-link" data-scroll-target="#project-level-roles"><span class="toc-section-number">3.1</span>  Project Level Roles</a></li>
+  <li><a href="#a-suggested-project-structure" id="toc-a-suggested-project-structure" class="nav-link" data-scroll-target="#a-suggested-project-structure"><span class="toc-section-number">3.2</span>  A Suggested Project Structure</a></li>
+  </ul></li>
+  <li><a href="#tags-know-them-love-them-use-them" id="toc-tags-know-them-love-them-use-them" class="nav-link" data-scroll-target="#tags-know-them-love-them-use-them"><span class="toc-section-number">4</span>  Tags: Know Them, Love Them, Use Them</a>
+  <ul class="collapse">
+  <li><a href="#dx-tag" id="toc-dx-tag" class="nav-link" data-scroll-target="#dx-tag"><span class="toc-section-number">4.1</span>  <code>dx tag</code></a></li>
+  <li><a href="#always-add-a-project-context-to-your-file-ids" id="toc-always-add-a-project-context-to-your-file-ids" class="nav-link" data-scroll-target="#always-add-a-project-context-to-your-file-ids"><span class="toc-section-number">4.2</span>  Always Add a Project Context to your File IDs</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Project and File Management</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Successful project management at scale on the DNAnexus platform does require planning and though for how you will use the platform.</p>
+<section id="learning-objectives" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">2.1</span> Learning Objectives</h2>
+<ul>
+<li><strong>Explain</strong> the role of organizations in project and member management</li>
+<li><strong>Utilize</strong> different management strategies for administering your data to users</li>
+<li><strong>Describe</strong> the roles that can be assigned to projects and how they interact with them</li>
+<li><strong>Annotate</strong> your data with essential metadata such as tags and properties</li>
+</ul>
+</section>
+<section id="checklist-for-successful-project-management" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="checklist-for-successful-project-management"><span class="header-section-number">2.2</span> Checklist for Successful Project Management</h2>
+<p>Based on past customers and how they interact with projects, I’ve tried to put together a checklist for new customers starting from scratch.</p>
+<p>We assume that you will have multiple users, and that there is an administrator is in charge of the organization.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Task</th>
+<th>Person Responsible</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Creation of an Org</td>
+<td>DNAnexus Support</td>
+</tr>
+<tr class="even">
+<td>Setting up billing for org</td>
+<td>DNAnexus Support</td>
+</tr>
+<tr class="odd">
+<td>Assigning an Admin for the Org</td>
+<td>Org Admin</td>
+</tr>
+<tr class="even">
+<td>Enable Smart Reuse in Org</td>
+<td>Org Admin</td>
+</tr>
+<tr class="odd">
+<td>Creating a base project for incoming data</td>
+<td>Org Admin</td>
+</tr>
+<tr class="even">
+<td>Uploading Data into base project</td>
+<td>Org Admin/Uploader/Project Admin</td>
+</tr>
+<tr class="odd">
+<td><a href="https://documentation.dnanexus.com/admin/portal-config#initial-portal-setup-by-dnanexus">Initial Portal Setup</a></td>
+<td>xVantage Team</td>
+</tr>
+<tr class="even">
+<td><a href="https://documentation.dnanexus.com/admin/single-sign-on">Enable Single Sign On</a></td>
+<td>DNAnexus Team</td>
+</tr>
+<tr class="odd">
+<td>Creating User Accounts for the Org</td>
+<td>Org Admin</td>
+</tr>
+<tr class="even">
+<td>Creating projects/Copying Data from the base project</td>
+<td>Project Admin</td>
+</tr>
+<tr class="odd">
+<td>Setting Project Permissions (Downloads/Uploads/etc)</td>
+<td>Project Admin</td>
+</tr>
+<tr class="even">
+<td>Assigning Users to projects with Roles</td>
+<td>Project Admin</td>
+</tr>
+</tbody>
+</table>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Org/Project Terminology
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Here is a very useful link in case you get lost in terms of all of the terminology associated with projects and orgs: <a href="https://documentation.dnanexus.com/getting-started/key-concepts/organizations#glossary-of-org-terms" class="uri">https://documentation.dnanexus.com/getting-started/key-concepts/organizations#glossary-of-org-terms</a></p>
+</div>
+</div>
+</section>
+<section id="starting-point-the-organization-or-org" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="starting-point-the-organization-or-org"><span class="header-section-number">2.3</span> Starting Point: the Organization (or Org)</h2>
+<p>Before anything, you will need to create or have an organization (also known as an <em>org</em>) created for your group. This is usually done through contacting support (support@dnanexus.com).</p>
+<p>What is an organization on the platform? It is an entity on the platform that is associated with multiple users. There are a lot of operations at the Org level that make effective data and project management possible.</p>
+<p>Creating an org is important because an organization owns and administers the following:</p>
+<ul>
+<li>Control membership within your organization and access levels</li>
+<li>Set up for centralized Billing for your org</li>
+<li>Default app access level in the organization</li>
+<li>Default project access level in the organization</li>
+<li>Enable Smart Reuse for Organization</li>
+<li>Administer the <a href="">portal for your own organization</a></li>
+<li>Access to files within projects administered by the org</li>
+<li><a href="https://documentation.dnanexus.com/admin/audit-trail">Creating an Audit Trail</a> for the Organization</li>
+</ul>
+<p>The Org Administrator has power over all projects and members in the Org. They are able to:</p>
+<ul>
+<li>Add and remove members to an org and change their access level</li>
+<li>Make themselves members of any project in the Org</li>
+<li>Change the Spending Limit of the Org</li>
+<li>Enable PHI Data Protections</li>
+<li>Enable Smart Reuse</li>
+</ul>
+</section>
+<section id="org-owned-projects" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="org-owned-projects"><span class="header-section-number">2.4</span> Org-owned projects</h2>
+<p>In general, you will want to create projects within your org. This can be done by the org administrators. This simplifies billing for both file storage and compute.</p>
+<p>Users can also create their own projects, but if they want to tie their project to the org’s billing, they will need to transfer ownership to the organization.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+PHI, Projects, and Orgs
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>There are many cases, especially when protected health information (PHI) is involved, where having a single organization doesn’t make sense.</p>
+<p>Controlling such data through its own organization may make much more sense for your group. For very large datasets, we recommend working with your Customer Success representative for implementation strategies.</p>
+<p>Additionally, project admins can <a href="https://documentation.dnanexus.com/getting-started/key-concepts/projects#phi-data-protection">enable PHI Restrictions within a project</a>.</p>
+<p><a href="https://documentation.dnanexus.com/admin/audit-trail">Enabling an audit trail</a> for the org also becomes very important, in order to be compliant with regulations such as 21 CFR Part 11. In short, an org admin will create a project for which the audit logs will be stored,</p>
+</div>
+</div>
+</section>
+<section id="a-base-project-a-data-project-for-all-your-orgs-data" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="a-base-project-a-data-project-for-all-your-orgs-data"><span class="header-section-number">2.5</span> A Base Project: A Data Project for All Your Org’s Data</h2>
+<div id="fig-base-project" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<p>
+</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-1">flowchart LR
+  A(Admin) -- manages--&gt; B[Base Project\ncontains all\ndata]
+  B --Dispensed\nby Admin--&gt;C[Project A]
+  B --Dispensed\nby Admin--&gt;D[Project B]
+  B --Dispensed\nby Admin--&gt;E[Project C]
+  F(Uploader) --Uploads Data --&gt; B
+</pre>
+<div id="mermaid-tooltip-1" class="mermaidTooltip">
+
+</div>
+<p></p>
+</div>
+</div>
+</div>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2.1: Using a base project to manage your Org’s data. All other projects will be derived from this base project.</figcaption><p></p>
+</figure>
+</div>
+<p>One strategy for administering projects within your organization is to have a base project that contains all of your data (<a href="#fig-base-project">Figure&nbsp;<span>2.1</span></a>). Tagging incoming data as they are uploaded can simplify project management. Then using these tags, you can copy the relevant data files to your separate projects.</p>
+<p>The primary advantage of having a base project is that it allows for centralized data management. The org administrator / base project administrator controls access to all files within the org.</p>
+<p>A related advantage of using base projects has to do with file deletion. Once a file is deleted in a project, it is not recoverable, unless they are also in the base project. Thus, having a base project can provide an overall safety net for the underlying files.</p>
+<p>One final advantage of having a base project is that you can grant <em>upload access</em> to specific users to the base project. This is really helpful for when you have a sequencing group that needs to get raw data into your project.</p>
+</section>
+<section id="uploading-batch-files-with-the-upload-agent" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="uploading-batch-files-with-the-upload-agent"><span class="header-section-number">2.6</span> Uploading Batch Files with the Upload Agent</h2>
+<p>Now that we’ve created a base project, we’ll need to get our files into it. In our checklist, this can be done by the org admin, or an org user who has <em>uploader</em> access to the base project.</p>
+<p><a href="https://documentation.dnanexus.com/user/objects/uploading-and-downloading-files/batch/upload-agent">The DNAnexus Upload Agent</a> software can be <a href="https://documentation.dnanexus.com/downloads#download-and-install">downloaded, installed, and used</a> for automated batch uploading.</p>
+<p>The Upload Agent is recommended over <code>dx upload</code> for large sets of files, because it is multi-threaded, and supports resuming in case an upload is interrupted. It will upload 1000 files at a time.</p>
+<p>In particular, when uploading batches of files, such as everything that is in a folder, we recommend using the <code>--tag</code> or <code>--property</code> options to <a href="https://documentation.dnanexus.com/user/objects/uploading-and-downloading-files/batch/upload-agent#upload-with-metadata">set metadata, such as tags</a>.</p>
+</section>
+<section id="copying-files-from-one-project-to-another" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="copying-files-from-one-project-to-another"><span class="header-section-number">2.7</span> Copying Files from One Project to Another</h2>
+<p>[Figure Here]</p>
+<p>Copying has very specific definition on the DNAnexus platform: <strong>it means copying a file from one project to another project.</strong> Copying doesn’t refer to duplicating a file within a project. You may be used to creating aliases or symbolic links within a project.</p>
+<p>When we copy a file from one project to another, a new physical copy is not made. The reference to the original file is copied. The data is identical and points to the same location on the platform, and the metadata is copied to the new project.</p>
+<p>This is quite nice in that you are not doubly charged for storage on the platform within your org. You do have the ability to <a href="https://documentation.dnanexus.com/developer/api/data-containers/cloning#specification">clone files</a> into a different project - that way a new physical copy of the data is created.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+A Metadata Multiverse
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Once the metadata is copied into the new project, there is no syncing of the metadata between the two projects.</p>
+<p>User 1 is free to modify the metadata in Project A and changes are not made to the metadata in Project B. However, the underlying data does not change.</p>
+<p>Remember that the metadata for file objects includes file names, so you can actually change the file name in project B for the file object that you copied. This is not recommended, but it is possible.</p>
+<p>Regardless, the underlying file id for the file object will remain the same.</p>
+</div>
+</div>
+<p>:::{.callout-note} ## Will I still be charged?</p>
+<p>What happens when you have two copies of a file in two different org owned projects? What happens when one of these projects is deleted?</p>
+<p>There is a process on the platform that is scans file-ids and whether they exist in a project for your org. If a reference to that file-id still exists in your project, then you will still be charged for it.</p>
+<p>This is also why having a file archiving strategy is important when managing costs on the platform. :::</p>
+</section>
+<section id="full-diagram" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="full-diagram"><span class="header-section-number">2.8</span> Full Diagram</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<p>
+</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-2">flowchart LR
+  A(Admin) -- manages--&gt; B[Base Project\ncontains all\ndata]
+  B --Dispensed\nby Admin--&gt;C[Project A]
+  B --Dispensed\nby Admin--&gt;D[Project B]
+  B --Dispensed\nby Admin--&gt;E[Project C]
+  C --viewer--&gt;G(Person 1)
+  D --admin--&gt;G
+  E --contributor--&gt;H(Person 2)
+</pre>
+<div id="mermaid-tooltip-2" class="mermaidTooltip">
+
+</div>
+<p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="some-rules-of-thumb-for-data-files-in-a-project" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="some-rules-of-thumb-for-data-files-in-a-project"><span class="header-section-number">2.9</span> Some Rules of Thumb for Data Files in a Project</h2>
+<p>Given this structure, you will want to avoid having too many files within a project.</p>
+<p>A good rule of thumb is to shoot for around 10,000 file objects total in a project. Going larger than this may impact the speed of your file searches.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Destructive Processes on the DNAnexus platform
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>There are certain operations on the platform that are destructive; that is, there is no ability to undo that operation:</p>
+<ul>
+<li>File / App / Workflow deletion</li>
+<li>Project deletion</li>
+</ul>
+<p>Making your org users aware of these operations is important.</p>
+<p>There is also the option to <em>disallow deletion</em> within a project to avoid issues like this. This is recommended especially in audit log projects to insure integrity of the audit logs.</p>
+</div>
+</div>
+</section>
+<section id="project-administration" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Project Administration</h1>
+<p>In this section, we will talk about roles and what operations can be enabled/disabled in a project.</p>
+<section id="project-level-roles" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="project-level-roles"><span class="header-section-number">3.1</span> Project Level Roles</h2>
+<div id="fig-project-roles" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<p>
+</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-3">flowchart LR
+  B[Base Project\ncontains all data] --Dispensed\nby Admin--&gt;C[Project A]
+  B --Dispensed\nby Admin--&gt;D[Project B]
+  B --Dispensed\nby Admin--&gt;E[Project C]
+  C ---|viewer|G(Person 1)
+  D ---|admin|G
+  E ---|contributor|H(Person 2)
+</pre>
+<div id="mermaid-tooltip-3" class="mermaidTooltip">
+
+</div>
+<p></p>
+</div>
+</div>
+</div>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.1: Possible roles within a project include <em>Admin</em>, <em>Contributor</em>, <em>Uploader</em>, and <em>Viewer</em>.</figcaption><p></p>
+</figure>
+</div>
+<p>There are multiple roles that can be assigned to members of a project. In order of access (with each role inheriting privileges of the ones above):</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Role</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Viewer</td>
+<td>Can View Files and Apps within a Project</td>
+</tr>
+<tr class="even">
+<td>Uploader</td>
+<td>Can upload files within a project; limited file management</td>
+</tr>
+<tr class="odd">
+<td>Contributor</td>
+<td>Can manage files and run apps/workflows</td>
+</tr>
+<tr class="even">
+<td>Admin</td>
+<td>Top level - can manage membership and delete project</td>
+</tr>
+</tbody>
+</table>
+<p>Project Administrators can also modify project-related flags for a project under the Settings Tab in a project. This includes:</p>
+<ul>
+<li><a href="https://documentation.dnanexus.com/getting-started/key-concepts/projects#phi-data-protection">Enable PHI restrictions for a project</a>, which supersedes any other flags set below</li>
+<li>Enable / Disallow file operations, including copying, uploading, and downloading</li>
+<li>Transfer Project Billing</li>
+<li>Project Deletion</li>
+</ul>
+</section>
+<section id="a-suggested-project-structure" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="a-suggested-project-structure"><span class="header-section-number">3.2</span> A Suggested Project Structure</h2>
+<p>The DNAnexus platform is an object-based filesystem. That technically means that folders aren’t needed. However, they are extremely helpful in helping you group your work.</p>
+<p>For example, when I’m starting a project I usually have the following folder structure:</p>
+<pre><code>raw_data/    ## raw files
+outputs/     ## processed Files
+applets/     ## project-specific applets
+workflows/.  ## project-specific workflows
+notebooks/.  ## Jupyter Notebooks</code></pre>
+</section>
+</section>
+<section id="tags-know-them-love-them-use-them" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Tags: Know Them, Love Them, Use Them</h1>
+<p>One of the ways to become a power user on the DNAnexus platform is to utilize tags when you generate output. This is important for reproducible analysis.</p>
+<section id="dx-tag" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="dx-tag"><span class="header-section-number">4.1</span> <code>dx tag</code></h2>
+<p>Well, we’ve uploaded our files but forgot to tag them. We can apply tags to files using the <code>dx tag</code> command:</p>
+<pre><code>% dx tag file-FpQKQk00FgkGV3Vb3jJ8xqGV blah</code></pre>
+<p>If we do a <code>dx describe</code>:</p>
+<pre><code>% dx describe file-FpQKQk00FgkGV3Vb3jJ8xqGV
+Result 1:
+ID                  file-FpQKQk00FgkGV3Vb3jJ8xqGV
+Tags:               blah</code></pre>
+</section>
+<section id="always-add-a-project-context-to-your-file-ids" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="always-add-a-project-context-to-your-file-ids"><span class="header-section-number">4.2</span> Always Add a Project Context to your File IDs</h2>
+<p>We’ve already discovered one way of selecting multiple files on the platform: <code>dx find data</code> (<span class="quarto-unresolved-ref">?sec-dx-find</span>). This is our main tool for selecting files with metadata.</p>
+<p>When we work with files outside of our current project, we might reference it by using a bare file-id. In general, we need to be careful when we use bare file IDs!</p>
+<p>Why is this so? There is a search tree when we use a file ID that is not in our project and without a project context. <a href="https://documentation.dnanexus.com/user/projects/path-resolution">The search over metadata</a> is looking for a file object based on just file ID. Usually, when we provide a bare file ID, this search goes like the following:</p>
+<ol type="1">
+<li>Look for the file in the current project</li>
+<li>Look at all files across all other projects (Very computationally expensive)</li>
+</ol>
+<p>If you want to use the platform effectively, you want to avoid 2) at all costs, especially when working with a lot of files. The metadata server will take much longer to find your files.</p>
+<p>The lesson here is <em>when using file-ids from a different project, it is much safer (and faster overall) to put the project-id in front of your file id</em> such as below:</p>
+<pre><code>project-XXXXX:file-YYYYYYYYY</code></pre>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./10-object-based-file-systems.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Object Based File Systems</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./13-spark-on-dnanexus.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Spark on the DNAnexus Platform</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,21 @@
+---
+title: "Hail on DNAnexus"
+---
+
+## What is Hail?
+
+Hail is a genomics framework built on top of Spark to allow for scalable genomics queries. It uses many of the same concepts (partitions, executors, plans) but it is genomics focused. 
+For example the Hail MatrixFrame can be QC'ed, and then filtered on these QC metrics.  
+
+The cardinal rule of MatrixTables is this:
+
+> **Row** operations operate on *variants*, while **column** operations operate on *samples*.
+
+It is easy to get lost in a chain of Hail commands and not be able to understand what the code is doing unless you concentrate on this.
+
+:::{.callout-note}
+## Storing MatrixTables in DNAX
+
+
+
+:::

@@ -1,10 +1,10 @@
 # Object Based File Systems
 
-Project storage on the DNAnexus platform is object-based. This kind of filesystem is probably very different from other file systems you've experienced.
+Project storage on the DNAnexus platform is *object-based*. This kind of filesystem is probably very different from other file systems you've experienced.
 
-The goal of this chapter is to show how the filesystem is different from your previous experiences, and to highlight ways to work successfully on the platform. Specifically you will be able to:
+The goal of this chapter is to show how the filesystem is different from your previous experiences, and to highlight ways to work successfully on the platform given this filesystem. Specifically you will be able to:
 
-1. **Compare** and **contrast** differences between object-based file systems and folder-based filesystems
+1. **Compare** and **contrast** differences between object-based file systems and POSIX filesystems
 1. **Explain** the role of metadata and folders in organizing data and outputs
 1. **Set up** a project for reproducible analysis
 1. **Tag** and **utilize** tags for selecting files and separating output from multiple jobs.
@@ -12,13 +12,14 @@ The goal of this chapter is to show how the filesystem is different from your pr
 
 ## Terminology
 
+- **POSIX** - The filesystem that linux is based on. POSIX filesystems have *paths* and *files*.
 - **Data** - The actual file contents. For example, for a CSV file, the actual header and rows correspond to the data.
 - **Metadata** - information that is not part of the data, but is associated with the data. For our CSV file, some examples of metadata are the *file permissions* (who can access the file), the *creator*, and the *creation date*. 
 - **Object** - A contiguous set of memory that contains both the *data* and *metadata*. Has a unique identifier. 
 - **Unique Identifier** - the actual "address" for accessing the file. Unique to the file object when it is created. Does not change for the entire lifecycle of an object.
 - **Database Engine** - software that allows for rapid searching and retrieving objects. 
 
-## Review: File/Directory Filesystems
+## Review: POSIX Filesystems
 
 You may be familar with *directory based* filesystems as a way to organize your data. The main way to find/refer to a file is through its *path*. What does this mean?
 
@@ -30,12 +31,15 @@ For example, if my file is called `chr1.vcf.gz` and it is located in the directo
 
 Paths are the main way we organize files for directory based systems. This information is external to a file. Most importantly, we use directories to organize and group files logically. For example, we might have our R script and the data it analyzes in the same directory. 
 
-For a file in a folder-based filesystem, **the path needs to be unique.** If they are not, there are rules for whether to replace that file with a new one, or to save both versions. For example, we can't have two files named:
+For a file in a POSIX-based filesystem, **the path needs to be unique.** If they are not, there are rules for whether to replace that file with a new one, or to save both versions. For example, we can't have two files named:
 
 ```
 /Geno_Data/chr1.vcf.gz
 ```
 In the same folder. That violates our ability to find a file in the system. 
+
+<https://grimoire.carcano.ch/blog/posix-compliant-filesystems/>                          
+<https://www.kernel.org/doc/html/latest/filesystems/fuse.html>
 
 ## Object Based Filesystems are different
 
@@ -56,12 +60,15 @@ On the DNAnexus platform, both the *filename* and its path are considered **meta
 
 Importantly, *folders are not considered objects on the platform* - folders only exist within the metadata for the file objects. 
 
-The other issue is that metadata has no requirements to be unique. Which means you can have duplicates with the same file name in the same folder. I know, this can be very distressing for most people. You can have two objects with the same file name, but they are considered distinct objects because they have unique identifiers. 
+The other issue is that the metadata for an object has no requirements to be unique. Which means you can have duplicates with the same file name in the same folder. 
+
+I know, this can be very distressing for most people. You can have two objects with the same file name, but they are considered distinct objects because they have unique identifiers. 
 
 <https://www.ibm.com/cloud/blog/object-vs-file-vs-block-storage>
 
+## Comparing POSIX and Object Based File Systems
 
-|Concept|File-based System|Object-Based System|
+|Concept|POSIX File System|Object-Based System|
 |-------|-----------------|-------------------|
 |File ID|Represented by Full Path|Represented by Object ID|
 |Storage|Data with limited metadata|Metadata+Data|
