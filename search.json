@@ -4,49 +4,28 @@
     "href": "index.html",
     "title": "Best Practices on the DNAnexus Platform",
     "section": "",
-    "text": "Preface\nThis is a companion book to Bash for Bioinformatics. In this book we attempt to highlight best practices on the DNAnexus platform given some previous knowledge."
+    "text": "Preface\nThis is a companion book to Bash for Bioinformatics.\nIn this book we attempt to highlight best practices on the DNAnexus platform given some previous knowledge."
   },
   {
     "objectID": "index.html#learning-objectives",
     "href": "index.html#learning-objectives",
     "title": "Best Practices on the DNAnexus Platform",
     "section": "Learning Objectives",
-    "text": "Learning Objectives\n\nExplain the object based filesystem on the DNAnexus platform and how it differs from Linux/Unix POSIX filesystems.\nExplain key details of the UKB Research Analysis Platform and how these details impact your work.\nUtilize Projects and Organizations to effectively manage data for your group.\nUse Spark to connect, extract, and manipulate Apollo Datasets on the platform.\nUtilize Hail to load, query, model, annotate, and visualize large-scale genomics data such as the Exome Data on the UK Biobank Research Analysis Platform.\nBuild native DNAnexus apps effectively that manage inputs, outputs, and work with batch mode.\nUtilize existing and build native DNAnexus workflows using Workflow Description Language (WDL).\nExecute NextFlow pipelines on the DNAnexus Platform.\n\nOur goal is to bring information together in a task-oriented format to achieve things on the platform."
+    "text": "Learning Objectives\nAfter reading this book and doing the exercises, you should be able to:\n\nExplain the object based filesystem on the DNAnexus platform and how it differs from Linux/Unix POSIX filesystems.\nExplain key details of the UKB Research Analysis Platform and how these details impact your work.\nUtilize Projects and Organizations to effectively manage data for your group.\nUse Spark to connect, extract, and manipulate Apollo Datasets on the platform.\nUtilize Hail to load, query, model, annotate, and visualize large-scale genomics data such as the Exome Data on the UK Biobank Research Analysis Platform.\nBuild native DNAnexus apps effectively that manage inputs, outputs, and work with batch mode.\nUtilize existing and build native DNAnexus workflows using Workflow Description Language (WDL).\nExecute NextFlow pipelines on the DNAnexus Platform.\n\nOur goal is to bring information together in a task-oriented format to achieve things on the platform."
   },
   {
     "objectID": "index.html#four-levels-of-using-dnanexus",
     "href": "index.html#four-levels-of-using-dnanexus",
     "title": "Best Practices on the DNAnexus Platform",
     "section": "Four Levels of Using DNAnexus",
-    "text": "Four Levels of Using DNAnexus\nOne way to approach learning DNAnexus is to think about the skills you need to process a number of files. Ben Busby has noted there are 4 main skill levels in processing files on the DNAnexus platform:\n\n\n\n\n\n\n\n\nLevel\n# of Files\nSkill\n\n\n\n\n1\n1\nInteractive Analysis (Cloud Workstation, JupyterLab)\n\n\n2\n1-50 Files\ndx run, Swiss Army Knife\n\n\n3\n50-1000 Files\nBuilding your own apps\n\n\n4\n1000+ Files, multiple steps\nUsing WDL (Workflow Description Language)\n\n\n\nWe’ll be covering mostly level 2, but you will have the skills to move on to Level 3.\nThe key is to gradually build on your skills."
-  },
-  {
-    "objectID": "index.html#what-is-not-covered",
-    "href": "index.html#what-is-not-covered",
-    "title": "Best Practices on the DNAnexus Platform",
-    "section": "What is not covered",
-    "text": "What is not covered\n\nUsing Bash scripting in DNAnexus Apps and Workflows\nUsing Bash Scripting in Workflow Description Language (WDL)\n\nAs mentioned, these are advanced level topics. However, this book will provide an excellent foundation to effectively building apps and workflows on the DNAnexus platform.\nThis book is not meant to be a substitute for excellent books such as Data Science on the Command Line. This book focuses on the essential Bash shell skills that will help you on the DNAnexus platform."
-  },
-  {
-    "objectID": "index.html#notes",
-    "href": "index.html#notes",
-    "title": "Best Practices on the DNAnexus Platform",
-    "section": "Notes",
-    "text": "Notes\nThis is a very opinionated journey through Bash shell scripting, workflow languages, and reproduciblity. This is written from the perspective of a user, and should not be considered as official DNAnexus documentation.\nIt is designed to build on each of the concepts in a gradual manner. Where possible, we link to the official DNAnexus documentation. It is not meant to be a replacement for the DNAnexus documentation.\nAt each step, you’ll be able to do useful things with your data. We will focus on skills and programming patterns that are useful."
+    "text": "Four Levels of Using DNAnexus\nOne way to approach learning DNAnexus is to think about the skills you need to process a number of files. Ben Busby has noted there are 4 main skill levels in processing files on the DNAnexus platform:\n\n\n\n\n\n\n\n\nLevel\n# of Files\nSkill\n\n\n\n\n1\n1\nInteractive Analysis (Cloud Workstation, JupyterLab)\n\n\n2\n1-50 Files\ndx run, Swiss Army Knife\n\n\n3\n50-1000 Files\nBuilding your own apps\n\n\n4\n1000+ Files, multiple steps\nUsing WDL (Workflow Description Language)\n\n\n\nWe’ll be covering mostly level 3 and 4 in this book. But you will need to be at level 2 before you can tackle these topics.\nThe key is to gradually build on your skills."
   },
   {
     "objectID": "index.html#prerequisites",
     "href": "index.html#prerequisites",
     "title": "Best Practices on the DNAnexus Platform",
     "section": "Prerequisites",
-    "text": "Prerequisites\nBefore you tackle this book, you should be able to accomplish the following:\n\nHave Basic Bash Skills for DNAnexus\nUnderstand the basic architecture of Cloud Computing\nKnow how to edit and utilize JSON Files\nBe familiar with dx-toolkit commands, including:\n\ndx run\ndx find data and dx find executions\n\n\nWe recommend reviewing Bash for Bioinformatics if you need to brush up on these prerequisite skills."
-  },
-  {
-    "objectID": "index.html#contributors",
-    "href": "index.html#contributors",
-    "title": "Best Practices on the DNAnexus Platform",
-    "section": "Contributors",
-    "text": "Contributors\nNo one writes a book alone. This book comes from a lot of conversations with everyone at DNAnexus, including:\n\nAllison Regier\nBen Busby\nAnastazie Sedlakova\nScott Funkhouser\nStanley Lan\nOndrej Klempir\nBranislav Slavik\nDavid Stanek\nChai Fungtammasan"
+    "text": "Prerequisites\nBefore you tackle this book, you should be able to accomplish the following:\n\nUtilize Basic Bash Skills for DNAnexus\nUnderstand the basic architecture of Cloud Computing\nKnow how to edit and utilize JSON Files\nBe familiar with dx-toolkit commands, including:\n\ndx run\ndx find data and dx find jobs/dx watch\n\n\nWe recommend reviewing Bash for Bioinformatics if you need to brush up on these prerequisite skills."
   },
   {
     "objectID": "index.html#want-to-be-a-contributor",
