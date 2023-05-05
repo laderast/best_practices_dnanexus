@@ -266,11 +266,14 @@ Spark/Hail on The Core Platform
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Spark/Hail on UKB RAP
+Par-what-now?
 </div>
 </div>
 <div class="callout-body-container callout-body">
-
+<p>You may have heard of <em>Parquet</em> files and wondered how they relate to database objects on the platform. They are a way to store data in a format called <em>columnar</em> storage.</p>
+<p>It turns out it is faster for retrieval and searching to store data not by <em>rows</em>, but by <em>columns</em>. This is really helpful because the data is sorted by <em>data</em> type and it’s easier to traverse for this reason.</p>
+<p>Apache Spark is the scalable solution to using columnar formats such as Parquet. There are a number of <em>database engines</em> that are fast at searching and traversing these types of files. Some examples are Snowflake and Apache Arrow.</p>
+<p>On the DNAnexus platform, certain data objects (called Dataset and Database objects) are actually stored in Parquet format, for rapid searching and querying using Apache Spark.</p>
 </div>
 </div>
 <section id="what-is-spark" class="level3" data-number="3.2.1">
@@ -301,6 +304,7 @@ Spark/Hail on UKB RAP
 <li>Try to avoid transfers through the Driver node (<code>hdfs dfs -get</code>/<code>dx upload</code>), as you are limited to the memory/disk space of the Driver node.</li>
 <li>When possible, use dxFUSE to directly stream files into HDFS (Spark Cluster Storage) from project storage by using <code>file:///mnt/project/</code> URLs. You will need to remount dxFUSE in the JupyterLab container to do this.</li>
 <li>If you need to get files out of HDFS into Project Storage, use dxFUSE in <code>-limitedWrite</code> mode to write into project storage by passing in <code>file:///mnt/project/</code> URLs to the <code>.write()</code> methods in Spark/Hail.</li>
+<li>If you need to persist your Spark DataFrame, use <code>dnax:///&lt;db_name&gt;/&lt;table_name&gt;</code> with <code>.write()</code> to write it into DNAX storage. Then use SparkSQL to save it in the Spark Database in DNAX.</li>
 </ol>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -312,7 +316,7 @@ Accessing Spark Databases on DNAnexus
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>One issue I see a lot of people get tripped up with is with Database Access. Databases cannot be moved from project to project. Once the data is ingested into a database object, it can’t be copied to a new project.</p>
+<p>One issue I see a lot of people get tripped up with is with Database Access. One thing to know is that Spark databases cannot be moved from project to project. Once the data is ingested into a database object, it can’t be copied to a new project.</p>
 <p><strong>For a user to access the data in a Spark Database, they must have at least VIEW level access to the project that contains it on the platform.</strong></p>
 <p>Note that <em>Datasets</em> (not <em>Databases</em>) can be copied to new projects. However, to actually access the data in Cohort Browser, the project that contains the database needs to be viewable by the user.</p>
 </div>
