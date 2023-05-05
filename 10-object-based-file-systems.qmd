@@ -204,10 +204,10 @@ In short, dxFUSE makes the Object Based Filesystem of DNAnexus act like a POSIX 
 One important thing to remember: dxFUSE is only mounted once when you start JupyterLab. You will have to use the `dxfuse` command to remount it to see any files you've added to project storage after opening JupyterLab.
 
 ```
-dxfuse 
+dxfuse -
 ```
 
-### dxFUSE: limitedWrite
+### dxFUSE: `-limitedWrite`
 
 For the most part, dxFUSE is read-only from project storage. However, it has a `-limitedWrite` option that is mostly used from writing from Spark into project storage.
 
@@ -217,18 +217,7 @@ dxfuse -limitedWrite
 
 Once you have remounted with `-limitedWrite`, you'll be able to specify `file:///mnt/project` urls in your `.write()` command. This is especially useful when calculating and saving BGEN Index files.
 
-In addition to dxFUSE, there are a number of other POSIX/Object translation layers that try to make object-based file systems more POSIX-like, such as JuiceFS (for Redis/S3).
+In addition to dxFUSE, there are a number of other POSIX/Object translation layers that try to make object-based file systems more POSIX-like, such as JuiceFS (for S3).
 
 
-:::{.callout-note}
-## Par-what-now?
-
-You may have heard of *Parquet* files and wondered how they relate to database objects on the platform. They are a way to store data in a format called *columnar* storage.
-
-It turns out it is faster for retrieval and searching to store data not by *rows*, but by *columns*. This is really helpful because the data is sorted by *data* type and it's easier to traverse for this reason. 
-
-Apache Spark is the scalable solution to using columnar formats such as Parquet. There are a number of *database engines* that are fast at searching and traversing these types of files. Some examples are Snowflake and Apache Arrow. 
-
-On the DNAnexus platform, certain data objects (called Dataset and Database objects) are actually stored in Parquet format, for rapid searching and querying using Apache Spark.
-:::
 

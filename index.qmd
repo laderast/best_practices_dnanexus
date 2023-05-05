@@ -1,6 +1,12 @@
 # Preface {.unnumbered}
 
-This is a companion book to Bash for Bioinformatics. In this book we attempt to highlight best practices on the DNAnexus platform given some previous knowledge:
+This is a companion book to [Bash for Bioinformatics](https://laderast.github.io/bash_for_bioinformatics/). 
+
+In this book we attempt to highlight best practices on the DNAnexus platform given some previous knowledge.
+
+## Learning Objectives
+
+After reading this book and doing the exercises, you should be able to:
 
 - **Explain** the object based filesystem on the DNAnexus platform and how it differs from Linux/Unix POSIX filesystems.
 - **Explain** key details of the UKB Research Analysis Platform and how these details impact your work.
@@ -12,4 +18,48 @@ This is a companion book to Bash for Bioinformatics. In this book we attempt to 
 - **Execute** NextFlow pipelines on the DNAnexus Platform.
 
 Our goal is to bring information together in a task-oriented format to achieve things on the platform.
+
+## Four Levels of Using DNAnexus
+
+One way to approach learning DNAnexus is to think about the skills you need to process a number of files. Ben Busby has noted there are 4 main skill levels in processing files on the DNAnexus platform:
+
+| Level | \# of Files   | Skill                                     |
+|-------|---------------|-------------------------------------------|
+| 1     | 1             | Interactive Analysis (Cloud Workstation, JupyterLab)                                  |
+| 2     | 1-50 Files    | `dx run`, Swiss Army Knife                          |
+| 3     | 50-1000 Files | Building your own apps                    |
+| 4     | 1000+ Files, multiple steps   | Using WDL (Workflow Description Language) |
+
+We'll be covering mostly level 3 and 4 in this book. But you will need to be at level 2 before you can tackle these topics.
+
+The key is to gradually build on your skills. 
+
+## Prerequisites
+
+Before you tackle this book, you should be able to accomplish the following:
+
+- Utilize [Basic Bash Skills for DNAnexus](https://laderast.github.io/bash_for_bioinformatics/)
+- Understand the [basic architecture of Cloud Computing](https://laderast.github.io/bash_for_bioinformatics/03-cloud-computing-basics.html)
+- Know how to [edit and utilize JSON Files](https://laderast.github.io/bash_for_bioinformatics/06-JSON.html)
+- Be familiar with `dx-toolkit` commands, including:
+  - [`dx run`](https://laderast.github.io/bash_for_bioinformatics/04-doing-work-with-dx-run.html)
+  - [`dx find data`](https://laderast.github.io/bash_for_bioinformatics/05-batch-processing.html#sec-dx-find) and [`dx find jobs`/`dx watch`](https://laderast.github.io/bash_for_bioinformatics/05-batch-processing.html#when-batching-tag-your-jobs)
+
+We recommend reviewing [Bash for Bioinformatics](https://laderast.github.io/bash_for_bioinformatics/) if you need to brush up on these prerequisite skills.
+
+## Want to be a Contributor?
+
+This is the first draft of this book. It's not going to be perfect, and we need help.
+
+If you find a problem/issue or have a question, you can file it as an issue using [this link](https://github.com/laderast/best_practices_dnanexus/issues/new/choose).
+
+In your issue, please note the following:
+
+- Your Name
+- What your issue was
+- Which section, and line you found problematic or wouldn't run
+
+If you're quarto/GitHub savvy, you can fork and file a pull request for typos/edits. If you're not, you can file an issue.
+
+Just be aware that this is not my primary job - I'll try to be as responsive as I can.
 
