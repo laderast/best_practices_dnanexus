@@ -133,7 +133,16 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
+  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a>
+  <ul class="collapse">
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
+  <li><a href="#four-levels-of-using-dnanexus" id="toc-four-levels-of-using-dnanexus" class="nav-link" data-scroll-target="#four-levels-of-using-dnanexus">Four Levels of Using DNAnexus</a></li>
+  <li><a href="#what-is-not-covered" id="toc-what-is-not-covered" class="nav-link" data-scroll-target="#what-is-not-covered">What is not covered</a></li>
+  <li><a href="#notes" id="toc-notes" class="nav-link" data-scroll-target="#notes">Notes</a></li>
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
+  <li><a href="#contributors" id="toc-contributors" class="nav-link" data-scroll-target="#contributors">Contributors</a></li>
+  <li><a href="#want-to-be-a-contributor" id="toc-want-to-be-a-contributor" class="nav-link" data-scroll-target="#want-to-be-a-contributor">Want to be a Contributor?</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -171,7 +180,9 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="preface" class="level1 unnumbered">
 <h1 class="unnumbered">Preface</h1>
-<p>This is a companion book to Bash for Bioinformatics. In this book we attempt to highlight best practices on the DNAnexus platform given some previous knowledge:</p>
+<p>This is a companion book to Bash for Bioinformatics. In this book we attempt to highlight best practices on the DNAnexus platform given some previous knowledge.</p>
+<section id="learning-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h2>
 <ul>
 <li><strong>Explain</strong> the object based filesystem on the DNAnexus platform and how it differs from Linux/Unix POSIX filesystems.</li>
 <li><strong>Explain</strong> key details of the UKB Research Analysis Platform and how these details impact your work.</li>
@@ -183,8 +194,109 @@ ul.task-list li input[type="checkbox"] {
 <li><strong>Execute</strong> NextFlow pipelines on the DNAnexus Platform.</li>
 </ul>
 <p>Our goal is to bring information together in a task-oriented format to achieve things on the platform.</p>
+</section>
+<section id="four-levels-of-using-dnanexus" class="level2">
+<h2 class="anchored" data-anchor-id="four-levels-of-using-dnanexus">Four Levels of Using DNAnexus</h2>
+<p>One way to approach learning DNAnexus is to think about the skills you need to process a number of files. Ben Busby has noted there are 4 main skill levels in processing files on the DNAnexus platform:</p>
+<table class="table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 23%">
+<col style="width: 66%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Level</th>
+<th># of Files</th>
+<th>Skill</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>1</td>
+<td>Interactive Analysis (Cloud Workstation, JupyterLab)</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>1-50 Files</td>
+<td><code>dx run</code>, Swiss Army Knife</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>50-1000 Files</td>
+<td>Building your own apps</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>1000+ Files, multiple steps</td>
+<td>Using WDL (Workflow Description Language)</td>
+</tr>
+</tbody>
+</table>
+<p>We’ll be covering mostly level 2, but you will have the skills to move on to Level 3.</p>
+<p>The key is to gradually build on your skills.</p>
+</section>
+<section id="what-is-not-covered" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-not-covered">What is not covered</h2>
+<ul>
+<li>Using Bash scripting in DNAnexus Apps and Workflows</li>
+<li>Using Bash Scripting in Workflow Description Language (WDL)</li>
+</ul>
+<p>As mentioned, these are advanced level topics. However, this book will provide an excellent foundation to effectively building apps and workflows on the DNAnexus platform.</p>
+<p>This book is not meant to be a substitute for excellent books such as <a href="https://datascienceatthecommandline.com/2e/">Data Science on the Command Line</a>. This book focuses on the essential Bash shell skills that will help you on the DNAnexus platform.</p>
+</section>
+<section id="notes" class="level2">
+<h2 class="anchored" data-anchor-id="notes">Notes</h2>
+<p>This is a very opinionated journey through Bash shell scripting, workflow languages, and reproduciblity. This is written from the perspective of a user, and should not be considered as official DNAnexus documentation.</p>
+<p>It is designed to build on each of the concepts in a gradual manner. Where possible, we link to the official DNAnexus documentation. It is not meant to be a replacement for the DNAnexus documentation.</p>
+<p>At each step, you’ll be able to do useful things with your data. We will focus on skills and programming patterns that are useful.</p>
+</section>
+<section id="prerequisites" class="level2">
+<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
+<p>Before you tackle this book, you should be able to accomplish the following:</p>
+<ul>
+<li>Have Basic Bash Skills for DNAnexus</li>
+<li>Understand the basic architecture of Cloud Computing</li>
+<li>Know how to edit and utilize JSON Files</li>
+<li>Be familiar with <code>dx-toolkit</code> commands, including:
+<ul>
+<li><code>dx run</code></li>
+<li><code>dx find data</code> and <code>dx find executions</code></li>
+</ul></li>
+</ul>
+<p>We recommend reviewing <a href="https://laderast.github.io/bash_for_bioinformatics/">Bash for Bioinformatics</a> if you need to brush up on these prerequisite skills.</p>
+</section>
+<section id="contributors" class="level2">
+<h2 class="anchored" data-anchor-id="contributors">Contributors</h2>
+<p>No one writes a book alone. This book comes from a lot of conversations with everyone at DNAnexus, including:</p>
+<ul>
+<li>Allison Regier</li>
+<li>Ben Busby</li>
+<li>Anastazie Sedlakova</li>
+<li>Scott Funkhouser</li>
+<li>Stanley Lan</li>
+<li>Ondrej Klempir</li>
+<li>Branislav Slavik</li>
+<li>David Stanek</li>
+<li>Chai Fungtammasan</li>
+</ul>
+</section>
+<section id="want-to-be-a-contributor" class="level2">
+<h2 class="anchored" data-anchor-id="want-to-be-a-contributor">Want to be a Contributor?</h2>
+<p>This is the first draft of this book. It’s not going to be perfect, and we need help.</p>
+<p>If you find a problem/issue or have a question, you can file it as an issue using <a href="https://github.com/laderast/best_practices_dnanexus/issues/new/choose">this link</a>.</p>
+<p>In your issue, please note the following:</p>
+<ul>
+<li>Your Name</li>
+<li>What your issue was</li>
+<li>Which section, and line you found problematic or wouldn’t run</li>
+</ul>
+<p>If you’re quarto/GitHub savvy, you can fork and file a pull request for typos/edits. If you’re not, you can file an issue.</p>
+<p>Just be aware that this is not my primary job - I’ll try to be as responsive as I can.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
