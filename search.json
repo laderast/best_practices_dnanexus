@@ -266,10 +266,24 @@
     "text": "4.1 What is Hail?\nHail is a genomics framework built on top of Spark to allow for scalable genomics queries. It uses many of the same concepts (partitions, executors, plans) but it is genomics focused.\nFor example, the Hail MatrixFrame can be QC’ed, and then filtered on these QC metrics."
   },
   {
+    "objectID": "14-hail-on-dnanexus.html#important-data-structures-in-hail-tables-and-matrixtables",
+    "href": "14-hail-on-dnanexus.html#important-data-structures-in-hail-tables-and-matrixtables",
+    "title": "4  Hail on DNAnexus",
+    "section": "4.2 Important Data Structures in Hail: Tables and MatrixTables",
+    "text": "4.2 Important Data Structures in Hail: Tables and MatrixTables\nBefore we get started with doing a GWAS in Hail, let’s talk about the data structures we’ll work with. Hail Tables and Hail MatrixTables.\nOne of the hardest things to understand about Hail data structures is that they are actually linked data structures. It’s easiest to think of them as data tables with attached metadata.\n\n4.2.1 Hail Table\nThe fundamental data structure in Hail is the Hail Table.\nI think of Hail Tables as a regular data table with a set of metadata fields. These metadata fields are known as global fields.\n\n\n4.2.2 Hail MatrixTable\nIn contrast, Hail MatrixTables consist of the entries (genotypes) that have metadata attached to both the rows and columns.\nThe row metadata is called row fields, which correspond to the variants in the MatrixTable. Operations\nThe column metadata is called column fields, which correspond to the samples in the MatrixTable."
+  },
+  {
     "objectID": "14-hail-on-dnanexus.html#keep-in-mind",
     "href": "14-hail-on-dnanexus.html#keep-in-mind",
     "title": "4  Hail on DNAnexus",
-    "section": "4.2 Keep in Mind",
-    "text": "4.2 Keep in Mind\nThe cardinal rule of MatrixTables is this:\n\nRow operations operate on variants, while column operations operate on samples.\n\nIt is easy to get lost in a chain of Hail commands and not be able to understand what the code is doing unless you concentrate on this.\n\n\n\n\n\n\nStoring MatrixTables in DNAX"
+    "section": "4.3 Keep in Mind",
+    "text": "4.3 Keep in Mind\nThe cardinal rule of MatrixTables is this:\n\nRow operations operate on variants, while column operations operate on samples.\n\nIt is easy to get lost in a chain of Hail commands and not be able to understand what the code is doing unless you concentrate on this.\n\n\n\n\n\n\nStoring MatrixTables in DNAX\n\n\n\nIn general, if you are loading pVCF files, we suggest that you save the MatrixTable into DNAX. This is because loading pVCF files is an expensive operation compared to BGEN files.\nHowever, we suggest doing filtering and QC of your variants before you save your MatrixTable to DNAX. In general, you will be doubly charged for MatrixTable storage along with your pVCF file storage, so it is worth reducing the data stored in DNAX.\nNote that BGEN files can be loaded from"
+  },
+  {
+    "objectID": "14-hail-on-dnanexus.html#section",
+    "href": "14-hail-on-dnanexus.html#section",
+    "title": "4  Hail on DNAnexus",
+    "section": "4.4 ",
+    "text": "4.4"
   }
 ]

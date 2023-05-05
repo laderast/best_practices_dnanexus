@@ -133,7 +133,13 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#what-is-hail" id="toc-what-is-hail" class="nav-link active" data-scroll-target="#what-is-hail"><span class="toc-section-number">4.1</span>  What is Hail?</a></li>
-  <li><a href="#keep-in-mind" id="toc-keep-in-mind" class="nav-link" data-scroll-target="#keep-in-mind"><span class="toc-section-number">4.2</span>  Keep in Mind</a></li>
+  <li><a href="#important-data-structures-in-hail-tables-and-matrixtables" id="toc-important-data-structures-in-hail-tables-and-matrixtables" class="nav-link" data-scroll-target="#important-data-structures-in-hail-tables-and-matrixtables"><span class="toc-section-number">4.2</span>  Important Data Structures in Hail: Tables and MatrixTables</a>
+  <ul class="collapse">
+  <li><a href="#hail-table" id="toc-hail-table" class="nav-link" data-scroll-target="#hail-table"><span class="toc-section-number">4.2.1</span>  Hail Table</a></li>
+  <li><a href="#hail-matrixtable" id="toc-hail-matrixtable" class="nav-link" data-scroll-target="#hail-matrixtable"><span class="toc-section-number">4.2.2</span>  Hail MatrixTable</a></li>
+  </ul></li>
+  <li><a href="#keep-in-mind" id="toc-keep-in-mind" class="nav-link" data-scroll-target="#keep-in-mind"><span class="toc-section-number">4.3</span>  Keep in Mind</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"><span class="toc-section-number">4.4</span>  </a></li>
   </ul>
 </nav>
     </div>
@@ -162,8 +168,24 @@ ul.task-list li input[type="checkbox"] {
 <p>Hail is a genomics framework built on top of Spark to allow for scalable genomics queries. It uses many of the same concepts (partitions, executors, plans) but it is genomics focused.</p>
 <p>For example, the Hail MatrixFrame can be QC’ed, and then filtered on these QC metrics.</p>
 </section>
-<section id="keep-in-mind" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="keep-in-mind"><span class="header-section-number">4.2</span> Keep in Mind</h2>
+<section id="important-data-structures-in-hail-tables-and-matrixtables" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="important-data-structures-in-hail-tables-and-matrixtables"><span class="header-section-number">4.2</span> Important Data Structures in Hail: Tables and MatrixTables</h2>
+<p>Before we get started with doing a GWAS in Hail, let’s talk about the data structures we’ll work with. <em>Hail Tables</em> and <em>Hail MatrixTables</em>.</p>
+<p>One of the hardest things to understand about Hail data structures is that they are actually linked data structures. It’s easiest to think of them as data tables with attached metadata.</p>
+<section id="hail-table" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="hail-table"><span class="header-section-number">4.2.1</span> Hail Table</h3>
+<p>The fundamental data structure in Hail is the Hail Table.</p>
+<p>I think of Hail Tables as a regular data table with a set of metadata fields. These metadata fields are known as global fields.</p>
+</section>
+<section id="hail-matrixtable" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="hail-matrixtable"><span class="header-section-number">4.2.2</span> Hail MatrixTable</h3>
+<p>In contrast, Hail MatrixTables consist of the entries (genotypes) that have metadata attached to both the rows and columns.</p>
+<p>The row metadata is called row fields, which correspond to the variants in the MatrixTable. Operations</p>
+<p>The column metadata is called column fields, which correspond to the samples in the MatrixTable.</p>
+</section>
+</section>
+<section id="keep-in-mind" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="keep-in-mind"><span class="header-section-number">4.3</span> Keep in Mind</h2>
 <p>The cardinal rule of MatrixTables is this:</p>
 <blockquote class="blockquote">
 <p><strong>Row</strong> operations operate on <em>variants</em>, while <strong>column</strong> operations operate on <em>samples</em>.</p>
@@ -179,9 +201,14 @@ Storing MatrixTables in DNAX
 </div>
 </div>
 <div class="callout-body-container callout-body">
-
+<p>In general, if you are loading pVCF files, we suggest that you save the MatrixTable into DNAX. This is because loading pVCF files is an expensive operation compared to BGEN files.</p>
+<p>However, we suggest doing filtering and QC of your variants before you save your MatrixTable to DNAX. In general, you will be doubly charged for MatrixTable storage along with your pVCF file storage, so it is worth reducing the data stored in DNAX.</p>
+<p>Note that BGEN files can be loaded from</p>
 </div>
 </div>
+</section>
+<section id="section" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="section"><span class="header-section-number">4.4</span> </h2>
 
 
 </section>
