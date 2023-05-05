@@ -21,7 +21,7 @@ The goal of this chapter is to show how the filesystem is different from your pr
 
 ## Review: POSIX Filesystems
 
-You may be familar with *directory based* filesystems as a way to organize your data. The main way to find/refer to a file is through its *path*. What does this mean?
+You may be familar with *POSIX* (Portable Operating System Interface) filesystems as a way to organize your data. The main way to find/refer to a file is through its *path*. What does this mean?
 
 For example, if my file is called `chr1.vcf.gz` and it is located in the directory `/Geno_Data`, we'd refer to it using the *full path*:
 
@@ -29,7 +29,7 @@ For example, if my file is called `chr1.vcf.gz` and it is located in the directo
 /Geno_Data/chr1.vcf.gz
 ```
 
-Paths are the main way we organize files for directory based systems. This information is external to a file. Most importantly, we use directories to organize and group files logically. For example, we might have our R script and the data it analyzes in the same directory. 
+Paths are the main way we organize files for POSIX filesystems. This information is external to a file. Most importantly, we use directories to organize and group files logically. For example, we might have our R script and the data it analyzes in the same directory. 
 
 For a file in a POSIX-based filesystem, **the path needs to be unique.** If they are not, there are rules for whether to replace that file with a new one, or to save both versions. For example, we can't have two files named:
 
@@ -38,6 +38,7 @@ For a file in a POSIX-based filesystem, **the path needs to be unique.** If they
 ```
 In the same folder. That violates our ability to find a file in the system. 
 
+<https://www.computerweekly.com/feature/Posix-vs-object-storage-How-much-longer-for-Posix>
 <https://grimoire.carcano.ch/blog/posix-compliant-filesystems/>                          
 <https://www.kernel.org/doc/html/latest/filesystems/fuse.html>
 
@@ -120,7 +121,7 @@ Once the metadata is copied into the new project, there is no syncing of the met
 
 ### Advantages of Object Based Filesystems
 
-The DNAnexus platform is only one example of an object-based filesystem. Other examples include Amazon S3 (Simple Storage Service), which is one of the biggest examples. Why does the world run on object based filesystems? There are a lot of advantages. 
+The DNAnexus platform is only one example of an object-based filesystem. Other examples include Amazon S3 (Simple Storage Service), Microsoft Azure Blob Storage, and Google Cloud Storage. Why does the world run on object based filesystems? There are a lot of advantages. 
 
 - **Highly scalable.** This is the main reason given for using an object-based system. Given that unique identifier, the data part of the object can be very large.
 - **Fast Retrieval.** Object-based filesystems let us work with arbitrarily large file sizes, and we can actually stream files to and from workers.
@@ -139,7 +140,7 @@ Coming from folder based filesystems, it can be a bit of a mind-bender getting u
 
 ## Always add project IDs to your File IDs
 
-In Bash for Bioinformatics, we already discovered one way of working with files on the platform: `dx find data` (@sec-dx-find). This is our main tool for selecting files with metadata.
+In Bash for Bioinformatics, we already discovered one way of working with files on the platform: `dx find data` (sec-dx-find). This is our main tool for selecting files with metadata.
 
 When we work with files outside of our current project, we might reference it by a file-id. Using file IDs by themselves are a global operation and we need to be careful when we use this!
 
@@ -148,7 +149,7 @@ Why is this so? There is a search tree when we use a file ID that is not in our 
 1. Look for the file in the current project
 2. Look at all files across all other projects
 
-If you want to use the platform effectively, you want to avoid 2. at all costs, especially when working with a lot of files. The metadata server will take much longer to find your files.
+If you want to use the platform effectively, you want to avoid #2 at all costs, especially when working with a lot of files. The metadata server will take much longer to find your files.
 
 The lesson here is when using file-ids, it is safer to put the project-id in front of your file id such as below:
 
@@ -194,23 +195,40 @@ Say there are files we want to archive. We can use `dx tag` or the DNAnexus UI t
 
 An administrator can then run a monthly job that archives the files with these tags using `dx api <project-id> archive --tag to_archive`.
 
-:::{.callout-note}
 ## What about dxFUSE?
 
-You might ask about the role of dxFUSE with the Object Based Filesystem.
+You might ask about the role of [dxFUSE](https://github.com/dnanexus/dxfuse) with the Object Based Filesystem.
 
-In short, dxFUSE makes the Object Based Filesystem of DNAnexus act like a POSIX filesystem. Specifically, if there are multiple objects with the same name within a folder, it provides a way to specify these objects using file paths. 
-:::
+In short, dxFUSE makes the Object Based Filesystem of DNAnexus act like a POSIX filesystem. Specifically, if there are multiple objects with the same name within a folder, it provides a way to specify these objects using file paths.
+
+One important thing to remember: dxFUSE is only mounted once when you start JupyterLab. You will have to use the `dxfuse` command to remount it to see any files you've added to project storage after opening JupyterLab.
+
+```
+dxfuse 
+```
+
+### dxFUSE: limitedWrite
+
+For the most part, dxFUSE is read-only from project storage. However, it has a `-limitedWrite` option that is mostly used from writing from Spark into project storage.
+
+```
+dxfuse -limitedWrite
+```
+
+Once you have remounted with `-limitedWrite`, you'll be able to specify `file:///mnt/project` urls in your `.write()` command. This is especially useful when calculating and saving BGEN Index files.
+
+In addition to dxFUSE, there are a number of other POSIX/Object translation layers that try to make object-based file systems more POSIX-like, such as JuiceFS (for Redis/S3).
+
 
 :::{.callout-note}
 ## Par-what-now?
 
-You may have heard of *Parquet* files and wondered how they relate to file objects on the platform. They are a way to store data in a format called *columnar* storage.
+You may have heard of *Parquet* files and wondered how they relate to database objects on the platform. They are a way to store data in a format called *columnar* storage.
 
-It turns out it is faster for retrieval to store data not by *rows*, but by *columns*. This is really helpful because the data is sorted by *data* type and it's easier to traverse for this reason. 
+It turns out it is faster for retrieval and searching to store data not by *rows*, but by *columns*. This is really helpful because the data is sorted by *data* type and it's easier to traverse for this reason. 
 
-There are a number of *database engines* that are fast at searching and traversing these types of files. Some examples are Snowflake and Apache Arrow. 
+Apache Spark is the scalable solution to using columnar formats such as Parquet. There are a number of *database engines* that are fast at searching and traversing these types of files. Some examples are Snowflake and Apache Arrow. 
 
-On the DNAnexus platform, certain data objects (called Datasets) are actually stored in Parquet format, for rapid searching and querying using Apache Spark.
+On the DNAnexus platform, certain data objects (called Dataset and Database objects) are actually stored in Parquet format, for rapid searching and querying using Apache Spark.
 :::
 

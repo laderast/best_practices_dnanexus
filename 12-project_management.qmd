@@ -248,7 +248,7 @@ Tags:               blah
 
 ## Always Add a Project Context to your File IDs
 
-We've already discovered one way of selecting multiple files on the platform: `dx find data` (@sec-dx-find). This is our main tool for selecting files with metadata.
+We've already discovered one way of selecting multiple files on the platform: `dx find data` (sec-dx-find). This is our main tool for selecting files with metadata.
 
 When we work with files outside of our current project, we might reference it by using a bare file-id. In general, we need to be careful when we use bare file IDs!
 
