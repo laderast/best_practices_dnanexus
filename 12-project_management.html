@@ -153,11 +153,9 @@ ul.task-list li input[type="checkbox"] {
   <ul class="collapse">
   <li><a href="#project-level-roles" id="toc-project-level-roles" class="nav-link" data-scroll-target="#project-level-roles"><span class="toc-section-number">3.1</span>  Project Level Roles</a></li>
   <li><a href="#a-suggested-project-structure" id="toc-a-suggested-project-structure" class="nav-link" data-scroll-target="#a-suggested-project-structure"><span class="toc-section-number">3.2</span>  A Suggested Project Structure</a></li>
-  </ul></li>
-  <li><a href="#tags-know-them-love-them-use-them" id="toc-tags-know-them-love-them-use-them" class="nav-link" data-scroll-target="#tags-know-them-love-them-use-them"><span class="toc-section-number">4</span>  Tags: Know Them, Love Them, Use Them</a>
-  <ul class="collapse">
-  <li><a href="#dx-tag" id="toc-dx-tag" class="nav-link" data-scroll-target="#dx-tag"><span class="toc-section-number">4.1</span>  <code>dx tag</code></a></li>
-  <li><a href="#always-add-a-project-context-to-your-file-ids" id="toc-always-add-a-project-context-to-your-file-ids" class="nav-link" data-scroll-target="#always-add-a-project-context-to-your-file-ids"><span class="toc-section-number">4.2</span>  Always Add a Project Context to your File IDs</a></li>
+  <li><a href="#tags-know-them-love-them-use-them" id="toc-tags-know-them-love-them-use-them" class="nav-link" data-scroll-target="#tags-know-them-love-them-use-them"><span class="toc-section-number">3.3</span>  Tags: Know Them, Love Them, Use Them</a></li>
+  <li><a href="#dx-tag" id="toc-dx-tag" class="nav-link" data-scroll-target="#dx-tag"><span class="toc-section-number">3.4</span>  <code>dx tag</code></a></li>
+  <li><a href="#always-add-a-project-context-to-your-file-ids" id="toc-always-add-a-project-context-to-your-file-ids" class="nav-link" data-scroll-target="#always-add-a-project-context-to-your-file-ids"><span class="toc-section-number">3.5</span>  Always Add a Project Context to your File IDs</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -509,12 +507,12 @@ applets/     ## project-specific applets
 workflows/.  ## project-specific workflows
 notebooks/.  ## Jupyter Notebooks</code></pre>
 </section>
-</section>
-<section id="tags-know-them-love-them-use-them" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Tags: Know Them, Love Them, Use Them</h1>
+<section id="tags-know-them-love-them-use-them" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="tags-know-them-love-them-use-them"><span class="header-section-number">3.3</span> Tags: Know Them, Love Them, Use Them</h2>
 <p>One of the ways to become a power user on the DNAnexus platform is to utilize tags when you generate output. This is important for reproducible analysis.</p>
-<section id="dx-tag" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="dx-tag"><span class="header-section-number">4.1</span> <code>dx tag</code></h2>
+</section>
+<section id="dx-tag" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="dx-tag"><span class="header-section-number">3.4</span> <code>dx tag</code></h2>
 <p>Well, we’ve uploaded our files but forgot to tag them. We can apply tags to files using the <code>dx tag</code> command:</p>
 <pre><code>% dx tag file-FpQKQk00FgkGV3Vb3jJ8xqGV blah</code></pre>
 <p>If we do a <code>dx describe</code>:</p>
@@ -523,8 +521,8 @@ Result 1:
 ID                  file-FpQKQk00FgkGV3Vb3jJ8xqGV
 Tags:               blah</code></pre>
 </section>
-<section id="always-add-a-project-context-to-your-file-ids" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="always-add-a-project-context-to-your-file-ids"><span class="header-section-number">4.2</span> Always Add a Project Context to your File IDs</h2>
+<section id="always-add-a-project-context-to-your-file-ids" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="always-add-a-project-context-to-your-file-ids"><span class="header-section-number">3.5</span> Always Add a Project Context to your File IDs</h2>
 <p>We’ve already discovered one way of selecting multiple files on the platform: <code>dx find data</code> (sec-dx-find). This is our main tool for selecting files with metadata.</p>
 <p>When we work with files outside of our current project, we might reference it by using a bare file-id. In general, we need to be careful when we use bare file IDs!</p>
 <p>Why is this so? There is a search tree when we use a file ID that is not in our project and without a project context. <a href="https://documentation.dnanexus.com/user/projects/path-resolution">The search over metadata</a> is looking for a file object based on just file ID. Usually, when we provide a bare file ID, this search goes like the following:</p>

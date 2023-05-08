@@ -203,19 +203,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#suggested-configuration-mem2_ssd1_v1_x8-with-at-least-6-nodes-use-hailvep-feature-set" id="toc-suggested-configuration-mem2_ssd1_v1_x8-with-at-least-6-nodes-use-hailvep-feature-set" class="nav-link active" data-scroll-target="#suggested-configuration-mem2_ssd1_v1_x8-with-at-least-6-nodes-use-hailvep-feature-set"><span class="toc-section-number">5.0.1</span>  Suggested Configuration: <code>mem2_ssd1_v1_x8</code> with at least 6 nodes (use <code>Hail/VEP</code> feature set)</a></li>
-  <li><a href="#initialize-spark-and-hail" id="toc-initialize-spark-and-hail" class="nav-link" data-scroll-target="#initialize-spark-and-hail"><span class="toc-section-number">5.1</span>  0) Initialize Spark and Hail</a></li>
-  <li><a href="#sec-loading_data" id="toc-sec-loading_data" class="nav-link" data-scroll-target="#sec-loading_data"><span class="toc-section-number">5.2</span>  1) Read Genotype MatrixTable</a></li>
-  <li><a href="#sec-load_pheno" id="toc-sec-load_pheno" class="nav-link" data-scroll-target="#sec-load_pheno"><span class="toc-section-number">5.3</span>  2) Load and Merge Pheno Table</a>
+  <li><a href="#suggested-configuration-mem2_ssd1_v1_x8-with-at-least-6-nodes-use-hailvep-feature-set" id="toc-suggested-configuration-mem2_ssd1_v1_x8-with-at-least-6-nodes-use-hailvep-feature-set" class="nav-link active" data-scroll-target="#suggested-configuration-mem2_ssd1_v1_x8-with-at-least-6-nodes-use-hailvep-feature-set"><span class="toc-section-number">5.1</span>  Suggested Configuration: <code>mem2_ssd1_v1_x8</code> with at least 6 nodes (use <code>Hail/VEP</code> feature set)</a></li>
+  <li><a href="#initialize-spark-and-hail" id="toc-initialize-spark-and-hail" class="nav-link" data-scroll-target="#initialize-spark-and-hail"><span class="toc-section-number">5.2</span>  0) Initialize Spark and Hail</a></li>
+  <li><a href="#sec-loading_data" id="toc-sec-loading_data" class="nav-link" data-scroll-target="#sec-loading_data"><span class="toc-section-number">5.3</span>  1) Read Genotype MatrixTable</a></li>
+  <li><a href="#sec-load_pheno" id="toc-sec-load_pheno" class="nav-link" data-scroll-target="#sec-load_pheno"><span class="toc-section-number">5.4</span>  2) Load and Merge Pheno Table</a>
   <ul class="collapse">
-  <li><a href="#b-annotate-mt-with-pheno-table" id="toc-b-annotate-mt-with-pheno-table" class="nav-link" data-scroll-target="#b-annotate-mt-with-pheno-table"><span class="toc-section-number">5.3.1</span>  2b Annotate MT with pheno Table</a></li>
+  <li><a href="#b-annotate-mt-with-pheno-table" id="toc-b-annotate-mt-with-pheno-table" class="nav-link" data-scroll-target="#b-annotate-mt-with-pheno-table"><span class="toc-section-number">5.4.1</span>  2b Annotate MT with pheno Table</a></li>
   </ul></li>
-  <li><a href="#sec-sample_table" id="toc-sec-sample_table" class="nav-link" data-scroll-target="#sec-sample_table"><span class="toc-section-number">5.4</span>  3) Filter MT using Sample QC Tables</a></li>
-  <li><a href="#sec-variant_table" id="toc-sec-variant_table" class="nav-link" data-scroll-target="#sec-variant_table"><span class="toc-section-number">5.5</span>  Build Variant QC table from MT, use to filter MT</a></li>
-  <li><a href="#sec-gwas" id="toc-sec-gwas" class="nav-link" data-scroll-target="#sec-gwas"><span class="toc-section-number">5.6</span>  5) Run GWAS</a></li>
-  <li><a href="#sec-visualize" id="toc-sec-visualize" class="nav-link" data-scroll-target="#sec-visualize"><span class="toc-section-number">5.7</span>  6) Visualize GWAS results</a></li>
-  <li><a href="#sec-annotate" id="toc-sec-annotate" class="nav-link" data-scroll-target="#sec-annotate"><span class="toc-section-number">5.8</span>  7) Annotate GWAS results</a></li>
-  <li><a href="#export-gwas-table-export-mt-to-bgen" id="toc-export-gwas-table-export-mt-to-bgen" class="nav-link" data-scroll-target="#export-gwas-table-export-mt-to-bgen"><span class="toc-section-number">5.9</span>  8) Export GWAS Table, Export MT to BGEN</a></li>
+  <li><a href="#sec-sample_table" id="toc-sec-sample_table" class="nav-link" data-scroll-target="#sec-sample_table"><span class="toc-section-number">5.5</span>  3) Filter MT using Sample QC Tables</a></li>
+  <li><a href="#sec-variant_table" id="toc-sec-variant_table" class="nav-link" data-scroll-target="#sec-variant_table"><span class="toc-section-number">5.6</span>  Build Variant QC table from MT, use to filter MT</a></li>
+  <li><a href="#sec-gwas" id="toc-sec-gwas" class="nav-link" data-scroll-target="#sec-gwas"><span class="toc-section-number">5.7</span>  5) Run GWAS</a></li>
+  <li><a href="#sec-visualize" id="toc-sec-visualize" class="nav-link" data-scroll-target="#sec-visualize"><span class="toc-section-number">5.8</span>  6) Visualize GWAS results</a></li>
+  <li><a href="#sec-annotate" id="toc-sec-annotate" class="nav-link" data-scroll-target="#sec-annotate"><span class="toc-section-number">5.9</span>  7) Annotate GWAS results</a></li>
+  <li><a href="#export-gwas-table-export-mt-to-bgen" id="toc-export-gwas-table-export-mt-to-bgen" class="nav-link" data-scroll-target="#export-gwas-table-export-mt-to-bgen"><span class="toc-section-number">5.10</span>  8) Export GWAS Table, Export MT to BGEN</a></li>
   </ul>
 </nav>
     </div>
@@ -239,8 +239,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<section id="suggested-configuration-mem2_ssd1_v1_x8-with-at-least-6-nodes-use-hailvep-feature-set" class="level3" data-number="5.0.1">
-<h3 data-number="5.0.1" class="anchored" data-anchor-id="suggested-configuration-mem2_ssd1_v1_x8-with-at-least-6-nodes-use-hailvep-feature-set"><span class="header-section-number">5.0.1</span> Suggested Configuration: <code>mem2_ssd1_v1_x8</code> with at least 6 nodes (use <code>Hail/VEP</code> feature set)</h3>
+<section id="suggested-configuration-mem2_ssd1_v1_x8-with-at-least-6-nodes-use-hailvep-feature-set" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="suggested-configuration-mem2_ssd1_v1_x8-with-at-least-6-nodes-use-hailvep-feature-set"><span class="header-section-number">5.1</span> Suggested Configuration: <code>mem2_ssd1_v1_x8</code> with at least 6 nodes (use <code>Hail/VEP</code> feature set)</h2>
 <p>This notebook shows how to perform a GWAS for 1 case–control trait using Firth’s logistic regression with Hail and save the results as a Hail Table to an Apollo database (dnax://) on the DNAnexus platform. See documentation for guidance on launch specs for the JupyterLab with Spark Cluster app for different data sizes: https://documentation.dnanexus.com/science/using-hail-to-analyze-genomic-data</p>
 <p>Note: For population scale data, samples may be referred to as individuals. In this notebook, the word “sample” will be used.</p>
 <p>Pre-conditions for running this notebook successfully: - There is an existing Hail MatrixTable in DNAX (see <a href="https://github.com/dnanexus/OpenBio/blob/master/hail_tutorial/pVCF_import.ipynb">pVCF Import Notebook</a> and <a href="https://github.com/dnanexus/OpenBio/blob/master/hail_tutorial/BGEN_import.ipynb">BGEN Import Notebook</a>) - There is a Sample QC Hail Table in DNAX (see https://github.com/dnanexus/OpenBio/blob/master/hail_tutorial/sample_qc.ipynb) - There is a Variant QC Hail Table in DNAX (see https://github.com/dnanexus/OpenBio/blob/master/hail_tutorial/locus_qc.ipynb) - There is phenotypic data for the samples</p>
@@ -267,37 +267,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 <tr class="even">
 <td>1.</td>
-<td>Load pVCF/BGEN data, save as MatrixTable (MT) <a href="#sec-loading_data"><span>Section&nbsp;5.2</span></a></td>
+<td>Load pVCF/BGEN data, save as MatrixTable (MT) <a href="#sec-loading_data"><span>Section&nbsp;5.3</span></a></td>
 <td><code>mt = hl.import_vcf(path)</code> or <code>mt = hl.import_bgen(path)</code></td>
 </tr>
 <tr class="odd">
 <td>2.</td>
-<td>Load Pheno file, merge with MatrixTable <a href="#sec-load_pheno"><span>Section&nbsp;5.3</span></a></td>
+<td>Load Pheno file, merge with MatrixTable <a href="#sec-load_pheno"><span>Section&nbsp;5.4</span></a></td>
 <td><code>phenogeno_mt = mt.annotate_cols(**pheno_table[mt.s])</code></td>
 </tr>
 <tr class="even">
 <td>3.</td>
-<td>Build Sample QC table from MT, use to filter MT <a href="#sec-sample_table"><span>Section&nbsp;5.4</span></a></td>
+<td>Build Sample QC table from MT, use to filter MT <a href="#sec-sample_table"><span>Section&nbsp;5.5</span></a></td>
 <td><code>sample_qc_tb = hl.sample_qc(mt);</code> <code>qc_mt = phenogeno_mt.semi_join_rows(locus_qc_tb)</code></td>
 </tr>
 <tr class="odd">
 <td>4.</td>
-<td>Build Locus QC table from MT, use to filter MT <a href="#sec-variant_table"><span>Section&nbsp;5.5</span></a></td>
+<td>Build Locus QC table from MT, use to filter MT <a href="#sec-variant_table"><span>Section&nbsp;5.6</span></a></td>
 <td><code>locus_qc_tb = hl.locus_qc(mt);</code> <code>qc_mt = qc_mt.semi_join_cols(sample_qc_tb)</code></td>
 </tr>
 <tr class="even">
 <td>5.</td>
-<td>Run GWAS <a href="#sec-gwas"><span>Section&nbsp;5.6</span></a></td>
+<td>Run GWAS <a href="#sec-gwas"><span>Section&nbsp;5.7</span></a></td>
 <td><code>gwas_tb = hl.logistic_regression.rows()</code></td>
 </tr>
 <tr class="odd">
 <td>6.</td>
-<td>Visualize Results <a href="#sec-visualize"><span>Section&nbsp;5.7</span></a></td>
+<td>Visualize Results <a href="#sec-visualize"><span>Section&nbsp;5.8</span></a></td>
 <td><code>manhattan_plot = hl.plot.manhattan(gwas_tb.p_value)</code>; <code>show(manhattan_plot)</code></td>
 </tr>
 <tr class="even">
 <td>7.</td>
-<td>Annotate Results with VEP or annotation db <a href="#sec-annotate"><span>Section&nbsp;5.8</span></a></td>
+<td>Annotate Results with VEP or annotation db <a href="#sec-annotate"><span>Section&nbsp;5.9</span></a></td>
 <td><code>ann_gwas_tb = db.annotate_rows_db(gwas_tb, 'gencode'</code></td>
 </tr>
 <tr class="odd">
@@ -308,8 +308,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 </section>
-<section id="initialize-spark-and-hail" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="initialize-spark-and-hail"><span class="header-section-number">5.1</span> 0) Initialize Spark and Hail</h2>
+<section id="initialize-spark-and-hail" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="initialize-spark-and-hail"><span class="header-section-number">5.2</span> 0) Initialize Spark and Hail</h2>
 <p>Once you run the code below, make sure to open up another tab at <code>https://JOB-URL:8081/jobs</code> to look at the Spark UI. It is extremely helpful in understanding what’s going on behind the scenes.</p>
 <div class="cell" data-trusted="true" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Running this cell will output a red-colored message- this is expected.</span></span>
@@ -344,8 +344,8 @@ LOGGING: writing to /opt/notebooks/hail-20230419-2230-0.2.78-b17627756568.log</c
 </div>
 </div>
 </section>
-<section id="sec-loading_data" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="sec-loading_data"><span class="header-section-number">5.2</span> 1) Read Genotype MatrixTable</h2>
+<section id="sec-loading_data" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="sec-loading_data"><span class="header-section-number">5.3</span> 1) Read Genotype MatrixTable</h2>
 <p>We’ll read in the MatrixTable we loaded in from the pVCF files.</p>
 <p>See (<code>supplementary_notebooks/01_pVCF_import.ipynb</code> for more info)</p>
 <p>This was the code used to load the VCF files:</p>
@@ -605,8 +605,8 @@ Row key: ['locus', 'alleles']
 </div>
 </div>
 </section>
-<section id="sec-load_pheno" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="sec-load_pheno"><span class="header-section-number">5.3</span> 2) Load and Merge Pheno Table</h2>
+<section id="sec-load_pheno" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="sec-load_pheno"><span class="header-section-number">5.4</span> 2) Load and Merge Pheno Table</h2>
 <p>Phenotypic data may come from an array of sources, such as a cohort from the Cohort Browser or a separate, stand-alone text file. In this notebook, we use phenotypic data from a CSV file, which was previously uploaded to a project. In this (very basic) example we use the phenotypic trait, <code>is_case</code>, for each sample. The values indicate if the sample is a case, <code>is_case=true</code>, or a control, <code>is_case=false</code></p>
 <p><em>Note: Although this notebook provides an example using a stand-alone CSV file, another source of phenotypic data could be derived from an Apollo Dataset. Please refer to Table Exporter documentation (https://documentation.dnanexus.com/developer/apps/developing-spark-apps/table-exporter-application) or OpenBio notebooks (https://github.com/dnanexus/OpenBio/tree/master/dx-toolkit) with <code>extract_dataset</code> in the title for guidance on how to extract data from an Apollo Dataset.</em></p>
 <p>All data uploaded to the project before running the JupyterLab app is mounted (https://documentation.dnanexus.com/user/jupyter-notebooks?#accessing-data) and can be accessed in <code>/mnt/project/&lt;path_to_data&gt;</code>. The file URL follows the format: <code>file:///mnt/project/&lt;path_to_data&gt;</code></p>
@@ -730,8 +730,8 @@ Key: ['iid']
 </tbody></table><p style="background: #fdd; padding: 0.4em;">showing top 10 rows</p>
 </div>
 </div>
-<section id="b-annotate-mt-with-pheno-table" class="level3" data-number="5.3.1">
-<h3 data-number="5.3.1" class="anchored" data-anchor-id="b-annotate-mt-with-pheno-table"><span class="header-section-number">5.3.1</span> 2b Annotate MT with pheno Table</h3>
+<section id="b-annotate-mt-with-pheno-table" class="level3" data-number="5.4.1">
+<h3 data-number="5.4.1" class="anchored" data-anchor-id="b-annotate-mt-with-pheno-table"><span class="header-section-number">5.4.1</span> 2b Annotate MT with pheno Table</h3>
 <div class="cell" data-trusted="true" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Annotate the MT with pheno Table by matching the MT's column key ('s') with the pheno Table's key ('sample_id')</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -981,16 +981,16 @@ Row key: ['locus', 'alleles']
 <p>We see that the pheno traits have been added in the column fields of the MT</p>
 </section>
 </section>
-<section id="sec-sample_table" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="sec-sample_table"><span class="header-section-number">5.4</span> 3) Filter MT using Sample QC Tables</h2>
+<section id="sec-sample_table" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="sec-sample_table"><span class="header-section-number">5.5</span> 3) Filter MT using Sample QC Tables</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="02-gwas_files/figure-html/0045e1c2-1-efd67be3-b00e-4fdb-87c8-abdb90bc57e5.png" class="img-fluid figure-img"></p>
+<p><img src="02-gwas_files/figure-html/248d8ce5-1-efd67be3-b00e-4fdb-87c8-abdb90bc57e5.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">image.png</figcaption><p></p>
 </figure>
 </div>
-<section id="a-filter-sample-qc-table" class="level4" data-number="5.4.0.1">
-<h4 data-number="5.4.0.1" class="anchored" data-anchor-id="a-filter-sample-qc-table"><span class="header-section-number">5.4.0.1</span> 3a) Filter sample QC Table</h4>
+<section id="a-filter-sample-qc-table" class="level4" data-number="5.5.0.1">
+<h4 data-number="5.5.0.1" class="anchored" data-anchor-id="a-filter-sample-qc-table"><span class="header-section-number">5.5.0.1</span> 3a) Filter sample QC Table</h4>
 <p>The above figure illustrates the basic process for filtering on Sample QC metrics. We first need to build the sample_qc table called <code>pre_sample_qc_tb</code>. Then we will extract the row fields using the <code>.row()</code> accessor and write it to DNAX using <code>pre_sample_qc_table.write()</code>. (see https://github.com/dnanexus/OpenBio/blob/master/hail_tutorial/sample_qc.ipynb for more info)</p>
 <p>This table was built using:</p>
 <pre><code>pre_sample_qc_tb = hl.sample_qc(mt).cols()</code></pre>
@@ -1428,8 +1428,8 @@ Num samples after filtering: 50062</code></pre>
 </div>
 </div>
 </section>
-<section id="b-filter-mt-with-sample-qc-table" class="level4" data-number="5.4.0.2">
-<h4 data-number="5.4.0.2" class="anchored" data-anchor-id="b-filter-mt-with-sample-qc-table"><span class="header-section-number">5.4.0.2</span> 3b) Filter MT with Sample QC Table</h4>
+<section id="b-filter-mt-with-sample-qc-table" class="level4" data-number="5.5.0.2">
+<h4 data-number="5.5.0.2" class="anchored" data-anchor-id="b-filter-mt-with-sample-qc-table"><span class="header-section-number">5.5.0.2</span> 3b) Filter MT with Sample QC Table</h4>
 <p>Now we can use <code>.semi_join_cols()</code> to filter our <code>phenogeno_mt</code> with <code>sample_qc_tb</code>.</p>
 <div class="cell" data-trusted="true" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the MT using the sample QC Table</span></span>
@@ -1438,13 +1438,13 @@ Num samples after filtering: 50062</code></pre>
 </div>
 </section>
 </section>
-<section id="sec-variant_table" class="level2" data-number="5.5">
-<h2 data-number="5.5" class="anchored" data-anchor-id="sec-variant_table"><span class="header-section-number">5.5</span> Build Variant QC table from MT, use to filter MT</h2>
-<section id="a-extract-locus-qc-table" class="level4" data-number="5.5.0.1">
-<h4 data-number="5.5.0.1" class="anchored" data-anchor-id="a-extract-locus-qc-table"><span class="header-section-number">5.5.0.1</span> 4a) Extract Locus QC table</h4>
+<section id="sec-variant_table" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="sec-variant_table"><span class="header-section-number">5.6</span> Build Variant QC table from MT, use to filter MT</h2>
+<section id="a-extract-locus-qc-table" class="level4" data-number="5.6.0.1">
+<h4 data-number="5.6.0.1" class="anchored" data-anchor-id="a-extract-locus-qc-table"><span class="header-section-number">5.6.0.1</span> 4a) Extract Locus QC table</h4>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="02-gwas_files/figure-html/96ebd217-1-8cddc2b5-6e38-4373-a251-b0ae3157a2cf.png" class="img-fluid figure-img"></p>
+<p><img src="02-gwas_files/figure-html/04ec636c-1-8cddc2b5-6e38-4373-a251-b0ae3157a2cf.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">image.png</figcaption><p></p>
 </figure>
 </div>
@@ -1710,8 +1710,8 @@ Num loci after filtering: 39952</code></pre>
 </div>
 </div>
 </section>
-<section id="b-filter-mt-with-variant-qc-tables" class="level4" data-number="5.5.0.2">
-<h4 data-number="5.5.0.2" class="anchored" data-anchor-id="b-filter-mt-with-variant-qc-tables"><span class="header-section-number">5.5.0.2</span> 4b) Filter MT with variant QC Tables</h4>
+<section id="b-filter-mt-with-variant-qc-tables" class="level4" data-number="5.6.0.2">
+<h4 data-number="5.6.0.2" class="anchored" data-anchor-id="b-filter-mt-with-variant-qc-tables"><span class="header-section-number">5.6.0.2</span> 4b) Filter MT with variant QC Tables</h4>
 <p>Now we can use <code>.semi_join_rows()</code> to filter our <code>phenogeno_mt</code> with <code>locus_qc_tb</code>.</p>
 <div class="cell" data-trusted="true" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the MT using the locus QC Table</span></span>
@@ -1947,8 +1947,8 @@ Row key: ['locus', 'alleles']
 </div>
 </section>
 </section>
-<section id="sec-gwas" class="level2" data-number="5.6">
-<h2 data-number="5.6" class="anchored" data-anchor-id="sec-gwas"><span class="header-section-number">5.6</span> 5) Run GWAS</h2>
+<section id="sec-gwas" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="sec-gwas"><span class="header-section-number">5.7</span> 5) Run GWAS</h2>
 <p>Quick reminder that our pheno file has a lot of missing values, so we’re going to be dropping a bunch of samples when we do our analysis.</p>
 <div class="cell" data-trusted="true" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>qc_mt.ccs.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2031,8 +2031,8 @@ Key: ['locus', 'alleles']
 <span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>pandas_gwas.to_csv(<span class="st">"gwas_results.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="sec-visualize" class="level2" data-number="5.7">
-<h2 data-number="5.7" class="anchored" data-anchor-id="sec-visualize"><span class="header-section-number">5.7</span> 6) Visualize GWAS results</h2>
+<section id="sec-visualize" class="level2" data-number="5.8">
+<h2 data-number="5.8" class="anchored" data-anchor-id="sec-visualize"><span class="header-section-number">5.8</span> 6) Visualize GWAS results</h2>
 <p>Bokeh is a Python library that is included in this JupyterLab environment- which makes it easy for us to import.</p>
 <p>We’ll need the <code>output_notebook</code> and <code>show</code> modules to make our plots.</p>
 <div class="cell" data-trusted="true" data-execution_count="17">
@@ -2395,8 +2395,8 @@ Key: ['locus', 'alleles']
 <span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>show(manhattan_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="sec-annotate" class="level2" data-number="5.8">
-<h2 data-number="5.8" class="anchored" data-anchor-id="sec-annotate"><span class="header-section-number">5.8</span> 7) Annotate GWAS results</h2>
+<section id="sec-annotate" class="level2" data-number="5.9">
+<h2 data-number="5.9" class="anchored" data-anchor-id="sec-annotate"><span class="header-section-number">5.9</span> 7) Annotate GWAS results</h2>
 <p>Now that we have our GWAS results, we’ll annotate our file using Hail’s experimental DB, which is hosted on Open Data on AWS. This resource is not available in the RAP region. Here we’re going to add GENCODE annotations to our matrix. There are a lot of other annotations available in the DB as well.</p>
 <p>There is the query builder if you have access to the experimental annotations. This will help you write your <code>db.annotate_rows_db()</code> statement.</p>
 <p>https://hail.is/docs/0.2/annotation_database_ui.html#database-query</p>
@@ -2442,8 +2442,8 @@ Key: ['locus', 'alleles']
 </div>
 </div>
 </section>
-<section id="export-gwas-table-export-mt-to-bgen" class="level2" data-number="5.9">
-<h2 data-number="5.9" class="anchored" data-anchor-id="export-gwas-table-export-mt-to-bgen"><span class="header-section-number">5.9</span> 8) Export GWAS Table, Export MT to BGEN</h2>
+<section id="export-gwas-table-export-mt-to-bgen" class="level2" data-number="5.10">
+<h2 data-number="5.10" class="anchored" data-anchor-id="export-gwas-table-export-mt-to-bgen"><span class="header-section-number">5.10</span> 8) Export GWAS Table, Export MT to BGEN</h2>
 <p>We can convert our Hail GWAS table and bring it into memory using the <code>.to_pandas()</code> method. Then we can write it to HDFS using <code>.to_csv()</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to Pandas DataFrame</span></span>
