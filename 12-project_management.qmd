@@ -133,6 +133,7 @@ Remember that the metadata for file objects includes file names, so you can actu
 Regardless, the underlying file id for the file object will remain the same. 
 :::
 
+
 :::{.callout-note}
 ## Will I still be charged?
 
@@ -140,7 +141,8 @@ What happens when you have two copies of a file in two different org owned proje
 
 There is a process on the platform that is scans file-ids and whether they exist in a project for your org. If a reference to that file-id still exists in your project, then you will still be charged for it.
 
-This is also why having a file archiving strategy is important when managing costs on the platform. :::
+This is also why having a file archiving strategy is important when managing costs on the platform. 
+:::
 
 ## Full Diagram
 

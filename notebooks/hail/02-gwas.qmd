@@ -1,0 +1,506 @@
+---
+jupyter: python3
+---
+
+# GWAS with Hail
+
+### Suggested Configuration: `mem2_ssd1_v1_x8` with at least 6 nodes (use `Hail/VEP` feature set)
+
+This notebook shows how to perform a GWAS for 1 case–control trait using Firth's logistic regression with Hail and save the results as a Hail Table to an Apollo database (dnax://) on the DNAnexus platform. See documentation for guidance on launch specs for the JupyterLab with Spark Cluster app for different data sizes: https://documentation.dnanexus.com/science/using-hail-to-analyze-genomic-data
+
+Note: For population scale data, samples may be referred to as individuals. In this notebook, the word "sample" will be used.
+
+Pre-conditions for running this notebook successfully:
+- There is an existing Hail MatrixTable in DNAX (see [pVCF Import Notebook](https://github.com/dnanexus/OpenBio/blob/master/hail_tutorial/pVCF_import.ipynb) and [BGEN Import Notebook](https://github.com/dnanexus/OpenBio/blob/master/hail_tutorial/BGEN_import.ipynb))
+- There is a Sample QC Hail Table in DNAX (see https://github.com/dnanexus/OpenBio/blob/master/hail_tutorial/sample_qc.ipynb)
+- There is a Variant QC Hail Table in DNAX (see https://github.com/dnanexus/OpenBio/blob/master/hail_tutorial/locus_qc.ipynb)
+- There is phenotypic data for the samples
+
+# Basic GWAS Process
+
+0. Initiate Spark and Hail
+1. Load pVCF/BGEN data, save as MatrixTable (MT)
+2. Load Pheno file, merge with MatrixTable
+3. Build Sample QC table from MT, use to filter MT
+4. Build Locus QC table from MT, use to filter MT
+5. Run GWAS 
+6. Visualize Results
+7. Annotate Results with VEP or annotation db
+8. Save results to CSV, export chromosomes as BGEN file
+
+## 0) Initiate Spark and Hail
+
+Once you run the code below, make sure to open up another tab at `https://JOB-URL:8081/jobs` to look at the Spark UI. It is extremely helpful in understanding what's going on behind the scenes.
+
+```{python}
+#| trusted: true
+# Running this cell will output a red-colored message- this is expected.
+# The 'Welcome to Hail' message in the output will indicate that Hail is ready to use in the notebook.
+
+from pyspark.sql import SparkSession
+import hail as hl
+
+builder = (
+    SparkSession
+    .builder
+    .enableHiveSupport()
+)
+spark = builder.getOrCreate()
+hl.init(sc=spark.sparkContext)
+
+db_name = "db_mt_test2"
+```
+
+## 1) Read Genotype MatrixTable
+
+We'll read in the MatrixTable we loaded in from the pVCF files. See (`supplementary_notebooks/01_pVCF_import.ipynb` for more info)
+
+```{python}
+#| trusted: true
+# read MT
+mt_url="dnax://database-GQYV2Bj04bPg9X3KfFyj2jyY/geno.mt"
+mt = hl.read_matrix_table(mt_url)
+```
+
+```{python}
+#| trusted: true
+mt.rows().show()
+```
+
+```{python}
+#| trusted: true
+# View structure of MT before adding pheno data
+
+mt.describe()
+```
+
+We can look at the first few rows and columns of the genotyping table with `mt.GT.show()`. Note that it includes the locus/alleles column. This is because the row key corresponds to a combination of both `locus` and `alleles`.
+
+```{python}
+#| trusted: true
+mt.GT.show()
+```
+
+## 2) Load and Merge Pheno Table
+
+Phenotypic data may come from an array of sources, such as a cohort from the Cohort Browser or a separate, stand-alone text file. In this notebook, we use phenotypic data from a CSV file, which was previously uploaded to a project. In this (very basic) example we use the phenotypic trait, `is_case`, for each sample. The values indicate if the sample is a case, `is_case=true`, or a control, `is_case=false`
+
+_Note: Although this notebook provides an example using a stand-alone CSV file, another source of phenotypic data could be derived from an Apollo Dataset. Please refer to Table Exporter documentation (https://documentation.dnanexus.com/developer/apps/developing-spark-apps/table-exporter-application) or OpenBio notebooks (https://github.com/dnanexus/OpenBio/tree/master/dx-toolkit) with `extract_dataset` in the title for guidance on how to extract data from an Apollo Dataset._
+
+All data uploaded to the project before running the JupyterLab app is mounted (https://documentation.dnanexus.com/user/jupyter-notebooks?#accessing-data) and can be accessed in `/mnt/project/<path_to_data>`. The file URL follows the format: `file:///mnt/project/<path_to_data>`
+
+```{python}
+#| trusted: true
+# Import the pheno CSV file as a Hail Table
+
+pheno_table = hl.import_table("file:///mnt/project/data/ukbb_100k_bmi_casecontrol.csv",
+                              delimiter=',',
+                              impute=True,
+                              key='iid') # specify the column that will be the key (values must match what is in the MT 's' column)
+
+pheno_table.show()
+```
+
+One thing I always do when I'm loading in a Hail Table is use `.summarize()` on the entire Table. This gives me a high level overview of the Table.
+
+```{python}
+#| trusted: true
+pheno_table.summarize()
+```
+
+We need to modify `case_control_status` in our table, because it needs to be 0/1 instead of 1/2 to work with Hail's `.logistic_regression()` method. 
+
+We can do this with `.annotate()`, which will add a column to our table. We will subtract 1 from both `case_control_status` and `sex_code`.
+
+```{python}
+#| trusted: true
+pheno_fixed = pheno_table.annotate(ccs = pheno_table.case_control_status - 1,
+                                  sc = pheno_table.sex_code - 1)
+pheno_fixed.show()
+```
+
+If we `.describe()`, we'll see that we added two row fields: `ccs` and `sc`.
+
+```{python}
+#| trusted: true
+# View structure of pheno Table
+
+pheno_fixed.describe()
+```
+
+```{python}
+#| trusted: true
+pheno_fixed.show(10)
+```
+
+### 2b Annotate MT with pheno Table
+
+```{python}
+#| trusted: true
+# Annotate the MT with pheno Table by matching the MT's column key ('s') with the pheno Table's key ('sample_id')
+
+phenogeno_mt = mt.annotate_cols(**pheno_fixed[mt.s])
+```
+
+If we look at what happened in the merge, we will see that there are missing values in the pheno data. That's because the pheno file only had 20000 rows.
+
+```{python}
+#| trusted: true
+phenogeno_mt.col.show(20)
+```
+
+```{python}
+#| trusted: true
+# View structure of MT after annotating with pheno Table
+
+phenogeno_mt.describe()
+```
+
+We see that the pheno traits have been added in the column fields of the MT
+
+## 3) Filter MT using Sample QC Tables
+
+![image.png](attachment:efd67be3-b00e-4fdb-87c8-abdb90bc57e5.png)
+
+#### 3a) Filter sample QC Table
+
+The above figure illustrates the basic process for filtering on Sample QC metrics. We first need to build the sample_qc table called `pre_sample_qc_tb`. Then we will extract the row fields using the `.row()` accessor and write it to DNAX using `pre_sample_qc_table.write()`. (see https://github.com/dnanexus/OpenBio/blob/master/hail_tutorial/sample_qc.ipynb for more info)
+
+This table was built using:
+
+```
+pre_sample_qc_tb = hl.sample_qc(mt).cols()
+```
+
+```{python}
+#| trusted: true
+# Define sample QC Table url
+
+sample_qc_url = "dnax://database-GQYV2Bj04bPg9X3KfFyj2jyY/sample_qc.ht"
+```
+
+```{python}
+#| trusted: true
+# Read sample QC Table
+
+pre_sample_qc_tb = hl.read_table(sample_qc_url)
+```
+
+```{python}
+#| trusted: true
+# View structure of sample QC Table
+
+pre_sample_qc_tb.describe()
+```
+
+Let's plot the call rate across the samples. This will help us decide what our cutoff should be.
+
+```{python}
+#| trusted: true
+from bokeh.io import output_notebook, show
+output_notebook()
+
+p = hl.plot.histogram(pre_sample_qc_tb["sample_qc"]["call_rate"])
+show(p)
+```
+
+Let's filter for samples that have a call rate greater or equal to 0.99
+
+```{python}
+#| trusted: true
+# Filter sample QC Table using expressions
+# Note: Viewing the structure of the sample QC table in from the cell above 
+# shows us that the "call_rate" field is within the "sample_qc" struct field
+
+sample_qc_tb = pre_sample_qc_tb.filter(
+    pre_sample_qc_tb["sample_qc"]["call_rate"] >= 0.99) 
+```
+
+```{python}
+#| trusted: true
+# View number of samples in QC Table before and after filtering
+#
+# Note: running this cell can be computationally expensive and take
+# longer for bigger datasets (this cell can be commented out).
+
+print(f"Num samples before filtering: {pre_sample_qc_tb.count()}")
+print(f"Num samples after filtering: {sample_qc_tb.count()}")
+```
+
+#### 3b) Filter MT with Sample QC Table
+
+Now we can use `.semi_join_cols()` to filter our `phenogeno_mt` with `sample_qc_tb`.
+
+```{python}
+#| trusted: true
+# Filter the MT using the sample QC Table
+
+qc_mt = phenogeno_mt.semi_join_cols(sample_qc_tb)
+```
+
+#### 4a) Extract Locus QC table
+
+![image.png](attachment:8cddc2b5-6e38-4373-a251-b0ae3157a2cf.png)
+
+
+This table was built using
+
+```
+pre_locus_qc_tb = hl.variant_qc(mt).rows() 
+```
+
+(see https://github.com/dnanexus/OpenBio/blob/master/hail_tutorial/locus_qc.ipynb for more info)
+
+```{python}
+#| trusted: true
+# Define locus QC Table url
+
+locus_qc_url = "dnax://database-GQYV2Bj04bPg9X3KfFyj2jyY/variant_qc.ht"
+```
+
+```{python}
+#| trusted: true
+# Read locus QC Table
+
+pre_locus_qc_tb = hl.read_table(locus_qc_url)
+```
+
+```{python}
+#| trusted: true
+# View structure of locus QC Table
+
+pre_locus_qc_tb.describe()
+```
+
+Let's filter for loci that have:
+- an AF value between 0.001-0.999,
+- a HWE p-value greater or equal to 1e-10,
+- a call rate greater or equal to 0.9
+
+```{python}
+#| trusted: true
+# Filter QC Table using expressions
+# Note: Viewing the structure of the locus QC table in from the cell above 
+# shows us that the "AF", "p_value_hwe", and "call_rate" fields are within
+# the "variant_qc" struct field.
+
+locus_qc_tb = pre_locus_qc_tb.filter(
+    (pre_locus_qc_tb["variant_qc"]["AF"][0] >= 0.001) & 
+    (pre_locus_qc_tb["variant_qc"]["AF"][0] <= 0.999) & 
+    (pre_locus_qc_tb["variant_qc"]["p_value_hwe"] >= 1e-10) & 
+    (pre_locus_qc_tb["variant_qc"]["call_rate"] >= 0.9)
+)
+```
+
+```{python}
+#| trusted: true
+# DON'T RUN in class
+# View number of loci in QC Table before and after filtering
+#
+# Note: running this cell can be computationally expensive and take
+# longer for bigger datasets (this cell can be commented out).
+
+print(f"Num loci before filtering: {pre_locus_qc_tb.count()}")
+print(f"Num loci after filtering: {locus_qc_tb.count()}")
+```
+
+#### 4b) Filter MT with variant QC Tables
+
+Now we can use `.semi_join_rows()` to filter our `phenogeno_mt` with `locus_qc_tb`.
+
+```{python}
+#| trusted: true
+# Filter the MT using the locus QC Table
+
+qc_mt = qc_mt.semi_join_rows(locus_qc_tb)
+```
+
+```{python}
+#| trusted: true
+# DON'T RUN in class
+# View MT after QC filters
+# 
+# Note: running 'mt.rows().count()' or 'mt.cols().count()' can be computationally 
+# expensive and take longer for bigger datasets (these lines can be commented out).
+
+print(f"Num partitions: {qc_mt.n_partitions()}")
+print(f"Num loci: {qc_mt.rows().count()}")
+print(f"Num samples: {qc_mt.cols().count()}")
+qc_mt.describe()
+```
+
+## 5) Run GWAS
+
+Quick reminder that our pheno file has a lot of missing values, so we're going to be dropping a bunch of samples when we do our analysis.
+
+```{python}
+#| trusted: true
+qc_mt.ccs.show()
+```
+
+Additional documentation: https://hail.is/docs/0.2/methods/stats.html#hail.methods.logistic_regression_rows
+
+```{python}
+#| trusted: true
+# Run Hail's logistic regression method
+
+gwas = hl.logistic_regression_rows(test="firth",
+                                   y=qc_mt.col.ccs, # the column field of the pheno trait we are looking at ('ccs')
+                                   x=qc_mt.GT.n_alt_alleles(), # n_alt_alleles() returns the count of non-reference alleles
+                                   covariates=[1, qc_mt.col.sc])
+```
+
+```{python}
+#| trusted: true
+# View structure of GWAS results Table
+
+gwas.describe()
+```
+
+```{python}
+#| trusted: true
+gwas.show()
+```
+
+```{python}
+#| trusted: true
+
+pandas_gwas = gwas.to_pandas()
+pandas_gwas.to_csv("gwas_results.csv")
+```
+
+## 6) Visualize GWAS results
+
+Bokeh is a Python library that is included in this JupyterLab environment- which makes it easy for us to import.
+
+We'll need the `output_notebook` and `show` modules to make our plots.
+
+```{python}
+#| trusted: true
+from bokeh.io import output_notebook, show
+output_notebook()
+```
+
+```{python}
+#| trusted: true
+qq_plot = hl.plot.qq(gwas.p_value)
+show(qq_plot)
+```
+
+```{python}
+manhattan_plot = hl.plot.manhattan(gwas_tb.p_value)
+show(manhattan_plot)
+```
+
+## 7) Annotate GWAS results
+
+Now that we have our GWAS results, we'll annotate our file using Hail's experimental DB, which is hosted on Open Data on AWS. This resource is not available in the RAP region. Here we're going to add GENCODE annotations to our matrix. There are a lot of other annotations available in the DB as well.
+
+There is the query builder if you have access to the experimental annotations. This will help you write your `db.annotate_rows_db()` statement. 
+
+https://hail.is/docs/0.2/annotation_database_ui.html#database-query 
+
+
+```{python}
+#| trusted: true
+db = hl.experimental.DB(region='us', cloud='aws')
+ann_gwas_tb = db.annotate_rows_db(gwas, 'gencode')
+ann_gwas_tb.show()
+```
+
+On RAP, we do not have access to this resource, as it isn't available in the UKB RAP region, so we must use the Hail/VEP configuration (note we started with the Hail/VEP features).
+
+`hl.vep()` requires a config file in JSON format. I have used the one available here: https://documentation.dnanexus.com/user/jupyter-notebooks/dxjupyterlab-spark-cluster#using-vep-with-hail
+
+```{python}
+#| trusted: true
+ann_gwas_tb2 = hl.vep(ann_gwas_tb, "file:///mnt/project/notebooks/config.json")
+ann_gwas_tb2.show()
+```
+
+## 8) Export GWAS Table, Export MT to BGEN
+
+We can convert our Hail GWAS table and bring it into memory using the `.to_pandas()` method. Then we can write it to HDFS using `.to_csv()`. 
+
+```{python}
+# Convert to Pandas DataFrame
+ann_gwas_pd = ann_gwas_tb.to_pandas()
+# Save as CSV file to Hadoop File System
+ann_gwas_pd.to_csv("gwas-results.csv")
+```
+
+Our `gwas-results.csv` file is now in the Hadoop File System. Then we can run `hdfs get` to pull it onto the disk of the Driver node. Then we can use `dx upload` to get it into project storage.
+
+```{python}
+%%bash
+
+#Fetch results file from Hadoop File System and save to Driver Node Storage
+hdfs dfs -get gwas-results.csv
+#Upload resutls file to Project Storage
+dx upload gwas-results.csv --destination "/users/tladeras/"
+```
+
+If we want to output BGEN files, there is no direct way for the notebook to write data into the project, so we will first write into HDFS (see https://documentation.dnanexus.com/developer/apps/developing-spark-apps#spark-cluster-management-software). 
+
+After writing out the BGEN files to HDFS, we can then move the data to the project in the next step as above.
+
+*Additional documentation: https://hail.is/docs/0.2/methods/impex.html#hail.methods.export_bgen*
+
+```{python}
+#| trusted: true
+# Create a set of unique chromosomes found in MT
+
+chr_set = mt.aggregate_rows(hl.agg.collect_as_set(mt.locus.contig))
+```
+
+```{python}
+#| trusted: true
+# Filter MT to a single chromosome and write out as BGEN file to HDFS as a single file for each chromosome in the MT
+for chrom in chr_set:
+    filtered_mt = hl.filter_intervals(mt, [hl.parse_locus_interval(chrom, reference_genome="GRCh38"),])
+    hl.export_bgen(filtered_mt, f"{chrom}")
+```
+
+
+```{python}
+#| trusted: true
+%%bash
+# Copy BGEN files from HDFS to the JupyterLab execution environment file system
+
+hdfs dfs -get ./*.bgen .
+```
+
+```{python}
+#| trusted: true
+%%bash
+# Copy SAMPLE files from HDFS to the JupyterLab execution environment file system
+
+hdfs dfs -get ./*.sample .
+```
+
+```{python}
+#| trusted: true
+%%bash
+# Upload BGEN and SAMPLE files to project
+
+dx upload *.bgen
+dx upload *.sample
+```
+
+Finally, we can save our filtered MatrixTable to `dnax` so we can use it later.
+
+```{python}
+# Store Table in DNAXc
+
+import dxpy
+
+# find database ID of newly created database using a dxpy methodc
+db_uri = dxpy.find_one_data_object(name=f"{db_name}", classname="database")['id']
+url = f"dnax://{db_uri}/{tb_name}"
+
+# Before this step, the Hail Table is just an object in memory. To persist it and be able to access 
+# it later, the notebook needs to write it into a persistent filesystem (in this case DNAX).
+# See https://hail.is/docs/0.2/hail.Table.html#hail.Table.write for additional documentation.
+qc_tb.write(url) # Note: output should describe size of Table (i.e. number of rows, partitions)
+```
+

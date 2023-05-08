@@ -1,3 +1,4 @@
+freeze: true
 project:
   type: book
 
@@ -11,6 +12,7 @@ book:
     - "12-project_management.qmd"
     - "13-spark-on-dnanexus.qmd"
     - "14-hail-on-dnanexus.qmd"
+    - "15-gwas-using-hail.qmd"
     - references.qmd
 
 bibliography: references.bib

@@ -1,0 +1,305 @@
+---
+jupyter: python3
+---
+
+# Hail Skills: Working with Hail Tables and MatrixTables
+
+This notebook shows how to perform sample QC on a Hail MatrixTable as a pre-GWAS step and save it as a Table to an Apollo database (dnax://) on the DNAnexus platform. See documentation for guidance on launch specs for the JupyterLab with Spark Cluster app for different data sizes: https://documentation.dnanexus.com/science/using-hail-to-analyze-genomic-data
+
+
+Note: For population scale data, samples may be referred to as individuals. In this notebook, the word "sample" will be used.
+
+Pre-conditions for running this notebook successfully:
+- There is an existing Hail MatrixTable in DNAX
+
+## 1) Initiate Spark and Hail
+
+Make sure to open up the Spark Interface at https://job-url:8081/jobs/
+
+```{python}
+#| trusted: true
+# Running this cell will output a red-colored message- this is expected.
+# The 'Welcome to Hail' message in the output will indicate that Hail is ready to use in the notebook.
+
+from pyspark.sql import SparkSession
+import hail as hl
+
+builder = (
+    SparkSession
+    .builder
+    .enableHiveSupport()
+)
+spark = builder.getOrCreate()
+hl.init(sc=spark.sparkContext)
+
+```
+
+ # Load in a Table from Project Storage
+ 
+ 
+ The first thing we'll do in hail is load a pheno file from project storage. 
+ 
+ We'll use `hl.import_table()` for this. We have to specify our key for the file. We will use `iid` (individual ID) as our key.
+
+```{python}
+#| trusted: true
+# Import the pheno CSV file as a Hail Table
+
+pheno_table = hl.import_table("file:///mnt/project/data/ukbb_100k_bmi_casecontrol.csv",
+                              delimiter=',',
+                              impute=True,
+                              key='iid') # specify the column that will be the key (values must match what is in the MT 's' column)
+```
+
+### Quick Hail Table EDA
+
+Three really helpful functions:
+
+- `.describe()` - gives the fields and their data types for our Hail Table
+- `.count()` - counts the number of rows in our Hail Table
+- `.show()` - shows the first few rows of our dataset.
+
+```{python}
+#| trusted: true
+pheno_table.describe()
+```
+
+```{python}
+#| trusted: true
+pheno_table.count()
+```
+
+```{python}
+#| trusted: true
+pheno_table.show()
+```
+
+Calling `.summarize()` on a Hail Table will give you an overview of missing values and data types for each of your columns in your Hail Table
+
+```{python}
+pheno_table.summarize()
+```
+
+For our `pheno_table`, we can also show a column by using the `.` accessor with `.show()`. By default, it will show the column along wi†h the row key for the dataset (`iid`)
+
+```{python}
+#| trusted: true
+pheno_table.case_control_status.show()
+```
+
+An additional method we can use on numeric columns is `.summarize()`, which will give a numeric summary of the column. Since we don't have a numeric column, we'll do it on the `sex_code` column:
+
+```{python}
+#| trusted: true
+pheno_table.sex_code.summarize()
+```
+
+### Specifying new columns using .annotate()
+
+We can define new columns in our Hail Table using the `.annotate()` method. This is a lot like the `mutate()` function in R/Tidyverse. We can compute new values based on other columns in our dataset.
+
+Here we're subtracting 1 from both the `sex_code` and `case_control_status` columns so that we can use them as a phenotype and a covariate in our downstream analysis.
+
+```{python}
+#| trusted: true
+pheno_table2 = pheno_table.annotate(sc= pheno_table.sex_code -1, ccs=pheno_table.case_control_status -1)
+pheno_table2.show()
+```
+
+### Filtering our pheno_table using `.filter()`
+
+The `.filter()` method is used a lot in Hail, for subsetting tables. We'll leverage this ability to filter on our QC tables and then subset our MatrixTable with our filtered table.
+
+```{python}
+#| trusted: true
+pheno3 = pheno_table2.filter(pheno_table2.sc == 0)
+pheno3.show()
+```
+
+## Getting Categorical Breakdowns
+
+We can count categories using `pheno3.aggregate()` and `hl.agg.counter()`. Here we're getting the categorical breakdown of the recoded Case Constrol Status variable `pheno3.ccs`.
+
+Keep in mind that these operations can be expensive to calculate in terms of CPU time. That doesn't mean that you shouldn't do it, but even getting descriptive statistics on a Hail Table can take some time.
+
+In our case, our `pheno3` Hail Table is pretty small, so we can 
+
+```{python}
+#| trusted: true
+pheno3.aggregate(hl.agg.counter(pheno3.ccs))
+```
+
+## Plotting the Hail Table
+
+We can plot the Hail Table using `hl.plot.histogram()` on our columns of interest. There are a number of different kinds of plots in `hl.plot`.
+
+The first thing we need to do is to load some modules from `Bokeh`, which will make our graphs more interactive.
+
+```{python}
+#| trusted: true
+from bokeh.io import output_notebook, show
+output_notebook()
+```
+
+Now we can use `hl.plot.histogram()` on columns in our Hail Table. We'll see that the plotting works similarly for MatrixTables
+
+```{python}
+#| trusted: true
+p = hl.plot.histogram(pheno_table2.ccs, title='Distribution of Cases/Controls', legend='ccs')
+show(p)
+```
+
+```{python}
+#| trusted: true
+p = hl.plot.histogram(pheno_table2.sc, range=(0,1), bins=100, title='Distribution of Gender', legend='sc')
+show(p)
+```
+
+## Working with MatrixTables
+
+![image.png](attachment:877e371c-7c8f-4f93-8fb1-01e9408d4f8b.png)
+
+MatrixTables are an extension of HailTables. They work like a 2-D matrix with two tables that are attached to them:
+
+1) Columns (Sample Based Operations), accessed using `.cols()` 
+
+2) Rows (Variant based operations. accessed using `.rows()`
+
+If you remember this, it makes MatrixTable operations more understandable.
+
+We'll load in a MatrixTable that I've already created. This was created from the pVCF files in the `Geno_Data/` directory using the `hl.import_vcf()` function, and then written to a dnax database using `mt.write()`. (see `supplementary_notebooks/01_import_pVCF.ipynb`)
+
+```{python}
+#| trusted: true
+# read MT
+mt_url="dnax://database-GQYV2Bj04bPg9X3KfFyj2jyY/geno.mt"
+mt = hl.read_matrix_table(mt_url)
+```
+
+We can see from using `.describe()` that there are Column and Row fields.
+
+```{python}
+#| trusted: true
+# View structure of MT before QC
+
+mt.describe()
+```
+
+We can see the actual genotype calls for each locus and each sample using `mt.GT.show()`:
+
+```{python}
+#| trusted: true
+mt.GT.show()
+```
+
+If we do a `.show()` operation on `mt.rows()` we will retrieve the keys used in the row operations. Here they are a combination of locus position and the allele at that position.
+
+```{python}
+#| trusted: true
+mt.row_key.show()
+```
+
+We can access a row field (here AF = Allele Frequency) by first going into the `.info` slot and then accessing the `AF` field within it. ![image.png](attachment:3dc5a474-b028-4f3b-a693-6723ab3fe360.png)
+
+Keep this in mind for when you are using `.filter_rows()`, since it's how you will accesss the fields.
+
+```{python}
+mt.info.AF.show()
+```
+
+If we use `mt.aggregate_entries()` and `hl.agg.counter()` on mt.GT.n_alt_alleles(), we will get the distribution of zygosities for our entire MatrixTable. 
+
+```{python}
+#| trusted: true
+mt.aggregate_entries(hl.agg.counter(mt.GT.n_alt_alleles()))
+```
+
+## 3) Run Hail's sample QC method
+
+If we use `hl.sample_qc()` on our MatrixTable, it will create a new MatrixTable that has the QC information attached. You'll notice that we have an additional column field called `mt.sample_qc`.
+
+Note that we're not going to create the sample QC table here - we will load it from the DNAX store when we do our GWAS. This is because it takes some time to calculate. For more about sample QC, refer to the OpenBio Sample QC notebook here: https://github.com/dnanexus/OpenBio/blob/master/hail_tutorial/sample_qc.ipynb
+
+*Additional documentation: https://hail.is/docs/0.2/methods/genetics.html#hail.methods.sample_qc*
+
+```{python}
+#| trusted: true
+# DON'T RUN in class
+# Run sample-level QC
+
+qc_mt = hl.sample_qc(mt)
+```
+
+```{python}
+#| trusted: true
+# View structure of MT after QC
+# Don't Run this cell
+
+qc_mt.describe()
+```
+
+We can see that a new column field called 'sample_qc' has been added the MT. Note that the `sample_qc` field is not calculated yet. If we do a `.show()`, then we will calculate the QC metrics.
+
+This step took a long time to calculate, over 20 minutes on a six node instance (`mem2_ssd1_v2_x8`), so we won't calculate it.
+
+```{python}
+#| trusted: true
+%%timeit
+qc_mt.cols().show()
+```
+
+We see that there is a column in `qc_mt.sample_qc` called `call_rate`.  We can access it using:
+
+`qc_mt.sample_qc.call_rate` or `qc_mt["sample_qc"]["call_rate"]` if we want to do something with it.
+
+## 4) Create sample QC Table and save in Apollo Database
+
+Now that we have calculated our sample qc metrics, we can save them as a separate table. We are mostly doing this for convenience and speed.
+
+In our case, this has already been done and calculated, so we're just showing the process of storing a MatrixTable into `dnax`.
+
+Note we could also do `mt.write("dnax://{db_name}/geno.mt")` and store the MatrixTable into dnax as well. Using `dnax` is helpful because Hail can read the MatrixTable directly from `dnax`.
+
+```{python}
+#| trusted: true
+# Create Hail Table from MT
+# note we use .cols() to access the column (sample) fields
+qc_tb = qc_mt.cols()
+```
+
+```{python}
+#| trusted: true
+# Define database and table name
+
+# Note: It is recommended to only use lowercase letters for the database name.
+# If uppercase lettering is used, the database name will be lowercased when creating the database.
+db_name = "db_mt_test2"
+tb_name = "sample_qc.ht"
+```
+
+```{python}
+#| trusted: true
+# DON'T RUN in class
+# Create database in DNAX
+
+stmt = f"CREATE DATABASE IF NOT EXISTS {db_name} LOCATION 'dnax://'"
+print(stmt)
+spark.sql(stmt).show()
+```
+
+```{python}
+#| trusted: true
+# DON'T RUN in class
+# Store Table in DNAXc
+import dxpy
+
+# find database ID of newly created database using a dxpy method
+db_uri = dxpy.find_one_data_object(name=f"{db_name}", classname="database")['id']
+url = f"dnax://{db_uri}/{tb_name}"
+
+# Before this step, the Hail Table is just an object in memory. To persist it and be able to access 
+# it later, the notebook needs to write it into a persistent filesystem (in this case DNAX).
+# See https://hail.is/docs/0.2/hail.Table.html#hail.Table.write for additional documentation.
+qc_tb.write(url) # Note: output should describe size of Table (i.e. number of rows, partitions)
+```
+
