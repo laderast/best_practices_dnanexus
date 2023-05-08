@@ -20,6 +20,69 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -30,7 +93,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
+<link href="./15-gwas-using-hail.html" rel="next">
 <link href="./13-spark-on-dnanexus.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -120,6 +183,11 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./15-gwas-using-hail.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">GWAS using Hail</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
   </div>
 </li>
@@ -132,14 +200,15 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#what-is-hail" id="toc-what-is-hail" class="nav-link active" data-scroll-target="#what-is-hail"><span class="toc-section-number">4.1</span>  What is Hail?</a></li>
-  <li><a href="#important-data-structures-in-hail-tables-and-matrixtables" id="toc-important-data-structures-in-hail-tables-and-matrixtables" class="nav-link" data-scroll-target="#important-data-structures-in-hail-tables-and-matrixtables"><span class="toc-section-number">4.2</span>  Important Data Structures in Hail: Tables and MatrixTables</a>
-  <ul class="collapse">
-  <li><a href="#hail-table" id="toc-hail-table" class="nav-link" data-scroll-target="#hail-table"><span class="toc-section-number">4.2.1</span>  Hail Table</a></li>
-  <li><a href="#hail-matrixtable" id="toc-hail-matrixtable" class="nav-link" data-scroll-target="#hail-matrixtable"><span class="toc-section-number">4.2.2</span>  Hail MatrixTable</a></li>
-  </ul></li>
-  <li><a href="#keep-in-mind" id="toc-keep-in-mind" class="nav-link" data-scroll-target="#keep-in-mind"><span class="toc-section-number">4.3</span>  Keep in Mind</a></li>
-  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"><span class="toc-section-number">4.4</span>  </a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="toc-section-number">4.1</span>  Learning Objectives</a></li>
+  <li><a href="#what-is-hail" id="toc-what-is-hail" class="nav-link" data-scroll-target="#what-is-hail"><span class="toc-section-number">4.2</span>  What is Hail?</a></li>
+  <li><a href="#vocabulary" id="toc-vocabulary" class="nav-link" data-scroll-target="#vocabulary"><span class="toc-section-number">4.3</span>  Vocabulary</a></li>
+  <li><a href="#very-first-thing-connect-to-hail" id="toc-very-first-thing-connect-to-hail" class="nav-link" data-scroll-target="#very-first-thing-connect-to-hail"><span class="toc-section-number">4.4</span>  Very first thing: Connect to Hail</a></li>
+  <li><a href="#important-data-structures-in-hail-tables-and-matrixtables" id="toc-important-data-structures-in-hail-tables-and-matrixtables" class="nav-link" data-scroll-target="#important-data-structures-in-hail-tables-and-matrixtables"><span class="toc-section-number">4.5</span>  Important Data Structures in Hail: Tables and MatrixTables</a></li>
+  <li><a href="#hail-table" id="toc-hail-table" class="nav-link" data-scroll-target="#hail-table"><span class="toc-section-number">4.6</span>  Hail Table</a></li>
+  <li><a href="#hail-matrixtable" id="toc-hail-matrixtable" class="nav-link" data-scroll-target="#hail-matrixtable"><span class="toc-section-number">4.7</span>  Hail MatrixTable</a></li>
+  <li><a href="#keep-in-mind" id="toc-keep-in-mind" class="nav-link" data-scroll-target="#keep-in-mind"><span class="toc-section-number">4.8</span>  Keep in Mind</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"><span class="toc-section-number">4.9</span>  </a></li>
   </ul>
 </nav>
     </div>
@@ -163,34 +232,124 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="what-is-hail" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="what-is-hail"><span class="header-section-number">4.1</span> What is Hail?</h2>
+<section id="learning-objectives" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">4.1</span> Learning Objectives</h2>
+<p>After reading this chapter, you should be able to:</p>
+<ul>
+<li><strong>Explain</strong> basic Hail terms and concepts</li>
+<li><strong>Import data</strong> into a Hail MatrixTable from pVCF and BGEN formats</li>
+<li><strong>Merge</strong> phenotypic data into the MatrixTable</li>
+<li><strong>QC</strong> and <strong>Filter</strong> Variant data for use in a GWAS using Hail</li>
+<li><strong>QC</strong> and <strong>Filter</strong> Sample data for use in GWAS with Hail</li>
+<li><strong>Run</strong> GWAS on a Hail MatrixTable</li>
+<li><strong>Annotate</strong> Hail MatrixTables with internal DNAnexus resources</li>
+<li><strong>Export</strong> results from Hail to CSV format</li>
+</ul>
+</section>
+<section id="what-is-hail" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="what-is-hail"><span class="header-section-number">4.2</span> What is Hail?</h2>
 <p>Hail is a genomics framework built on top of Spark to allow for scalable genomics queries. It uses many of the same concepts (partitions, executors, plans) but it is genomics focused.</p>
 <p>For example, the Hail MatrixFrame can be QC’ed, and then filtered on these QC metrics.</p>
 </section>
-<section id="important-data-structures-in-hail-tables-and-matrixtables" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="important-data-structures-in-hail-tables-and-matrixtables"><span class="header-section-number">4.2</span> Important Data Structures in Hail: Tables and MatrixTables</h2>
+<section id="vocabulary" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="vocabulary"><span class="header-section-number">4.3</span> Vocabulary</h2>
+<p>DNAnexus Specific:</p>
+<ul>
+<li><strong>DNAX</strong> - S3 bucket for storing Apollo Databases and Tables - accessed with the dnax:// protocol</li>
+<li><strong>Database Object</strong> - data object on platform that represents a parquet database - has a unique identifier.</li>
+</ul>
+<p>Hail Specific Terminology:</p>
+<ul>
+<li><strong>Spark Driver</strong> - the “boss” of the Spark cluster - hosts the Spark UI</li>
+<li><strong>Spark Worker</strong> - individual nodes that house executors</li>
+<li><strong>Hail Executor</strong> - individual cores/CPUs within a worker - Executors are assigned tasks, identical to Spark.</li>
+<li><strong>Data Partition</strong> - portion of the data that is accessed by worker in parquet columnar format</li>
+<li><strong>Key</strong> - unique identifier for rows or columns
+<ul>
+<li>row keys: <em>rsid + alleles</em></li>
+<li>column keys: <em>sample IDs</em></li>
+</ul></li>
+</ul>
+</section>
+<section id="very-first-thing-connect-to-hail" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="very-first-thing-connect-to-hail"><span class="header-section-number">4.4</span> Very first thing: Connect to Hail</h2>
+<p>The first thing we’ll do is connect to Hail. In our Spark DXJupyter Instance, we’ll use the following boilerplate code:</p>
+<pre><code># Running this cell will output a red-colored message- this is expected.
+# The 'Welcome to Hail' message in the output will indicate that Hail is ready to use in the notebook.
+
+from pyspark.sql import SparkSession
+import hail as hl
+
+builder = (
+    SparkSession
+    .builder
+    .enableHiveSupport()
+)
+spark = builder.getOrCreate()
+hl.init(sc=spark.sparkContext)</code></pre>
+<p>This will be the response from Hail:</p>
+<pre><code>pip-installed Hail requires additional configuration options in Spark referring
+  to the path to the Hail Python module directory HAIL_DIR,
+  e.g. /path/to/python/site-packages/hail:
+    spark.jars=HAIL_DIR/hail-all-spark.jar
+    spark.driver.extraClassPath=HAIL_DIR/hail-all-spark.jar
+    spark.executor.extraClassPath=./hail-all-spark.jarRunning on Apache Spark version 2.4.4
+SparkUI available at http://ip-172-31-34-162.ec2.internal:8081
+Welcome to
+     __  __     &lt;&gt;__
+    / /_/ /__  __/ /
+   / __  / _ `/ / /
+  /_/ /_/\_,_/_/_/   version 0.2.78-b17627756568
+LOGGING: writing to /opt/notebooks/hail-20230418-1956-0.2.78-b17627756568.log</code></pre>
+<p>Now we are ready to connect and do work with Hail.</p>
+<p>Note that you should only initialize one time in a notebook. If you try to initialize multiple times, then you will get an error.</p>
+<p>If that happens, restart the notebook kernel (<strong>Notebook</strong> &gt; <strong>Restart Kernel</strong> in the menu) and start executing all over again.</p>
+</section>
+<section id="important-data-structures-in-hail-tables-and-matrixtables" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="important-data-structures-in-hail-tables-and-matrixtables"><span class="header-section-number">4.5</span> Important Data Structures in Hail: Tables and MatrixTables</h2>
 <p>Before we get started with doing a GWAS in Hail, let’s talk about the data structures we’ll work with. <em>Hail Tables</em> and <em>Hail MatrixTables</em>.</p>
 <p>One of the hardest things to understand about Hail data structures is that they are actually linked data structures. It’s easiest to think of them as data tables with attached metadata.</p>
-<section id="hail-table" class="level3" data-number="4.2.1">
-<h3 data-number="4.2.1" class="anchored" data-anchor-id="hail-table"><span class="header-section-number">4.2.1</span> Hail Table</h3>
+</section>
+<section id="hail-table" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="hail-table"><span class="header-section-number">4.6</span> Hail Table</h2>
 <p>The fundamental data structure in Hail is the Hail Table.</p>
-<p>I think of Hail Tables as a regular data table with a set of metadata fields. These metadata fields are known as global fields.</p>
+<p>I think of Hail Tables as a regular data table with a set of metadata fields. These metadata fields are known as <strong>global fields</strong>. You can think of them as annotations for the entire table, such as the instrument used to generate the table, the software version used to process the data, etc.</p>
+<p>There are multiple operations we can do on a Hail Table (let’s call our Hail Table as <code>ht</code> here):</p>
+<ul>
+<li><code>ht.filter()</code></li>
+<li><code>ht.annotate()</code></li>
+<li><code>ht.show()</code></li>
+</ul>
+<p>Let’s look at some examples of these operations. We can find a list of the row fields for table using <code>.describe()</code>:</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ht.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As we work with MatrixTables, we’ll see that it is actually a little conceptually easier to filter on our sample QC data, then join it back to the MatrixTable to filter out samples that don’t meet our criteria.</p>
 </section>
-<section id="hail-matrixtable" class="level3" data-number="4.2.2">
-<h3 data-number="4.2.2" class="anchored" data-anchor-id="hail-matrixtable"><span class="header-section-number">4.2.2</span> Hail MatrixTable</h3>
-<p>In contrast, Hail MatrixTables consist of the entries (genotypes) that have metadata attached to both the rows and columns.</p>
-<p>The row metadata is called row fields, which correspond to the variants in the MatrixTable. Operations</p>
-<p>The column metadata is called column fields, which correspond to the samples in the MatrixTable.</p>
+<section id="hail-matrixtable" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="hail-matrixtable"><span class="header-section-number">4.7</span> Hail MatrixTable</h2>
+<p>In contrast, Hail MatrixTables consist of the entries (genotypes) that have metadata attached to both the rows and columns. (They also have global fields, but let’s ignore that for now.)</p>
+<p>The main data structure is the table itself, which contains the genotypes. This table is considered as the <strong>entry fields</strong>. Each entry (or cell) contains data.</p>
+<p>For example, if we call</p>
+<pre><code>mt.GT.show()</code></pre>
+<p>It will show the first few rows and columns of the genotypes (the example shown is synthetic data):</p>
+<p><img src="images/entry_fields.png" class="img-fluid"></p>
+<p>We call the row metadata <strong>row fields</strong>, which correspond to the genomic variants in the MatrixTable. Operations on the row fields are operations on genomic variants. (technically the data in a Hail Table are also called row fields, but I find this to be confusing).</p>
+<p>Here’s an example of some row fields. We’ll see that the rows correspond to variants, and the columns correspond to metrics or annotations about the variants.</p>
+<p><img src="images/row_fields.png" class="img-fluid"></p>
+<p>We call the column metadata <strong>column fields</strong>, which correspond to the samples in the MatrixTable. The rows in this table correspond to samples in our MatrixTable, and the columns correspond to per sample covariates (such as gender, age).</p>
+<p>Here’s an example of some column fields.</p>
+<p><img src="images/column_fields.png" class="img-fluid"></p>
+<p>Seeing everything together, we see this:</p>
 </section>
-</section>
-<section id="keep-in-mind" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="keep-in-mind"><span class="header-section-number">4.3</span> Keep in Mind</h2>
+<section id="keep-in-mind" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="keep-in-mind"><span class="header-section-number">4.8</span> Keep in Mind</h2>
 <p>The cardinal rule of MatrixTables is this:</p>
 <blockquote class="blockquote">
-<p><strong>Row</strong> operations operate on <em>variants</em>, while <strong>column</strong> operations operate on <em>samples</em>.</p>
+<p><strong>Row</strong> operations operate on <em>variants</em>, while <strong>Column</strong> operations operate on <em>samples</em>.</p>
 </blockquote>
 <p>It is easy to get lost in a chain of Hail commands and not be able to understand what the code is doing unless you concentrate on this.</p>
+<p><img src="images/keep_in_mind.png" class="img-fluid"></p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -201,14 +360,14 @@ Storing MatrixTables in DNAX
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In general, if you are loading pVCF files, we suggest that you save the MatrixTable into DNAX. This is because loading pVCF files is an expensive operation compared to BGEN files.</p>
-<p>However, we suggest doing filtering and QC of your variants before you save your MatrixTable to DNAX. In general, you will be doubly charged for MatrixTable storage along with your pVCF file storage, so it is worth reducing the data stored in DNAX.</p>
-<p>Note that BGEN files can be loaded from</p>
+<p>In general, if you are loading from pVCF files, we suggest that you save the MatrixTable into DNAX. This is because loading pVCF files is an expensive operation compared to BGEN files.</p>
+<p>However, we suggest doing filtering and QC of your variants before you save your MatrixTable to DNAX. In general, you will be doubly charged for MatrixTable storage along with your pVCF file storage if you store without filtering, so it is worth reducing the data stored in DNAX.</p>
+<p>Note that BGEN files can be directly loaded from Project Storage, but if there is a large amount of filtering/preprocessing involved, it is also worth storing the results as a MatrixTable in DNAX for others to use/access downstream.</p>
 </div>
 </div>
 </section>
-<section id="section" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="section"><span class="header-section-number">4.4</span> </h2>
+<section id="section" class="level2" data-number="4.9">
+<h2 data-number="4.9" class="anchored" data-anchor-id="section"><span class="header-section-number">4.9</span> </h2>
 
 
 </section>
@@ -354,8 +513,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link">
-        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./15-gwas-using-hail.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">GWAS using Hail</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
