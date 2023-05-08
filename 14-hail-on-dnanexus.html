@@ -93,7 +93,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./15-gwas-using-hail.html" rel="next">
+<link href="./02-gwas.html" rel="next">
 <link href="./13-spark-on-dnanexus.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -183,7 +183,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./15-gwas-using-hail.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">GWAS using Hail</span></a>
+  <a href="./02-gwas.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">GWAS using Hail</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -255,7 +255,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 data-number="4.3" class="anchored" data-anchor-id="vocabulary"><span class="header-section-number">4.3</span> Vocabulary</h2>
 <p>DNAnexus Specific:</p>
 <ul>
-<li><strong>DNAX</strong> - S3 bucket for storing Apollo Databases and Tables - accessed with the dnax:// protocol</li>
+<li><strong>DNAX</strong> - S3 bucket for storing Apollo Databases and Tables - accessed with the <code>dnax://</code> protocol</li>
 <li><strong>Database Object</strong> - data object on platform that represents a parquet database - has a unique identifier.</li>
 </ul>
 <p>Hail Specific Terminology:</p>
@@ -334,13 +334,14 @@ LOGGING: writing to /opt/notebooks/hail-20230418-1956-0.2.78-b17627756568.log</c
 <pre><code>mt.GT.show()</code></pre>
 <p>It will show the first few rows and columns of the genotypes (the example shown is synthetic data):</p>
 <p><img src="images/entry_fields.png" class="img-fluid"></p>
-<p>We call the row metadata <strong>row fields</strong>, which correspond to the genomic variants in the MatrixTable. Operations on the row fields are operations on genomic variants. (technically the data in a Hail Table are also called row fields, but I find this to be confusing).</p>
+<p>We call the row metadata <strong>row fields</strong>, which correspond to the genomic variants in the MatrixTable. <em>Operations on the row fields are operations on genomic variants.</em> (technically the data in a Hail Table are also called row fields, but I find this to be confusing).</p>
 <p>Here’s an example of some row fields. We’ll see that the rows correspond to variants, and the columns correspond to metrics or annotations about the variants.</p>
 <p><img src="images/row_fields.png" class="img-fluid"></p>
 <p>We call the column metadata <strong>column fields</strong>, which correspond to the samples in the MatrixTable. The rows in this table correspond to samples in our MatrixTable, and the columns correspond to per sample covariates (such as gender, age).</p>
 <p>Here’s an example of some column fields.</p>
 <p><img src="images/column_fields.png" class="img-fluid"></p>
-<p>Seeing everything together, we see this:</p>
+<p>Putting everything together, we see this:</p>
+<p><img src="images/mt_all.png" class="img-fluid"></p>
 </section>
 <section id="keep-in-mind" class="level2" data-number="4.8">
 <h2 data-number="4.8" class="anchored" data-anchor-id="keep-in-mind"><span class="header-section-number">4.8</span> Keep in Mind</h2>
@@ -513,7 +514,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./15-gwas-using-hail.html" class="pagination-link">
+      <a href="./02-gwas.html" class="pagination-link">
         <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">GWAS using Hail</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
