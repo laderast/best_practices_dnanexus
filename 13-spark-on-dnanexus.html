@@ -313,7 +313,7 @@ Par-what-now?
 </p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-1">flowchart TD
     A[Project Storage] --&gt;|dx download|B[Driver Node]
     A --&gt;|dxFUSE|C 
-    B --&gt;|hdfs dfs -put|C[HDFS System]
+    B --&gt;|hdfs dfs -put|C[HDFS\nSpark Cluster]
     B --&gt;|dx upload|A
     C --&gt;|hdfs dfs -get|B
     D[DNAX\nS3 Storage] --&gt;|dnax://|C
@@ -332,11 +332,11 @@ Par-what-now?
 <p>Using Spark on DNAnexus effectively requires us to be familiar with 4 different file systems (<a href="#fig-full-graph">Figure&nbsp;<span>3.1</span></a>):</p>
 <ul>
 <li><strong>dxFUSE</strong> file system - used to directly access project storage. We access this using <code>file:///mnt/project/</code> in our scripts. For example, if we need to access a file named <code>chr1.tar.gz</code>, we refer to it as <code>file:///mnt/project/chr1.tar.gz</code>. Mounted at the start of JupyterLab; to access</li>
-<li><strong>Driver Node</strong> File System - our waypoint for getting things into and out of the Hadoop File System and possibly into Project Storage. Since we run JupyterLab on the Driver Node, we use <code>hdfs://</code> to transfer from the Driver Node to the Hadoop File system (see below), and use <code>dxFUSE</code> to work with Project Storage files, and <code>dx upload</code> to transfer files back into project storage.</li>
-<li><strong>Hadoop</strong> File System (HDFS) - Distributed File System for the cluster. We access this using the <code>hdfs://</code> protocol.</li>
+<li><strong>Hadoop</strong> File System (HDFS) - Distributed File System for the Spark Cluster. We access this using the <code>hdfs://</code> protocol. This is the filesystem that Spark uses by default. When we load Spark DataFrames, this is where the Parquet files belonging to them live.</li>
 <li><strong>DNAX</strong> S3 Bucket - contains ingested data and other data loaded and saved to a database in Spark. This is a separate S3 bucket. We interact with ingested Pheno and Geno Data using a special protocol called <code>dnax://</code>. Ingested data that is stored here is accessed through connecting to the DNAX database that holds it. Part of why Cohort Browser works with very large data is that the ingested data is stored in this bucket.</li>
+<li><strong>Driver Node</strong> File System - our waypoint for getting things into and out of the Hadoop File System and to/from Project Storage. Since we run JupyterLab on the Driver Node, we use <code>hdfs dfs -put</code>/<code>hdfs dfs -get</code> to transfer to/from the Driver Node to the Hadoop File system (see below), and use <code>dx download</code> to work with Project Storage files, and <code>dx upload</code> to transfer files back into project storage.</li>
 </ul>
-<p>Whenever possible, we want to avoid using the Driver node to transfer files. That is because there are direct connections between HDFS and the Project Storage using dxFUSE.</p>
+<p>Whenever possible, <em>we want to avoid using the Driver node to transfer files to any of the other filesystems</em>. That is because we are limited to the disk space and memory of the file node. To overcome this, there are direct connections between HDFS and the Project Storage using dxFUSE that will let us stream the data.</p>
 <p>The TL;DR (too long; didn’t read) to this all is:</p>
 <ol type="1">
 <li>Try to avoid transfers through the Driver node (<code>hdfs dfs -get</code>/<code>dx upload</code>), as you are limited to the memory/disk space of the Driver node. You can specify a file path directly from project storage by putting a <code>file:///mnt/project/</code> before the file path (<a href="#fig-from-project">Figure&nbsp;<span>3.2</span></a>).</li>
@@ -348,7 +348,7 @@ Par-what-now?
 <p>
 </p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-2">flowchart TD
     subgraph F[From Project Storage]
-        A[Project Storage] --&gt;|dxFUSE|C[HDFS Storage]
+        A[Project Storage] --&gt;|dxFUSE|C[HDFS\nSpark Cluster]
     end
     C --&gt; D[DNAX\nS3 Storage]
 </pre>
@@ -362,7 +362,7 @@ Par-what-now?
 </div>
 </div>
 <ol start="2" type="1">
-<li>When possible, use dxFUSE with glob wildcards to directly stream files into HDFS (Spark Cluster Storage) from project storage by using <code>file:///mnt/project/</code> URLs (<a href="#fig-dxfuse-glob">Figure&nbsp;<span>3.3</span></a>). For example, we could load a set of pVCF files with <code>hl.read_vcf("file:///mnt/project/data/pVCF/*.vcf.gz")</code>)</li>
+<li>When possible, use dxFUSE with glob wildcards (such as <code>*.tar.gz</code> or <code>chr*</code>) to directly stream files into HDFS (Spark Cluster Storage) from project storage by using <code>file:///mnt/project/</code> URLs (<a href="#fig-dxfuse-glob">Figure&nbsp;<span>3.3</span></a>). For example, we could load a set of pVCF files with <code>hl.read_vcf("file:///mnt/project/data/pVCF/*.vcf.gz")</code>)</li>
 </ol>
 <div class="cell">
 <div class="cell-output-display">
@@ -371,7 +371,7 @@ Par-what-now?
 <p>
 </p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-3">flowchart TD
     subgraph F[From Project Storage]
-        A[Project Storage] --&gt;|dxFUSE|C[HDFS Storage]
+        A[Project Storage] --&gt;|dxFUSE|C[HDFS\nSpark Cluster]
     end
     C --&gt; D[DNAX\nS3 Storage]
 </pre>
@@ -395,10 +395,8 @@ Par-what-now?
 </p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-4">flowchart TD
     subgraph To Project Storage
       A[Project Storage]
-      C --&gt;|dxFUSE -limitedWrite|A
+      C[HDFS\nSpark Cluster] --&gt;|dxFUSE -limitedWrite|A
     end
-    C[HDFS File\nSystem] --&gt; D
-    D[DNAX\nS3 Storage] --&gt; C
 </pre>
 <div id="mermaid-tooltip-4" class="mermaidTooltip">
 
@@ -418,7 +416,7 @@ Par-what-now?
 <figure class="figure">
 <p>
 </p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-5">flowchart TD
-    C[HDFS File\nSystem] --&gt;|dnax://my_db/geno.mt|D
+    C[HDFS\nSpark Cluster] --&gt;|dnax://my_db/geno.mt|D
     D[DNAX\nS3 Storage] --&gt;|dnax://my_db/geno.mt|C
 </pre>
 <div id="mermaid-tooltip-5" class="mermaidTooltip">
@@ -430,6 +428,9 @@ Par-what-now?
 </div>
 </div>
 </div>
+<ol start="5" type="1">
+<li>More advanced usage - you can connect Spark to other S3 buckets using the <code>s3://</code> protocol. You will need to authenticate before connecting.</li>
+</ol>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
