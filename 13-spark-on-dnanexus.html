@@ -93,7 +93,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./14-hail-on-dnanexus.html" rel="next">
+<link href="./dx_extract_dataset_R.html" rel="next">
 <link href="./12-project_management.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -123,6 +123,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-submit-button-title": "Submit"
   }
 }</script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 </head>
@@ -178,12 +181,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./14-hail-on-dnanexus.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Hail on DNAnexus</span></a>
+  <a href="./dx_extract_dataset_R.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">“dx extract_dataset” in R</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02-gwas.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">GWAS using Hail</span></a>
+  <a href="./14-hail-on-dnanexus.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Hail on DNAnexus</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-gwas.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">GWAS using Hail</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -297,6 +305,26 @@ Par-what-now?
 </section>
 <section id="the-four-filesystems" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="the-four-filesystems"><span class="header-section-number">3.4</span> The Four Filesystems</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<p>
+</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-1">flowchart TD
+    A[Project Storage] --&gt;|dxFUSE|B[Driver Node]
+    B --&gt;|hdfs dfs -put|C[HDFS System]
+    B --&gt;|dx upload|A
+    C --&gt;|hdfs dfs -get|B
+    D[DNAX\nS3 Storage] --&gt;|dnax://|C
+    C --&gt;|dnax://|D
+    C --&gt;|dxFUSE -limitedWrite|A
+</pre>
+<div id="mermaid-tooltip-1" class="mermaidTooltip">
+
+</div>
+<p></p>
+</div>
+</div>
+</div>
 <p>Using Spark on DNAnexus effectively requires us to be familiar with 4 different file systems (yes, you heard that right):</p>
 <ul>
 <li><strong>dxFUSE</strong> file system - used to directly access project storage. We access this using <code>file:///mnt/project/</code> in our scripts. For example, if we need to access a file named <code>chr1.tar.gz</code>, we refer to it as <code>file:///mnt/project/chr1.tar.gz</code>. Mounted at the start of JupyterLab; to access</li>
@@ -304,11 +332,81 @@ Par-what-now?
 <li><strong>Hadoop</strong> File System (HDFS) - Distributed File System for the cluster. We access this using the <code>hdfs://</code> protocol.</li>
 <li><strong>dnax</strong> S3 Bucket - contains ingested data. This is a separate S3 bucket. We interact with ingested Pheno and Geno Data using a special protocol called <code>dnax://</code>. Ingested data that is stored here is accessed through connecting to the DNAX database that holds it. Part of why Cohort Browser works with very large data is that the ingested data is stored in this bucket.</li>
 </ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<p>
+</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-2">flowchart TD
+    A[Project Storage] --&gt;|dxFUSE|C
+    D[DNAX\nS3 Storage] --&gt;|dnax://|C
+    C[HDFS File\nSystem] --&gt;|dnax://|D
+    C --&gt;|dxFUSE -limitedWrite|A
+</pre>
+<div id="mermaid-tooltip-2" class="mermaidTooltip">
+
+</div>
+<p></p>
+</div>
+</div>
+</div>
 <p>The TL;DR (too long; didn’t read) to this all is:</p>
 <ol type="1">
 <li>Try to avoid transfers through the Driver node (<code>hdfs dfs -get</code>/<code>dx upload</code>), as you are limited to the memory/disk space of the Driver node.</li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<p>
+</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-3">flowchart TD
+    A[Project Storage] --&gt;|dxFUSE|C
+    C[HDFS File\nSystem] --&gt;|dnax://|D[DNAX\nS3 Storage] 
+</pre>
+<div id="mermaid-tooltip-3" class="mermaidTooltip">
+
+</div>
+<p></p>
+</div>
+</div>
+</div>
+<ol start="2" type="1">
 <li>When possible, use dxFUSE with glob wildcards to directly stream files into HDFS (Spark Cluster Storage) from project storage by using <code>file:///mnt/project/</code> URLs. For example, we could load a set of pVCF files with <code>hl.read_vcf(file:///mnt/project/data/pVCF/*.vcf.gz)</code>)</li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<p>
+</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-4">flowchart TD
+    A[Project Storage]
+    C[HDFS File\nSystem] --&gt;|dnax://|D
+    C --&gt;|dxFUSE -limitedWrite|A
+    D[DNAX\nS3 Storage] --&gt;|dnax://|C
+</pre>
+<div id="mermaid-tooltip-4" class="mermaidTooltip">
+
+</div>
+<p></p>
+</div>
+</div>
+</div>
+<ol start="3" type="1">
 <li>If you need to get files out of HDFS into Project Storage, use dxFUSE in <code>-limitedWrite</code> mode to write into project storage by passing in <code>file:///mnt/project/</code> URLs to the <code>.write()</code> methods in Spark/Hail. You will need to remount dxFUSE in the JupyterLab container to do this.</li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<p>
+</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-5">flowchart TD
+    C[HDFS File\nSystem] --&gt;|dnax://my_db/geno.mt|D
+    D[DNAX\nS3 Storage] --&gt;|dnax://my_db/geno.mt|C
+</pre>
+<div id="mermaid-tooltip-5" class="mermaidTooltip">
+
+</div>
+<p></p>
+</div>
+</div>
+</div>
+<ol start="4" type="1">
 <li>If you need to persist your Spark DataFrame, use <code>dnax:///&lt;db_name&gt;/&lt;table_name&gt;</code> with <code>.write()</code> to write it into DNAX storage (). Then use SparkSQL to save it in the Spark Database in DNAX.</li>
 </ol>
 <div class="callout-note callout callout-style-default callout-captioned">
@@ -545,8 +643,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./14-hail-on-dnanexus.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Hail on DNAnexus</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./dx_extract_dataset_R.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">“dx extract_dataset” in R</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

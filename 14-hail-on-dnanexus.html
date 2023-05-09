@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Best Practices on the DNAnexus Platform - 4&nbsp; Hail on DNAnexus</title>
+<title>Best Practices on the DNAnexus Platform - 5&nbsp; Hail on DNAnexus</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -94,7 +94,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./02-gwas.html" rel="next">
-<link href="./13-spark-on-dnanexus.html" rel="prev">
+<link href="./dx_extract_dataset_R.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -133,7 +133,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Hail on DNAnexus</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Hail on DNAnexus</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -178,12 +178,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./14-hail-on-dnanexus.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Hail on DNAnexus</span></a>
+  <a href="./dx_extract_dataset_R.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">“dx extract_dataset” in R</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02-gwas.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">GWAS using Hail</span></a>
+  <a href="./14-hail-on-dnanexus.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Hail on DNAnexus</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-gwas.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">GWAS using Hail</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -200,15 +205,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="toc-section-number">4.1</span>  Learning Objectives</a></li>
-  <li><a href="#what-is-hail" id="toc-what-is-hail" class="nav-link" data-scroll-target="#what-is-hail"><span class="toc-section-number">4.2</span>  What is Hail?</a></li>
-  <li><a href="#vocabulary" id="toc-vocabulary" class="nav-link" data-scroll-target="#vocabulary"><span class="toc-section-number">4.3</span>  Vocabulary</a></li>
-  <li><a href="#very-first-thing-connect-to-hail" id="toc-very-first-thing-connect-to-hail" class="nav-link" data-scroll-target="#very-first-thing-connect-to-hail"><span class="toc-section-number">4.4</span>  Very first thing: Connect to Hail</a></li>
-  <li><a href="#important-data-structures-in-hail-tables-and-matrixtables" id="toc-important-data-structures-in-hail-tables-and-matrixtables" class="nav-link" data-scroll-target="#important-data-structures-in-hail-tables-and-matrixtables"><span class="toc-section-number">4.5</span>  Important Data Structures in Hail: Tables and MatrixTables</a></li>
-  <li><a href="#hail-table" id="toc-hail-table" class="nav-link" data-scroll-target="#hail-table"><span class="toc-section-number">4.6</span>  Hail Table</a></li>
-  <li><a href="#hail-matrixtable" id="toc-hail-matrixtable" class="nav-link" data-scroll-target="#hail-matrixtable"><span class="toc-section-number">4.7</span>  Hail MatrixTable</a></li>
-  <li><a href="#keep-in-mind" id="toc-keep-in-mind" class="nav-link" data-scroll-target="#keep-in-mind"><span class="toc-section-number">4.8</span>  Keep in Mind</a></li>
-  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"><span class="toc-section-number">4.9</span>  </a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="toc-section-number">5.1</span>  Learning Objectives</a></li>
+  <li><a href="#what-is-hail" id="toc-what-is-hail" class="nav-link" data-scroll-target="#what-is-hail"><span class="toc-section-number">5.2</span>  What is Hail?</a></li>
+  <li><a href="#vocabulary" id="toc-vocabulary" class="nav-link" data-scroll-target="#vocabulary"><span class="toc-section-number">5.3</span>  Vocabulary</a></li>
+  <li><a href="#very-first-thing-connect-to-hail" id="toc-very-first-thing-connect-to-hail" class="nav-link" data-scroll-target="#very-first-thing-connect-to-hail"><span class="toc-section-number">5.4</span>  Very first thing: Connect to Hail</a></li>
+  <li><a href="#important-data-structures-in-hail-tables-and-matrixtables" id="toc-important-data-structures-in-hail-tables-and-matrixtables" class="nav-link" data-scroll-target="#important-data-structures-in-hail-tables-and-matrixtables"><span class="toc-section-number">5.5</span>  Important Data Structures in Hail: Tables and MatrixTables</a></li>
+  <li><a href="#hail-table" id="toc-hail-table" class="nav-link" data-scroll-target="#hail-table"><span class="toc-section-number">5.6</span>  Hail Table</a></li>
+  <li><a href="#hail-matrixtable" id="toc-hail-matrixtable" class="nav-link" data-scroll-target="#hail-matrixtable"><span class="toc-section-number">5.7</span>  Hail MatrixTable</a></li>
+  <li><a href="#keep-in-mind" id="toc-keep-in-mind" class="nav-link" data-scroll-target="#keep-in-mind"><span class="toc-section-number">5.8</span>  Keep in Mind</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"><span class="toc-section-number">5.9</span>  </a></li>
   </ul>
 </nav>
     </div>
@@ -217,7 +222,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Hail on DNAnexus</span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Hail on DNAnexus</span></h1>
 </div>
 
 
@@ -232,8 +237,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<section id="learning-objectives" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">4.1</span> Learning Objectives</h2>
+<section id="learning-objectives" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">5.1</span> Learning Objectives</h2>
 <p>After reading this chapter, you should be able to:</p>
 <ul>
 <li><strong>Explain</strong> basic Hail terms and concepts</li>
@@ -246,13 +251,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><strong>Export</strong> results from Hail to CSV format</li>
 </ul>
 </section>
-<section id="what-is-hail" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="what-is-hail"><span class="header-section-number">4.2</span> What is Hail?</h2>
+<section id="what-is-hail" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="what-is-hail"><span class="header-section-number">5.2</span> What is Hail?</h2>
 <p>Hail is a genomics framework built on top of Spark to allow for scalable genomics queries. It uses many of the same concepts (partitions, executors, plans) but it is genomics focused.</p>
 <p>For example, the Hail MatrixFrame can be QC’ed, and then filtered on these QC metrics.</p>
 </section>
-<section id="vocabulary" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="vocabulary"><span class="header-section-number">4.3</span> Vocabulary</h2>
+<section id="vocabulary" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="vocabulary"><span class="header-section-number">5.3</span> Vocabulary</h2>
 <p>DNAnexus Specific:</p>
 <ul>
 <li><strong>DNAX</strong> - S3 bucket for storing Apollo Databases and Tables - accessed with the <code>dnax://</code> protocol</li>
@@ -271,8 +276,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul>
 </section>
-<section id="very-first-thing-connect-to-hail" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="very-first-thing-connect-to-hail"><span class="header-section-number">4.4</span> Very first thing: Connect to Hail</h2>
+<section id="very-first-thing-connect-to-hail" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="very-first-thing-connect-to-hail"><span class="header-section-number">5.4</span> Very first thing: Connect to Hail</h2>
 <p>The first thing we’ll do is connect to Hail. In our Spark DXJupyter Instance, we’ll use the following boilerplate code:</p>
 <pre><code># Running this cell will output a red-colored message- this is expected.
 # The 'Welcome to Hail' message in the output will indicate that Hail is ready to use in the notebook.
@@ -305,13 +310,13 @@ LOGGING: writing to /opt/notebooks/hail-20230418-1956-0.2.78-b17627756568.log</c
 <p>Note that you should only initialize one time in a notebook. If you try to initialize multiple times, then you will get an error.</p>
 <p>If that happens, restart the notebook kernel (<strong>Notebook</strong> &gt; <strong>Restart Kernel</strong> in the menu) and start executing all over again.</p>
 </section>
-<section id="important-data-structures-in-hail-tables-and-matrixtables" class="level2" data-number="4.5">
-<h2 data-number="4.5" class="anchored" data-anchor-id="important-data-structures-in-hail-tables-and-matrixtables"><span class="header-section-number">4.5</span> Important Data Structures in Hail: Tables and MatrixTables</h2>
+<section id="important-data-structures-in-hail-tables-and-matrixtables" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="important-data-structures-in-hail-tables-and-matrixtables"><span class="header-section-number">5.5</span> Important Data Structures in Hail: Tables and MatrixTables</h2>
 <p>Before we get started with doing a GWAS in Hail, let’s talk about the data structures we’ll work with. <em>Hail Tables</em> and <em>Hail MatrixTables</em>.</p>
 <p>One of the hardest things to understand about Hail data structures is that they are actually linked data structures. It’s easiest to think of them as data tables with attached metadata.</p>
 </section>
-<section id="hail-table" class="level2" data-number="4.6">
-<h2 data-number="4.6" class="anchored" data-anchor-id="hail-table"><span class="header-section-number">4.6</span> Hail Table</h2>
+<section id="hail-table" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="hail-table"><span class="header-section-number">5.6</span> Hail Table</h2>
 <p>The fundamental data structure in Hail is the Hail Table.</p>
 <p>I think of Hail Tables as a regular data table with a set of metadata fields. These metadata fields are known as <strong>global fields</strong>. You can think of them as annotations for the entire table, such as the instrument used to generate the table, the software version used to process the data, etc.</p>
 <p>There are multiple operations we can do on a Hail Table (let’s call our Hail Table as <code>ht</code> here):</p>
@@ -326,8 +331,8 @@ LOGGING: writing to /opt/notebooks/hail-20230418-1956-0.2.78-b17627756568.log</c
 </div>
 <p>As we work with MatrixTables, we’ll see that it is actually a little conceptually easier to filter on our sample QC data, then join it back to the MatrixTable to filter out samples that don’t meet our criteria.</p>
 </section>
-<section id="hail-matrixtable" class="level2" data-number="4.7">
-<h2 data-number="4.7" class="anchored" data-anchor-id="hail-matrixtable"><span class="header-section-number">4.7</span> Hail MatrixTable</h2>
+<section id="hail-matrixtable" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="hail-matrixtable"><span class="header-section-number">5.7</span> Hail MatrixTable</h2>
 <p>In contrast, Hail MatrixTables consist of the entries (genotypes) that have metadata attached to both the rows and columns. (They also have global fields, but let’s ignore that for now.)</p>
 <p>The main data structure is the table itself, which contains the genotypes. This table is considered as the <strong>entry fields</strong>. Each entry (or cell) contains data.</p>
 <p>For example, if we call</p>
@@ -343,8 +348,8 @@ LOGGING: writing to /opt/notebooks/hail-20230418-1956-0.2.78-b17627756568.log</c
 <p>Putting everything together, we see this:</p>
 <p><img src="images/mt_all.png" class="img-fluid"></p>
 </section>
-<section id="keep-in-mind" class="level2" data-number="4.8">
-<h2 data-number="4.8" class="anchored" data-anchor-id="keep-in-mind"><span class="header-section-number">4.8</span> Keep in Mind</h2>
+<section id="keep-in-mind" class="level2" data-number="5.8">
+<h2 data-number="5.8" class="anchored" data-anchor-id="keep-in-mind"><span class="header-section-number">5.8</span> Keep in Mind</h2>
 <p>The cardinal rule of MatrixTables is this:</p>
 <blockquote class="blockquote">
 <p><strong>Row</strong> operations operate on <em>variants</em>, while <strong>Column</strong> operations operate on <em>samples</em>.</p>
@@ -367,8 +372,8 @@ Storing MatrixTables in DNAX
 </div>
 </div>
 </section>
-<section id="section" class="level2" data-number="4.9">
-<h2 data-number="4.9" class="anchored" data-anchor-id="section"><span class="header-section-number">4.9</span> </h2>
+<section id="section" class="level2" data-number="5.9">
+<h2 data-number="5.9" class="anchored" data-anchor-id="section"><span class="header-section-number">5.9</span> </h2>
 
 
 </section>
@@ -509,13 +514,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./13-spark-on-dnanexus.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Spark on the DNAnexus Platform</span></span>
+      <a href="./dx_extract_dataset_R.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">“dx extract_dataset” in R</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./02-gwas.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">GWAS using Hail</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">GWAS using Hail</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

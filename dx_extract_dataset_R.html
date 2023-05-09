@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Best Practices on the DNAnexus Platform - 4&nbsp; “dx extract_dataset” in R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./14-hail-on-dnanexus.html" rel="next">
+<link href="./13-spark-on-dnanexus.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">“dx extract_dataset” in R</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Best Practices on the DNAnexus Platform</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-object-based-file-systems.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Object Based File Systems</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-project_management.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Project and File Management</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-spark-on-dnanexus.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Spark on the DNAnexus Platform</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dx_extract_dataset_R.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">“dx extract_dataset” in R</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14-hail-on-dnanexus.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Hail on DNAnexus</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-gwas.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">GWAS using Hail</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#preparing-your-environment" id="toc-preparing-your-environment" class="nav-link active" data-scroll-target="#preparing-your-environment"><span class="toc-section-number">4.1</span>  Preparing your environment</a>
+  <ul class="collapse">
+  <li><a href="#launch-spec" id="toc-launch-spec" class="nav-link" data-scroll-target="#launch-spec"><span class="toc-section-number">4.1.1</span>  Launch spec:</a></li>
+  <li><a href="#install-dxpy" id="toc-install-dxpy" class="nav-link" data-scroll-target="#install-dxpy"><span class="toc-section-number">4.1.2</span>  Install dxpy</a></li>
+  <li><a href="#install-tidyverse-for-data-processing" id="toc-install-tidyverse-for-data-processing" class="nav-link" data-scroll-target="#install-tidyverse-for-data-processing"><span class="toc-section-number">4.1.3</span>  Install tidyverse for data processing</a></li>
+  <li><a href="#import-packages" id="toc-import-packages" class="nav-link" data-scroll-target="#import-packages"><span class="toc-section-number">4.1.4</span>  Import packages</a></li>
+  <li><a href="#assign-environment-variables" id="toc-assign-environment-variables" class="nav-link" data-scroll-target="#assign-environment-variables"><span class="toc-section-number">4.1.5</span>  1. Assign environment variables</a></li>
+  <li><a href="#call-dx-extract_dataset-using-a-supplied-dataset" id="toc-call-dx-extract_dataset-using-a-supplied-dataset" class="nav-link" data-scroll-target="#call-dx-extract_dataset-using-a-supplied-dataset"><span class="toc-section-number">4.1.6</span>  2. Call “dx extract_dataset” using a supplied dataset</a></li>
+  <li><a href="#understanding-the-data-dictionary-file" id="toc-understanding-the-data-dictionary-file" class="nav-link" data-scroll-target="#understanding-the-data-dictionary-file"><span class="toc-section-number">4.1.7</span>  Understanding the Data Dictionary File</a></li>
+  <li><a href="#parse-returned-metadata-and-extract-entityfield-names" id="toc-parse-returned-metadata-and-extract-entityfield-names" class="nav-link" data-scroll-target="#parse-returned-metadata-and-extract-entityfield-names"><span class="toc-section-number">4.1.8</span>  3. Parse returned metadata and extract entity/field names</a></li>
+  <li><a href="#use-extracted-entity-and-field-names-as-input-to-the-called-function-dx-extract_dataset-and-extract-data" id="toc-use-extracted-entity-and-field-names-as-input-to-the-called-function-dx-extract_dataset-and-extract-data" class="nav-link" data-scroll-target="#use-extracted-entity-and-field-names-as-input-to-the-called-function-dx-extract_dataset-and-extract-data"><span class="toc-section-number">4.1.9</span>  4. Use extracted entity and field names as input to the called function, “dx extract_dataset” and extract data</a></li>
+  </ul></li>
+  <li><a href="#decoding-columns-with-xvhelper" id="toc-decoding-columns-with-xvhelper" class="nav-link" data-scroll-target="#decoding-columns-with-xvhelper"><span class="toc-section-number">4.2</span>  Decoding columns with xvhelper</a>
+  <ul class="collapse">
+  <li><a href="#save-output-to-project" id="toc-save-output-to-project" class="nav-link" data-scroll-target="#save-output-to-project"><span class="toc-section-number">4.2.1</span>  Save Output to Project</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">“dx extract_dataset” in R</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<hr>
+<p><strong><em>As-Is Software Disclaimer</em></strong></p>
+<p>This content in this repository is delivered “As-Is”. Notwithstanding anything to the contrary, DNAnexus will have no warranty, support, liability or other obligations with respect to Materials provided hereunder.</p>
+<hr>
+<p>This notebook demonstrates usage of the dx command <code>extract_dataset</code> for: * Retrieval of Apollo-stored data, as referenced within entities and fields of a Dataset or Cohort object on the platform * Retrieval of the underlying data dictionary files used to generate a Dataset object on the platform</p>
+<p><a href="https://github.com/dnanexus/OpenBio/blob/master/LICENSE.md">MIT License</a> applies to this notebook.</p>
+<section id="preparing-your-environment" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="preparing-your-environment"><span class="header-section-number">4.1</span> Preparing your environment</h2>
+<section id="launch-spec" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="launch-spec"><span class="header-section-number">4.1.1</span> Launch spec:</h3>
+<ul>
+<li>App name: JupyterLab with Python, R, Stata, ML ()</li>
+<li>Kernel: R</li>
+<li>Instance type: Spark Cluster - mem1_ssd1_v2_x2, 4 nodes</li>
+<li>Snapshot: <code>/.Notebook_snapshots/jupyter_snapshot.gz</code></li>
+<li>Cost: &lt; $0.2</li>
+<li>Runtime: =~ 10 min</li>
+<li>Data description: Input for this notebook is a v3.0 Dataset or Cohort object ID</li>
+</ul>
+</section>
+<section id="install-dxpy" class="level3" data-number="4.1.2">
+<h3 data-number="4.1.2" class="anchored" data-anchor-id="install-dxpy"><span class="header-section-number">4.1.2</span> Install dxpy</h3>
+<p>extract_dataset requires dxpy version &gt;= 0.329.0. If running the command from your local environment (i.e.&nbsp;off of the DNAnexus platform), it may be required to also install pandas. For example, pip3 install -U dxpy[pandas]</p>
+<div class="cell" data-trusted="true" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">system</span>(<span class="st">"pip3 show dxpy"</span>, <span class="at">intern =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="install-tidyverse-for-data-processing" class="level3" data-number="4.1.3">
+<h3 data-number="4.1.3" class="anchored" data-anchor-id="install-tidyverse-for-data-processing"><span class="header-section-number">4.1.3</span> Install tidyverse for data processing</h3>
+<p>Quick note - you will need to read the licenses for the tidyverse in order to make sure whether you and your group are comfortable with the licensing terms.</p>
+<p>If you loaded the snapshot in this project, all of these packages and dependencies are also installed, so you don’t need to install them again.</p>
+<div class="cell" data-trusted="true" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"readr"</span>, <span class="st">"stringr"</span>, <span class="st">"dplyr"</span>, <span class="st">"glue"</span>, <span class="st">"reactable"</span>, <span class="st">"janitor"</span>, <span class="st">"remotes"</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"laderast/xvhelper"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Installing packages into ‘/usr/local/lib/R/site-library’
+(as ‘lib’ is unspecified)
+
+also installing the dependencies ‘bit’, ‘bit64’, ‘progress’, ‘hms’, ‘vroom’, ‘tzdb’, ‘vctrs’, ‘reactR’, ‘snakecase’
+
+
+Downloading GitHub repo laderast/xvhelper@HEAD
+</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rcpp       (1.0.9 -&gt; 1.0.10) [CRAN]
+utf8       (1.2.2 -&gt; 1.2.3 ) [CRAN]
+fansi      (1.0.3 -&gt; 1.0.4 ) [CRAN]
+stringi    (1.7.8 -&gt; 1.7.12) [CRAN]
+tibble     (3.1.8 -&gt; 3.2.0 ) [CRAN]
+purrr      (0.3.5 -&gt; 1.0.1 ) [CRAN]
+cli        (3.4.1 -&gt; 3.6.0 ) [CRAN]
+timechange (0.1.1 -&gt; 0.2.0 ) [CRAN]
+png        (NA    -&gt; 0.1-8 ) [CRAN]
+here       (NA    -&gt; 1.0.1 ) [CRAN]
+RcppTOML   (NA    -&gt; 0.2.2 ) [CRAN]
+tidyr      (1.2.1 -&gt; 1.3.0 ) [CRAN]
+lubridate  (1.9.0 -&gt; 1.9.2 ) [CRAN]
+reticulate (NA    -&gt; 1.28  ) [CRAN]</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Installing 14 packages: Rcpp, utf8, fansi, stringi, tibble, purrr, cli, timechange, png, here, RcppTOML, tidyr, lubridate, reticulate
+
+Installing packages into ‘/usr/local/lib/R/site-library’
+(as ‘lib’ is unspecified)
+</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>── R CMD build ─────────────────────────────────────────────────────────────────
+* checking for file ‘/tmp/RtmpJskvRy/remotes734410c4e0/laderast-xvhelper-6e0873a/DESCRIPTION’ ... OK
+* preparing ‘xvhelper’:
+* checking DESCRIPTION meta-information ... OK
+* checking for LF line-endings in source and make files and shell scripts
+* checking for empty or unneeded directories
+* building ‘xvhelper_0.0.100.tar.gz’
+</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Installing package into ‘/usr/local/lib/R/site-library’
+(as ‘lib’ is unspecified)
+</code></pre>
+</div>
+</div>
+</section>
+<section id="import-packages" class="level3" data-number="4.1.4">
+<h3 data-number="4.1.4" class="anchored" data-anchor-id="import-packages"><span class="header-section-number">4.1.4</span> Import packages</h3>
+<div class="cell" data-trusted="true" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glue)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reactable)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xvhelper)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="assign-environment-variables" class="level3" data-number="4.1.5">
+<h3 data-number="4.1.5" class="anchored" data-anchor-id="assign-environment-variables"><span class="header-section-number">4.1.5</span> 1. Assign environment variables</h3>
+<div class="cell" data-trusted="true" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The referenced Dataset is private and provided only to demonstrate an example input. The user will need to supply a permissible and valid record-id</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign project-id of dataset</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign dataset record-id</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>rid <span class="ot">&lt;-</span> <span class="st">'record-G5Ky4Gj08KQYQ4P810fJ8qPp'</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign joint dataset project-id:record-id</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>dataset <span class="ot">&lt;-</span> rid</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="call-dx-extract_dataset-using-a-supplied-dataset" class="level3" data-number="4.1.6">
+<h3 data-number="4.1.6" class="anchored" data-anchor-id="call-dx-extract_dataset-using-a-supplied-dataset"><span class="header-section-number">4.1.6</span> 2. Call “dx extract_dataset” using a supplied dataset</h3>
+<p>We’ll use the <code>{glue}</code> package to put our bash commands together for <code>dx extract_dataset</code>, and use <code>system()</code> to execute our bash code.</p>
+<p><code>glue::glue()</code> has the advantage of not needing to <code>paste()</code> together strings. The string substitution is cleaner.</p>
+<div class="cell" data-trusted="true" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>cmd <span class="ot">&lt;-</span> glue<span class="sc">::</span><span class="fu">glue</span>(<span class="st">"dx extract_dataset {dataset} -ddd"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>cmd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s execute our command using <code>system()</code> and then we will list the files that result using <code>list.files()</code>. We generate three files in the directory in JupyterLab storage:</p>
+<ul>
+<li><em>dataset_name</em><code>.codings.csv</code></li>
+<li><em>dataset_name</em><code>.data_dictionary.csv</code></li>
+<li><em>dataset_name</em><code>.entity_dictionary.csv</code></li>
+</ul>
+<div class="cell" data-trusted="true" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">system</span>(cmd)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="preview-data-in-the-three-dictionary-.csv-files" class="level4" data-number="4.1.6.1">
+<h4 data-number="4.1.6.1" class="anchored" data-anchor-id="preview-data-in-the-three-dictionary-.csv-files"><span class="header-section-number">4.1.6.1</span> Preview data in the three dictionary (*.csv) files</h4>
+<div class="cell" data-trusted="true" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#codings_file &lt;- system("ls *.codings.csv", intern = TRUE)</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>codings_file <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">pattern=</span><span class="st">"*.codings.csv"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>codings_df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(codings_file, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(codings_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-trusted="true" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>entity_dict_file <span class="ot">&lt;-</span> <span class="fu">system</span>(<span class="st">"ls *.entity_dictionary.csv"</span>, <span class="at">intern=</span><span class="cn">TRUE</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>entity_dict_df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(entity_dict_file, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(entity_dict_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="understanding-the-data-dictionary-file" class="level3" data-number="4.1.7">
+<h3 data-number="4.1.7" class="anchored" data-anchor-id="understanding-the-data-dictionary-file"><span class="header-section-number">4.1.7</span> Understanding the Data Dictionary File</h3>
+<p>The data dictionary is the glue for the entire dataset. It maps:</p>
+<ul>
+<li>Entity to Fields</li>
+<li>Fields to Codings</li>
+<li>Entity to Entity</li>
+</ul>
+<p>We’ll use the data dictionary to understand how to building our list of fields, and later, we’ll join it to the codings file to build a list of fields and their coded values.</p>
+<p>There are more columns to the data dictionary, but let’s first see the <code>entity</code>, <code>name</code>, <code>title</code>, and <code>type</code> columns:</p>
+<div class="cell" data-trusted="true" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#data_dict_file &lt;- system("ls *.data_dictionary.csv", intern=TRUE)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>data_dict_file <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">pattern=</span><span class="st">"*.data_dictionary.csv"</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>data_dict_df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(data_dict_file, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>data_dict_df <span class="ot">&lt;-</span> data_dict_df </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>data_dict_df <span class="sc">%&gt;%</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">select</span>(entity, name, title, type) <span class="sc">%&gt;%</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="parse-returned-metadata-and-extract-entityfield-names" class="level3" data-number="4.1.8">
+<h3 data-number="4.1.8" class="anchored" data-anchor-id="parse-returned-metadata-and-extract-entityfield-names"><span class="header-section-number">4.1.8</span> 3. Parse returned metadata and extract entity/field names</h3>
+<p>Let’s search for some fields. We want the following fields:</p>
+<ul>
+<li><code>Coffee intake | instance 0</code></li>
+<li><code>Sex</code> (Gender)</li>
+<li><code>Smoked cigarette or pipe within last hour | Instance 0</code></li>
+</ul>
+<p>We can use the <code>{reactable}</code> package to make a searchable table of the data dictionary. This will help in finding fields.</p>
+<p>Note the search box in the top right of the table - when we have many fields, we can use the search box to find fields of interest. Try searching for <code>Coffee intake</code> and see what fields pop up.</p>
+<div class="cell" data-trusted="true" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>data_dict_df <span class="ot">&lt;-</span> data_dict_df <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">relocate</span>(name, title) <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">ent_field =</span> glue<span class="sc">::</span><span class="fu">glue</span>(<span class="st">"{entity}.{name}"</span>))</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>basic_data_dict <span class="ot">&lt;-</span> data_dict_df <span class="sc">|&gt;</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">select</span>(title, name, entity, ent_field, coding_name, is_multi_select, is_sparse_coding)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>reactable<span class="sc">::</span><span class="fu">reactable</span>(basic_data_dict, <span class="at">searchable =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Another strategy for searching fields: we can use <code>grepl</code> within <code>dplyr::filter()</code> to search for fields that match our criteria.</p>
+<p>Note we’re chaining the <code>grepl</code> statements with an OR <code>|</code>.</p>
+<p>We’re also concatenating <code>entity</code> and <code>name</code> to a new variable, <code>ent_field</code>, which we’ll use when we specify our list of fields.</p>
+<div class="cell" data-trusted="true" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>filtered_dict <span class="ot">&lt;-</span> data_dict_df <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="fu">grepl</span>(<span class="st">"Coffee type"</span>, title) <span class="sc">|</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">grepl</span>(<span class="st">"Sex"</span>, title) <span class="sc">|</span> </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>           <span class="fu">grepl</span>(<span class="st">"Smoked"</span>, title) <span class="sc">|</span> </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">grepl</span>(<span class="st">"Age at recruitment"</span>, title) <span class="sc">|</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>           <span class="fu">grepl</span>(<span class="st">"main ICD10"</span>, title) <span class="sc">|</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>           <span class="fu">grepl</span>(<span class="st">"Types of transport"</span>, title)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>          ) <span class="sc">%&gt;%</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(title) </span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>filtered_dict <span class="sc">%&gt;%</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(name, title, ent_field)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s use this subset of fields - we’ll pull the <code>ent_field</code> column, and paste it together into a single comma delimited string using <code>paste</code>:</p>
+<div class="cell" data-trusted="true" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>field_list <span class="ot">&lt;-</span> filtered_dict <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(ent_field)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">#field_list &lt;- field_list[200:210]</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>field_list <span class="ot">&lt;-</span> <span class="fu">paste</span>(field_list, <span class="at">collapse =</span> <span class="st">","</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>field_list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="use-extracted-entity-and-field-names-as-input-to-the-called-function-dx-extract_dataset-and-extract-data" class="level3" data-number="4.1.9">
+<h3 data-number="4.1.9" class="anchored" data-anchor-id="use-extracted-entity-and-field-names-as-input-to-the-called-function-dx-extract_dataset-and-extract-data"><span class="header-section-number">4.1.9</span> 4. Use extracted entity and field names as input to the called function, “dx extract_dataset” and extract data</h3>
+<p>Again, we’ll use <code>glue()</code> here for cleaner string substitution.</p>
+<p>We’ll extract the cohort information to a file called <code>cohort_data.csv</code> and work with this file for the rest of the notebook.</p>
+<div class="cell" data-trusted="true" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>cohort <span class="ot">&lt;-</span> <span class="st">"record-G5Ky4Gj08KQYQ4P810fJ8qPp"</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>cohort_template <span class="ot">&lt;-</span> <span class="st">"dx extract_dataset {cohort} --fields {field_list} -o cohort_data.csv"</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>cmd <span class="ot">&lt;-</span> glue<span class="sc">::</span><span class="fu">glue</span>(cohort_template)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>cmd</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">system</span>(cmd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="preview-data-in-the-retrieved-data-file" class="level4" data-number="4.1.9.1">
+<h4 data-number="4.1.9.1" class="anchored" data-anchor-id="preview-data-in-the-retrieved-data-file"><span class="header-section-number">4.1.9.1</span> Preview data in the retrieved data file</h4>
+<p>We’ll see that the retrieved data contains the integer and character codes. These must be decoded (see below):</p>
+<div class="cell" data-trusted="true" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>data_df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"cohort_data.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="decoding-columns-with-xvhelper" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="decoding-columns-with-xvhelper"><span class="header-section-number">4.2</span> Decoding columns with xvhelper</h2>
+<p>xvhelper is a little R package that will return the actual values of the returned data.</p>
+<p>To use it, you build a <code>coded_col_df</code> using <code>merge_coding_data_dict()</code> and then translate the categorical columns to values using <code>decode_categories()</code>, and then change the column names to R friendly clean ones using <code>decode_column_names()</code>.</p>
+<p>Note that we need to run <code>decode_df()</code> before we run <code>decode_category()</code></p>
+<div class="cell" data-trusted="true" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install via remotes::install_github()</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("remotes")</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"laderast/xvhelper"</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xvhelper)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-trusted="true" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>coded_col_df <span class="ot">&lt;-</span> xvhelper<span class="sc">::</span><span class="fu">merge_coding_data_dict</span>(<span class="at">coding_dict =</span> codings_df, <span class="at">data_dict =</span> data_dict_df)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>decoded <span class="ot">&lt;-</span> data_df <span class="sc">%&gt;%</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    xvhelper<span class="sc">::</span><span class="fu">decode_single</span>(coded_col_df) <span class="sc">|&gt;</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    xvhelper<span class="sc">::</span><span class="fu">decode_multi_purrr</span>(coded_col_df) <span class="sc">|&gt;</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    xvhelper<span class="sc">::</span><span class="fu">decode_column_names</span>(coded_col_df, <span class="at">r_clean_names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(decoded)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-trusted="true" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(decoded, <span class="at">file=</span><span class="st">"cohort_decoded.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="save-output-to-project" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="save-output-to-project"><span class="header-section-number">4.2.1</span> Save Output to Project</h3>
+<div class="cell" data-trusted="true" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">system</span>(<span class="st">"dx upload *.csv --destination /users/tladeras/"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./13-spark-on-dnanexus.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Spark on the DNAnexus Platform</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./14-hail-on-dnanexus.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Hail on DNAnexus</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
