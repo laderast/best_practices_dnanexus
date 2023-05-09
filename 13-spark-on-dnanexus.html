@@ -214,7 +214,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#what-is-spark" id="toc-what-is-spark" class="nav-link" data-scroll-target="#what-is-spark"><span class="toc-section-number">3.2.1</span>  What is Spark?</a></li>
   </ul></li>
   <li><a href="#spark-and-lazy-evaluation" id="toc-spark-and-lazy-evaluation" class="nav-link" data-scroll-target="#spark-and-lazy-evaluation"><span class="toc-section-number">3.3</span>  Spark and Lazy Evaluation</a></li>
-  <li><a href="#the-four-filesystems" id="toc-the-four-filesystems" class="nav-link" data-scroll-target="#the-four-filesystems"><span class="toc-section-number">3.4</span>  The Four Filesystems</a></li>
+  <li><a href="#the-four-filesystems-and-how-to-avoid-one" id="toc-the-four-filesystems-and-how-to-avoid-one" class="nav-link" data-scroll-target="#the-four-filesystems-and-how-to-avoid-one"><span class="toc-section-number">3.4</span>  The Four Filesystems (and how to avoid one)</a></li>
   <li><a href="#balancing-cores-and-memory" id="toc-balancing-cores-and-memory" class="nav-link" data-scroll-target="#balancing-cores-and-memory"><span class="toc-section-number">3.5</span>  Balancing Cores and Memory</a></li>
   <li><a href="#the-spark-ui" id="toc-the-spark-ui" class="nav-link" data-scroll-target="#the-spark-ui"><span class="toc-section-number">3.6</span>  The Spark UI</a></li>
   <li><a href="#extracting-phenodata-with-dx-extract_dataset" id="toc-extracting-phenodata-with-dx-extract_dataset" class="nav-link" data-scroll-target="#extracting-phenodata-with-dx-extract_dataset"><span class="toc-section-number">3.7</span>  Extracting PhenoData with <code>dx extract_dataset</code></a></li>
@@ -303,14 +303,16 @@ Par-what-now?
 <p>One thing that is extremely important to know is that Spark executes operations in a <em>Lazy</em> manner. This is opposed to something like R or Python which executes commands right away (a <em>greedy</em> manner).</p>
 <p>When we run Spark operations, we are usually building chains of operations.</p>
 </section>
-<section id="the-four-filesystems" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="the-four-filesystems"><span class="header-section-number">3.4</span> The Four Filesystems</h2>
+<section id="the-four-filesystems-and-how-to-avoid-one" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="the-four-filesystems-and-how-to-avoid-one"><span class="header-section-number">3.4</span> The Four Filesystems (and how to avoid one)</h2>
 <div class="cell">
 <div class="cell-output-display">
-<div>
+<div id="fig-full-graph" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
 <p>
 </p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-1">flowchart TD
     A[Project Storage] --&gt;|dxFUSE|B[Driver Node]
+    A --&gt;|dxFUSE|C 
     B --&gt;|hdfs dfs -put|C[HDFS System]
     B --&gt;|dx upload|A
     C --&gt;|hdfs dfs -get|B
@@ -322,78 +324,98 @@ Par-what-now?
 
 </div>
 <p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.1: The four filesystems.</figcaption><p></p>
+</figure>
 </div>
 </div>
 </div>
-<p>Using Spark on DNAnexus effectively requires us to be familiar with 4 different file systems (yes, you heard that right):</p>
+<p>Using Spark on DNAnexus effectively requires us to be familiar with 4 different file systems (<a href="#fig-full-graph">Figure&nbsp;<span>3.1</span></a>):</p>
 <ul>
 <li><strong>dxFUSE</strong> file system - used to directly access project storage. We access this using <code>file:///mnt/project/</code> in our scripts. For example, if we need to access a file named <code>chr1.tar.gz</code>, we refer to it as <code>file:///mnt/project/chr1.tar.gz</code>. Mounted at the start of JupyterLab; to access</li>
 <li><strong>Driver Node</strong> File System - our waypoint for getting things into and out of the Hadoop File System and possibly into Project Storage. Since we run JupyterLab on the Driver Node, we use <code>hdfs://</code> to transfer from the Driver Node to the Hadoop File system (see below), and use <code>dxFUSE</code> to work with Project Storage files, and <code>dx upload</code> to transfer files back into project storage.</li>
 <li><strong>Hadoop</strong> File System (HDFS) - Distributed File System for the cluster. We access this using the <code>hdfs://</code> protocol.</li>
-<li><strong>dnax</strong> S3 Bucket - contains ingested data. This is a separate S3 bucket. We interact with ingested Pheno and Geno Data using a special protocol called <code>dnax://</code>. Ingested data that is stored here is accessed through connecting to the DNAX database that holds it. Part of why Cohort Browser works with very large data is that the ingested data is stored in this bucket.</li>
+<li><strong>DNAX</strong> S3 Bucket - contains ingested data and other data loaded and saved to a database in Spark. This is a separate S3 bucket. We interact with ingested Pheno and Geno Data using a special protocol called <code>dnax://</code>. Ingested data that is stored here is accessed through connecting to the DNAX database that holds it. Part of why Cohort Browser works with very large data is that the ingested data is stored in this bucket.</li>
 </ul>
+<p>Whenever possible, we want to avoid using the Driver node to transfer files. That is because there are direct connections between HDFS and the Project Storage using dxFUSE.</p>
+<p>The TL;DR (too long; didn’t read) to this all is:</p>
+<ol type="1">
+<li>Try to avoid transfers through the Driver node (<code>hdfs dfs -get</code>/<code>dx upload</code>), as you are limited to the memory/disk space of the Driver node. You can specify a file path directly from project storage by putting a <code>file:///mnt/project/</code> before the file path (<a href="#fig-from-project">Figure&nbsp;<span>3.2</span></a>).</li>
+</ol>
 <div class="cell">
 <div class="cell-output-display">
-<div>
+<div id="fig-from-project" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
 <p>
 </p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-2">flowchart TD
-    A[Project Storage] --&gt;|dxFUSE|C
-    D[DNAX\nS3 Storage] --&gt;|dnax://|C
-    C[HDFS File\nSystem] --&gt;|dnax://|D
-    C --&gt;|dxFUSE -limitedWrite|A
+    subgraph F[From Project Storage]
+        A[Project Storage] --&gt;|dxFUSE|C[HDFS Storage]
+    end
+    C --&gt; D[DNAX\nS3 Storage]
 </pre>
 <div id="mermaid-tooltip-2" class="mermaidTooltip">
 
 </div>
 <p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.2: From Project Storage to HDFS</figcaption><p></p>
+</figure>
 </div>
 </div>
 </div>
-<p>The TL;DR (too long; didn’t read) to this all is:</p>
-<ol type="1">
-<li>Try to avoid transfers through the Driver node (<code>hdfs dfs -get</code>/<code>dx upload</code>), as you are limited to the memory/disk space of the Driver node.</li>
+<ol start="2" type="1">
+<li>When possible, use dxFUSE with glob wildcards to directly stream files into HDFS (Spark Cluster Storage) from project storage by using <code>file:///mnt/project/</code> URLs (<a href="#fig-dxfuse-glob">Figure&nbsp;<span>3.3</span></a>). For example, we could load a set of pVCF files with <code>hl.read_vcf("file:///mnt/project/data/pVCF/*.vcf.gz")</code>)</li>
 </ol>
 <div class="cell">
 <div class="cell-output-display">
-<div>
+<div id="fig-dxfuse-glob" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
 <p>
 </p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-3">flowchart TD
-    A[Project Storage] --&gt;|dxFUSE|C
-    C[HDFS File\nSystem] --&gt;|dnax://|D[DNAX\nS3 Storage] 
+    subgraph F[From Project Storage]
+        A[Project Storage] --&gt;|dxFUSE|C[HDFS Storage]
+    end
+    C --&gt; D[DNAX\nS3 Storage]
 </pre>
 <div id="mermaid-tooltip-3" class="mermaidTooltip">
 
 </div>
 <p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.3: Load from Project Storage directly into HDFS.</figcaption><p></p>
+</figure>
 </div>
 </div>
 </div>
-<ol start="2" type="1">
-<li>When possible, use dxFUSE with glob wildcards to directly stream files into HDFS (Spark Cluster Storage) from project storage by using <code>file:///mnt/project/</code> URLs. For example, we could load a set of pVCF files with <code>hl.read_vcf(file:///mnt/project/data/pVCF/*.vcf.gz)</code>)</li>
+<ol start="3" type="1">
+<li>If you need to get files out of HDFS into Project Storage, use dxFUSE in <code>-limitedWrite</code> mode to write into project storage by passing in <code>file:///mnt/project/</code> URLs to the <code>.write()</code> methods in Spark/Hail. You will need to remount dxFUSE in the JupyterLab container to do this (<a href="#fig-hdfs-project">Figure&nbsp;<span>3.4</span></a>).</li>
 </ol>
 <div class="cell">
 <div class="cell-output-display">
-<div>
+<div id="fig-hdfs-project" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
 <p>
 </p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-4">flowchart TD
-    A[Project Storage]
-    C[HDFS File\nSystem] --&gt;|dnax://|D
-    C --&gt;|dxFUSE -limitedWrite|A
-    D[DNAX\nS3 Storage] --&gt;|dnax://|C
+    subgraph To Project Storage
+      A[Project Storage]
+      C --&gt;|dxFUSE -limitedWrite|A
+    end
+    C[HDFS File\nSystem] --&gt; D
+    D[DNAX\nS3 Storage] --&gt; C
 </pre>
 <div id="mermaid-tooltip-4" class="mermaidTooltip">
 
 </div>
 <p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.4: From HDFS to Project Storage.</figcaption><p></p>
+</figure>
 </div>
 </div>
 </div>
-<ol start="3" type="1">
-<li>If you need to get files out of HDFS into Project Storage, use dxFUSE in <code>-limitedWrite</code> mode to write into project storage by passing in <code>file:///mnt/project/</code> URLs to the <code>.write()</code> methods in Spark/Hail. You will need to remount dxFUSE in the JupyterLab container to do this.</li>
+<ol start="4" type="1">
+<li>If you need to persist your Spark DataFrame, use <code>dnax:///&lt;db_name&gt;/&lt;table_name&gt;</code> with <code>.write()</code> to write it into DNAX storage (for example, <code>mt.write("dnax:///my_db/geno.mt")</code>) (<a href="#fig-dnax">Figure&nbsp;<span>3.5</span></a>). When you need to retrieve a stored table in DNAX, use the same <code>dnax:///</code> URL to load it from DNAX (for example, <code>hl.read_matrix_table("dnax:///my_db/geno.mt"</code>).</li>
 </ol>
 <div class="cell">
 <div class="cell-output-display">
-<div>
+<div id="fig-dnax" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
 <p>
 </p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-5">flowchart TD
     C[HDFS File\nSystem] --&gt;|dnax://my_db/geno.mt|D
@@ -403,12 +425,11 @@ Par-what-now?
 
 </div>
 <p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.5: Saving and Loading into DNAX.</figcaption><p></p>
+</figure>
 </div>
 </div>
 </div>
-<ol start="4" type="1">
-<li>If you need to persist your Spark DataFrame, use <code>dnax:///&lt;db_name&gt;/&lt;table_name&gt;</code> with <code>.write()</code> to write it into DNAX storage (). Then use SparkSQL to save it in the Spark Database in DNAX.</li>
-</ol>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
