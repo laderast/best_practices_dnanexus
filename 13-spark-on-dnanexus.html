@@ -181,7 +181,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./dx_extract_dataset_R.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">“dx extract_dataset” in R</span></a>
+  <a href="./dx_extract_dataset_R.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><code>dx extract_dataset</code> in R</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -213,10 +213,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <ul class="collapse">
   <li><a href="#what-is-spark" id="toc-what-is-spark" class="nav-link" data-scroll-target="#what-is-spark"><span class="toc-section-number">3.2.1</span>  What is Spark?</a></li>
   </ul></li>
-  <li><a href="#spark-and-lazy-evaluation" id="toc-spark-and-lazy-evaluation" class="nav-link" data-scroll-target="#spark-and-lazy-evaluation"><span class="toc-section-number">3.3</span>  Spark and Lazy Evaluation</a></li>
-  <li><a href="#the-four-filesystems-and-how-to-avoid-one" id="toc-the-four-filesystems-and-how-to-avoid-one" class="nav-link" data-scroll-target="#the-four-filesystems-and-how-to-avoid-one"><span class="toc-section-number">3.4</span>  The Four Filesystems (and how to avoid one)</a></li>
-  <li><a href="#balancing-cores-and-memory" id="toc-balancing-cores-and-memory" class="nav-link" data-scroll-target="#balancing-cores-and-memory"><span class="toc-section-number">3.5</span>  Balancing Cores and Memory</a></li>
-  <li><a href="#the-spark-ui" id="toc-the-spark-ui" class="nav-link" data-scroll-target="#the-spark-ui"><span class="toc-section-number">3.6</span>  The Spark UI</a></li>
+  <li><a href="#the-three-or-four-filesystems" id="toc-the-three-or-four-filesystems" class="nav-link" data-scroll-target="#the-three-or-four-filesystems"><span class="toc-section-number">3.3</span>  The Three (or Four) Filesystems</a></li>
+  <li><a href="#balancing-cores-and-memory" id="toc-balancing-cores-and-memory" class="nav-link" data-scroll-target="#balancing-cores-and-memory"><span class="toc-section-number">3.4</span>  Balancing Cores and Memory</a></li>
+  <li><a href="#the-spark-ui" id="toc-the-spark-ui" class="nav-link" data-scroll-target="#the-spark-ui"><span class="toc-section-number">3.5</span>  The Spark UI</a></li>
+  <li><a href="#spark-and-lazy-evaluation" id="toc-spark-and-lazy-evaluation" class="nav-link" data-scroll-target="#spark-and-lazy-evaluation"><span class="toc-section-number">3.6</span>  Spark and Lazy Evaluation</a></li>
   <li><a href="#extracting-phenodata-with-dx-extract_dataset" id="toc-extracting-phenodata-with-dx-extract_dataset" class="nav-link" data-scroll-target="#extracting-phenodata-with-dx-extract_dataset"><span class="toc-section-number">3.7</span>  Extracting PhenoData with <code>dx extract_dataset</code></a></li>
   <li><a href="#connecting-with-pyspark-for-python-users" id="toc-connecting-with-pyspark-for-python-users" class="nav-link" data-scroll-target="#connecting-with-pyspark-for-python-users"><span class="toc-section-number">3.8</span>  Connecting with <code>PySpark</code> (For Python Users)</a>
   <ul class="collapse">
@@ -248,12 +248,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </header>
 
 <p>In this Chapter, we will discuss some of the intricacies behind working with Spark and on the DNAnexus platform.</p>
-<p>I highly recommend that you go over the Cloud Computing Concepts chapter from Bash for Bioinformatics before you start tackling this.</p>
+<p>I highly recommend that you go over the <a href="https://laderast.github.io/bash_for_bioinformatics/03-cloud-computing-basics.html">Cloud Computing Concepts</a> chapter from Bash for Bioinformatics before you start tackling this in case you need a quick refresher.</p>
 <section id="do-i-need-spark" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="do-i-need-spark"><span class="header-section-number">3.1</span> Do I need Spark?</h2>
 <p>As we’ll discover, Spark is made for working with very large datasets. The datasets themselves might be very <em>long</em> (have billions of rows), or very <em>wide</em> (millions of columns).</p>
-<p>A lot of datasets aren’t this big. Especially with tools such as <a href="https://arrow.apache.org/">Apache Arrow</a>, interactive analysis can handle data in the billion row range. Arrow support exists for both R (within the <code>DBI</code>/<code>tidyverse</code>/<code>arrow</code> packages), and Python (Pandas 2.0 now uses Arrow for its backend).</p>
-<p>Genomic Data is often the exception for this. Whole Genome Sequencing outputs usually have hundreds of millions of variants, and with datasets such as UK Biobank, this is multiplied by a very large number of participants. We’ll see in the next chapter that a framework exists for genomic analysis built on Spark called Hail.</p>
+<p>Very large data that is used for Phenotyping, such as Electronic Health Record (EHR) or other Real World Data (RWD) can definitely benefit from working with Spark. When this data is ingested into Spark, it is available as an Apollo Dataset and can be used in large scale queries or visualization tools such as <a href="https://documentation.dnanexus.com/user/cohort-browser">Cohort Browser</a>.</p>
+<p>Genomic Data is another good use-case. Whole Genome Sequencing outputs usually have hundreds of millions of variants, and with datasets such as UK Biobank, this is multiplied by a very large number of participants. We’ll see in the next chapter that a framework exists for genomic analysis built on Spark called Hail.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -265,7 +265,7 @@ Spark/Hail on The Core Platform
 </div>
 <div class="callout-body-container callout-body">
 <p>Please note that working with Spark requires an Apollo License if you are on the Core Platform. For more information, <a href="mailto:sales@dnanexus.com">please contact DNAnexus sales</a>.</p>
-<p>If you are on UKB RAP, the Pheno Data is stored as a Spark Database, so you do not have to have a license on RAP. You also have access to the Hail configurations of Spark JupyterLab as well.</p>
+<p>If you are on UKB RAP, the Pheno Data is stored as a Spark Database/Dataset, so you do not have to have an Apollo license on RAP. On RAP, you also have access to the Hail configurations of Spark JupyterLab as well.</p>
 </div>
 </div>
 </section>
@@ -283,28 +283,34 @@ Par-what-now?
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>You may have heard of <em>Parquet</em> files and wondered how they relate to database objects on the platform. They are a way to store data in a format called <em>columnar</em> storage.</p>
+<p>You may have heard of <em>Parquet</em> files and wondered how they relate to database objects on the platform. They are a way to store data in a format called <a href="https://www.codingninjas.com/codestudio/library/introduction-to-columnar-databases"><em>columnar</em> storage</a>.</p>
 <p>It turns out it is faster for retrieval and searching to store data not by <em>rows</em>, but by <em>columns</em>. This is really helpful because the data is sorted by <em>data</em> type and it’s easier to traverse for this reason.</p>
-<p>Apache Spark is the scalable solution to using columnar formats such as Parquet. There are a number of <em>database engines</em> that are fast at searching and traversing these types of files. Some examples are Snowflake and Apache Arrow.</p>
-<p>On the DNAnexus platform, certain data objects (called Dataset and Database objects) are actually stored in Parquet format, for rapid searching and querying using Apache Spark.</p>
+<p>Apache Spark is the scalable solution to using columnar formats such as Parquet. There are a number of <em>database engines</em> that are fast at searching and traversing these types of files. Some examples are <a href="https://www.snowflake.com/en/why-snowflake/">Snowflake</a> and <a href="https://arrow.apache.org/overview/">Apache Arrow</a>.</p>
+<p>On the DNAnexus platform, certain data objects (called Dataset Objects and Database objects) are actually stored in Parquet format, for rapid searching and querying using Apache Spark.</p>
 </div>
 </div>
 <section id="what-is-spark" class="level3" data-number="3.2.1">
 <h3 data-number="3.2.1" class="anchored" data-anchor-id="what-is-spark"><span class="header-section-number">3.2.1</span> What is Spark?</h3>
-<p>Apache Spark is a framework for working with large datasets that won’t fit into memory on a single computer. Instead, we use what’s called a Spark Cluster. Specifically, we request the Spark Cluster as part of a Spark JupyterLab configuration.</p>
-<p>The main pieces of a Spark Cluster are the <em>Driver Node</em>, and the <em>executors</em>, which correspond to individual cores on a <em>Worker Node</em>. Individual worker nodes have processes known as <em>Executors</em> that will run on their portion of the data.</p>
-<p>Spark lets us analyse large datasets by <em>partitioning</em> the data into smaller pieces that are made available to the cluster via the Hadoop File System. Each executor gains access to a piece of the data, and executes <em>tasks</em> assigned to it on this piece of the data.</p>
-<p>The Driver Node directs the individual executors by assigning <em>tasks</em>. These individual tasks are part of an overall execution plan.</p>
+<p>Apache Spark is a framework for working with large datasets that won’t fit into memory on a single computer. Instead, we use what’s called a Spark Cluster, which is a cluster of machines that we request when we start Spark JupyterLab. Specifically, we request the Spark Cluster as part of a Spark JupyterLab configuration.</p>
+<div id="fig-spark" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/spark-arch.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Spark Architecture.</figcaption><p></p>
+</figure>
+</div>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.1: <strong>?(caption)</strong></figcaption><p></p>
+</figure>
+</div>
+<p>The main pieces of a Spark Cluster are the <em>Driver Node</em>, a <em>Cluster manager</em> (which manages resources on the Worker Nodes), and the <em>Worker Nodes</em>. Individual worker nodes have processes known as <em>Executors</em> that will run on their portion of the data (<a href="#fig-spark">Figure&nbsp;<span>3.1</span></a>).</p>
+<p>Spark lets us analyse large datasets by <em>partitioning</em> the data into smaller pieces that are made available to the cluster via the Hadoop File System. Each executor gains access to a set of these data partitions, and they execute <em>tasks</em> assigned to by the Cluster Manager on their set of partitions.</p>
+<p>The Driver Node directs the individual executors by assigning <em>tasks</em>. These individual tasks are part of an overall <em>execution plan</em>.</p>
 <p>This link is a good introduction to <a href="https://mageswaran1989.medium.com/spark-jargon-for-starters-af1fd8117ada">Spark Terminology</a>.</p>
 </section>
 </section>
-<section id="spark-and-lazy-evaluation" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="spark-and-lazy-evaluation"><span class="header-section-number">3.3</span> Spark and Lazy Evaluation</h2>
-<p>One thing that is extremely important to know is that Spark executes operations in a <em>Lazy</em> manner. This is opposed to something like R or Python which executes commands right away (a <em>greedy</em> manner).</p>
-<p>When we run Spark operations, we are usually building chains of operations.</p>
-</section>
-<section id="the-four-filesystems-and-how-to-avoid-one" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="the-four-filesystems-and-how-to-avoid-one"><span class="header-section-number">3.4</span> The Four Filesystems (and how to avoid one)</h2>
+<section id="the-three-or-four-filesystems" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="the-three-or-four-filesystems"><span class="header-section-number">3.3</span> The Three (or Four) Filesystems</h2>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-full-graph" class="quarto-figure quarto-figure-center anchored">
@@ -324,22 +330,22 @@ Par-what-now?
 
 </div>
 <p></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;3.1: The four filesystems.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.2: The four filesystems.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Using Spark on DNAnexus effectively requires us to be familiar with 4 different file systems (<a href="#fig-full-graph">Figure&nbsp;<span>3.1</span></a>):</p>
+<p>Using Spark on DNAnexus effectively requires us to be familiar with at least 3 different file systems (<a href="#fig-full-graph">Figure&nbsp;<span>3.2</span></a>):</p>
 <ul>
 <li><strong>dxFUSE</strong> file system - used to directly access project storage. We access this using <code>file:///mnt/project/</code> in our scripts. For example, if we need to access a file named <code>chr1.tar.gz</code>, we refer to it as <code>file:///mnt/project/chr1.tar.gz</code>. Mounted at the start of JupyterLab; to access</li>
 <li><strong>Hadoop</strong> File System (HDFS) - Distributed File System for the Spark Cluster. We access this using the <code>hdfs://</code> protocol. This is the filesystem that Spark uses by default. When we load Spark DataFrames, this is where the Parquet files belonging to them live.</li>
 <li><strong>DNAX</strong> S3 Bucket - contains ingested data and other data loaded and saved to a database in Spark. This is a separate S3 bucket. We interact with ingested Pheno and Geno Data using a special protocol called <code>dnax://</code>. Ingested data that is stored here is accessed through connecting to the DNAX database that holds it. Part of why Cohort Browser works with very large data is that the ingested data is stored in this bucket.</li>
-<li><strong>Driver Node</strong> File System - our waypoint for getting things into and out of the Hadoop File System and to/from Project Storage. Since we run JupyterLab on the Driver Node, we use <code>hdfs dfs -put</code>/<code>hdfs dfs -get</code> to transfer to/from the Driver Node to the Hadoop File system (see below), and use <code>dx download</code> to work with Project Storage files, and <code>dx upload</code> to transfer files back into project storage.</li>
+<li><strong>Driver Node</strong> File System - one waypoint for getting things into and out of the Hadoop File System and to/from Project Storage. Since we run JupyterLab on the Driver Node, we use <code>hdfs dfs -put</code>/<code>hdfs dfs -get</code> to transfer to/from the Driver Node to the Hadoop File system (see below), and use <code>dx download</code> to work with Project Storage files, and <code>dx upload</code> to transfer files back into project storage.</li>
 </ul>
-<p>Whenever possible, <em>we want to avoid using the Driver node to transfer files to any of the other filesystems</em>. That is because we are limited to the disk space and memory of the file node. To overcome this, there are direct connections between HDFS and the Project Storage using dxFUSE that will let us stream the data.</p>
-<p>The TL;DR (too long; didn’t read) to this all is:</p>
+<p>Whenever possible, <em>we want to avoid using the Driver node to transfer files to any of the other filesystems</em>. That is because we are limited to the disk space and memory of the Driver node, and it is easy to run out of memory and disk space when using it to transfer files. To overcome this, there are direct connections between HDFS and the Project Storage using dxFUSE that will let us stream the data.</p>
+<p>Overall advice when working in a Spark Cluster:</p>
 <ol type="1">
-<li>Try to avoid transfers through the Driver node (<code>hdfs dfs -get</code>/<code>dx upload</code>), as you are limited to the memory/disk space of the Driver node. You can specify a file path directly from project storage by putting a <code>file:///mnt/project/</code> before the file path (<a href="#fig-from-project">Figure&nbsp;<span>3.2</span></a>).</li>
+<li>Try to avoid transfers through the Driver node (<code>hdfs dfs -get</code>/<code>dx upload</code>), as you are limited to the memory/disk space of the Driver node. You can specify a file path directly from project storage by putting a <code>file:///mnt/project/</code> before the file path (<a href="#fig-from-project">Figure&nbsp;<span>3.3</span></a>).</li>
 </ol>
 <div class="cell">
 <div class="cell-output-display">
@@ -356,13 +362,13 @@ Par-what-now?
 
 </div>
 <p></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;3.2: From Project Storage to HDFS</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.3: From Project Storage to HDFS</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <ol start="2" type="1">
-<li>When possible, use dxFUSE with glob wildcards (such as <code>*.tar.gz</code> or <code>chr*</code>) to directly stream files into HDFS (Spark Cluster Storage) from project storage by using <code>file:///mnt/project/</code> URLs (<a href="#fig-dxfuse-glob">Figure&nbsp;<span>3.3</span></a>). For example, we could load a set of pVCF files with <code>hl.read_vcf("file:///mnt/project/data/pVCF/*.vcf.gz")</code>)</li>
+<li>When possible, use dxFUSE with glob wildcards (such as <code>*.tar.gz</code> or <code>chr*</code>) to directly stream files into HDFS (Spark Cluster Storage) from project storage by using <code>file:///mnt/project/</code> URLs (<a href="#fig-dxfuse-glob">Figure&nbsp;<span>3.4</span></a>). For example, we could load a set of pVCF files as a Hail MatrixTable with <code>hl.read_vcf("file:///mnt/project/data/pVCF/*.vcf.gz")</code>)</li>
 </ol>
 <div class="cell">
 <div class="cell-output-display">
@@ -379,13 +385,13 @@ Par-what-now?
 
 </div>
 <p></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;3.3: Load from Project Storage directly into HDFS.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.4: Load from Project Storage directly into HDFS.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <ol start="3" type="1">
-<li>If you need to get files out of HDFS into Project Storage, use dxFUSE in <code>-limitedWrite</code> mode to write into project storage by passing in <code>file:///mnt/project/</code> URLs to the <code>.write()</code> methods in Spark/Hail. You will need to remount dxFUSE in the JupyterLab container to do this (<a href="#fig-hdfs-project">Figure&nbsp;<span>3.4</span></a>).</li>
+<li>If you need to get files out of HDFS into Project Storage, use dxFUSE in <code>-limitedWrite</code> mode to write into project storage by passing in <code>file:///mnt/project/</code> URLs to the <code>.write()</code> methods in Spark/Hail. You will need to remount dxFUSE in the JupyterLab container to do this (<a href="#fig-hdfs-project">Figure&nbsp;<span>3.5</span></a>).</li>
 </ol>
 <div class="cell">
 <div class="cell-output-display">
@@ -402,13 +408,13 @@ Par-what-now?
 
 </div>
 <p></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;3.4: From HDFS to Project Storage.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.5: From HDFS to Project Storage.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <ol start="4" type="1">
-<li>If you need to persist your Spark DataFrame, use <code>dnax:///&lt;db_name&gt;/&lt;table_name&gt;</code> with <code>.write()</code> to write it into DNAX storage (for example, <code>mt.write("dnax:///my_db/geno.mt")</code>) (<a href="#fig-dnax">Figure&nbsp;<span>3.5</span></a>). When you need to retrieve a stored table in DNAX, use the same <code>dnax:///</code> URL to load it from DNAX (for example, <code>hl.read_matrix_table("dnax:///my_db/geno.mt"</code>).</li>
+<li>If you need to persist your Spark DataFrame, use <code>dnax:///&lt;db_name&gt;/&lt;table_name&gt;</code> with <code>.write()</code> to write it into DNAX storage (for example, <code>mt.write("dnax:///my_db/geno.mt")</code>) (<a href="#fig-dnax">Figure&nbsp;<span>3.6</span></a>). When you need to retrieve a stored table in DNAX, use the same <code>dnax:///</code> URL to load it from DNAX (for example, <code>hl.read_matrix_table("dnax:///my_db/geno.mt"</code>).</li>
 </ol>
 <div class="cell">
 <div class="cell-output-display">
@@ -423,13 +429,13 @@ Par-what-now?
 
 </div>
 <p></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;3.5: Saving and Loading into DNAX.</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3.6: Saving and Loading into DNAX.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <ol start="5" type="1">
-<li>More advanced usage - you can connect Spark to other S3 buckets using the <code>s3://</code> protocol. You will need to authenticate before connecting.</li>
+<li>More advanced usage - you can connect Spark to other S3 buckets using the <code>s3://</code> protocol. You may need to authenticate before connecting.</li>
 </ol>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -442,8 +448,8 @@ Accessing Spark Databases on DNAnexus
 </div>
 <div class="callout-body-container callout-body">
 <p>One issue I see a lot of people get tripped up with is with Database Access. One thing to know is that Spark databases cannot be moved from project to project. Once the data is ingested into a database object, it can’t be copied to a new project.</p>
-<p><strong>For a user to access the data in a Spark Database, they must have at least VIEW level access to the project that contains it on the platform.</strong></p>
-<p>Note that <em>Datasets</em> (not <em>Databases</em>) can be copied to new projects. However, to actually access the data in Cohort Browser, the project that contains the database needs to be viewable by the user.</p>
+<p><strong>For a user to access the data in a Spark Database, they must have at least VIEW level access to the project that contains it on the platform.</strong> This includes anyone who is utilizing your database/dataset in Cohort Browser.</p>
+<p>Note that Apollo <em>Datasets</em> (not <em>Databases</em>) can be copied to new projects. However, to actually access the data in Cohort Browser, the project that contains the database needs to be viewable by the user.</p>
 </div>
 </div>
 <div class="callout-note callout callout-style-default callout-captioned">
@@ -461,65 +467,79 @@ Spark Cluster JupyterLab vs.&nbsp;Spark Apps
 </div>
 </div>
 </section>
-<section id="balancing-cores-and-memory" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="balancing-cores-and-memory"><span class="header-section-number">3.5</span> Balancing Cores and Memory</h2>
+<section id="balancing-cores-and-memory" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="balancing-cores-and-memory"><span class="header-section-number">3.4</span> Balancing Cores and Memory</h2>
 <p>Central to both Spark and Hail is tuning the number of cores and memory in each of our instances. This also needs to be balanced with the partition size for our data. Data can be repartitioned, although this <a href="https://towardsdatascience.com/should-i-repartition-836f7842298c">may be an expensive operation</a>.</p>
 <p>In general, the number of data partitions should be greater than the number of cores. Why? If there are less partitions than cores, then the remaining cores will be unused.</p>
 <p>There are a lot of other tuning considerations to keep in mind.</p>
 </section>
-<section id="the-spark-ui" class="level2" data-number="3.6">
-<h2 data-number="3.6" class="anchored" data-anchor-id="the-spark-ui"><span class="header-section-number">3.6</span> The Spark UI</h2>
+<section id="the-spark-ui" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="the-spark-ui"><span class="header-section-number">3.5</span> The Spark UI</h2>
 <p>When you start up Spark JupyterLab, you will see that it will open at a particular url which has the format <code>https://JOB-ID.dnanexus.com</code>. To open the Spark UI, use that same URL, but with a <code>:8081</code> at the end of it. For example, the UI url would be <code>https://JOB-ID.dnanexus.com:8081</code>.</p>
 <p>Note that the Spark UI is not launched until you connect to Spark or Hail.</p>
 <p>The Spark UI is really helpful in understanding how Spark translates a series of operations into a Plan, and how it executes that plan.</p>
 </section>
+<section id="spark-and-lazy-evaluation" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="spark-and-lazy-evaluation"><span class="header-section-number">3.6</span> Spark and Lazy Evaluation</h2>
+<p>One thing that is extremely important to know is that Spark executes operations in a <em>Lazy</em> manner. This is opposed to a language like R or Python which executes commands right away (a <em>greedy</em> manner).</p>
+<p>There are a number of commands that make Spark immediately start calculating a result, including:</p>
+<ul>
+<li><code>.count()</code></li>
+<li><code>.show()</code></li>
+<li><code>.write()</code></li>
+<li><code>.collect()</code></li>
+</ul>
+<p>When we run Spark operations, we are usually building chains of operations. For example, we might want to <code>.filter()</code> on a column, <code>.select()</code> columns of data, or aggregate (summarize) columns.</p>
+<p>Spark builds up these chains of commands until it sees it needs to execute an operation. For example:</p>
+<pre><code>df.filter().select().show(5)</code></pre>
+</section>
 <section id="extracting-phenodata-with-dx-extract_dataset" class="level2" data-number="3.7">
 <h2 data-number="3.7" class="anchored" data-anchor-id="extracting-phenodata-with-dx-extract_dataset"><span class="header-section-number">3.7</span> Extracting PhenoData with <code>dx extract_dataset</code></h2>
 <p>First of all, you may not need to use Spark JupyterLab if you just want to extract Pheno Data from a Dataset and you know the fields.</p>
-<p>There is a utility within dx-toolkit called <code>dx extract_dataset</code> that will retrieve pheno data in the form of a CSV. It uses Spark, but the Spark is executed by the Thrift Server (the same Spark Cluster that serves the data for Cohort Browser).</p>
-<p>You will need a list of field ids to retrieve them.</p>
+<p>There is a utility within <a href="https://documentation.dnanexus.com/downloads#dnanexus-platform-sdk">dx-toolkit</a> (the CLI tools for working with the DNAnexus platform) called <code>dx extract_dataset</code> that will retrieve pheno data in the form of a CSV. It uses Spark, but the Spark is executed by the <a href="https://documentation.dnanexus.com/user/spark/connect-to-thrift">Thrift Server</a> (the same Spark Cluster that also serves the data for Cohort Browser).</p>
+<p>You will need a list of entity/field ids to retrieve them. For more info, please refer to the R Notebook (<a href="dx_extract_dataset_R.html"><span>Chapter&nbsp;4</span></a>) and the <a href="">Python Notebook</a>.</p>
 <p>However, there are good reasons to work with the Spark Database directly. Number one is that your Cohort query will not run on the Thrift Server. If your query is complex and takes two minutes to execute, the Thrift Server will timeout. In that case, you need to run your own Spark JupyterLab cluster and extract the data using Spark itself.</p>
 </section>
 <section id="connecting-with-pyspark-for-python-users" class="level2" data-number="3.8">
 <h2 data-number="3.8" class="anchored" data-anchor-id="connecting-with-pyspark-for-python-users"><span class="header-section-number">3.8</span> Connecting with <code>PySpark</code> (For Python Users)</h2>
 <p>The first thing we’ll do to connect to the Spark database is connect to it by starting a Spark Session. Make sure you only do this once. If you try to connect twice, Spark will throw an error.</p>
 <p>If this happens, make sure to restart your notebook kernel.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyspark</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>sc <span class="op">=</span> pyspark.SparkContext()</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>spark <span class="op">=</span> pyspark.sql.SparkSession(sc)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyspark</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sc <span class="op">=</span> pyspark.SparkContext()</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>spark <span class="op">=</span> pyspark.sql.SparkSession(sc)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="running-sparksql-queries-in-pyspark" class="level3" data-number="3.8.1">
 <h3 data-number="3.8.1" class="anchored" data-anchor-id="running-sparksql-queries-in-pyspark"><span class="header-section-number">3.8.1</span> Running SparkSQL Queries in PySpark</h3>
 <p>The basic template for running Spark Queries is this:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>retrieve_sql <span class="op">=</span> <span class="st">'select .... from .... '</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> spark.sql(retrieve_sql)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>retrieve_sql <span class="op">=</span> <span class="st">'select .... from .... '</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> spark.sql(retrieve_sql)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="koalas-is-the-pandas-version-of-spark" class="level3" data-number="3.8.2">
 <h3 data-number="3.8.2" class="anchored" data-anchor-id="koalas-is-the-pandas-version-of-spark"><span class="header-section-number">3.8.2</span> Koalas is the Pandas version of Spark</h3>
 <p>If you are familiar with Pandas, the Koalas module (from Databricks) provides a Pandas-like interface to SparkSQL queries. This way, you don’t have to execute native Spark commands or SparkSQL queries.</p>
 <p>Once you have a Spark DataFrame, you can convert it to a Koalas one by using the <code>.to_koalas()</code> method.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df_koalas <span class="op">=</span> df.to_koalas()</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df_koalas <span class="op">=</span> df.to_koalas()</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </section>
 <section id="connecting-with-sparklyr-for-r-users" class="level2" data-number="3.9">
 <h2 data-number="3.9" class="anchored" data-anchor-id="connecting-with-sparklyr-for-r-users"><span class="header-section-number">3.9</span> Connecting with <code>sparklyr</code> (For R Users)</h2>
 <p>You’ll need to install the package <code>sparklyr</code> along with its dependencies to work with the Spark DataFrames directly with R.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>port <span class="ot">&lt;-</span> <span class="fu">Sys.getenv</span>(<span class="st">"SPARK_MASTER_PORT"</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>master <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">"spark://master:"</span>, port, <span class="at">sep =</span> <span class="st">''</span>)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">=</span> <span class="fu">spark_connect</span>(master)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>retrieve_sql <span class="ot">&lt;-</span> <span class="st">'select .... from .... '</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">dbGetQuery</span>(sc, retrieve_sql)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>port <span class="ot">&lt;-</span> <span class="fu">Sys.getenv</span>(<span class="st">"SPARK_MASTER_PORT"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>master <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">"spark://master:"</span>, port, <span class="at">sep =</span> <span class="st">''</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">=</span> <span class="fu">spark_connect</span>(master)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>retrieve_sql <span class="ot">&lt;-</span> <span class="st">'select .... from .... '</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">dbGetQuery</span>(sc, retrieve_sql)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section>
@@ -666,7 +686,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
   <div class="nav-page nav-page-next">
       <a href="./dx_extract_dataset_R.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">“dx extract_dataset” in R</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><code>dx extract_dataset</code> in R</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
