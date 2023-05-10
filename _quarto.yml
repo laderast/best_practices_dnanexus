@@ -11,8 +11,10 @@ book:
     - "10-object-based-file-systems.qmd"
     - "12-project_management.qmd"
     - "13-spark-on-dnanexus.qmd"
+    - "dx_extract_dataset_R.ipynb"
+#    - "dx_extract_dataset_python.ipynb"
     - "14-hail-on-dnanexus.qmd"
-    - "15-gwas-using-hail.qmd"
+    - "02-gwas.ipynb"
     - references.qmd
 
 bibliography: references.bib
@@ -20,8 +22,8 @@ bibliography: references.bib
 format:
   html:
     theme: cosmo
-  pdf:
-    documentclass: scrreprt
+#  pdf:
+#    documentclass: scrreprt
 
 
 

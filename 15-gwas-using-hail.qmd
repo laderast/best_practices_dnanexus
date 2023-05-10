@@ -7,13 +7,47 @@ This table shows the basic GWAS process using Hail. We will cover each of these 
 
 |Step|Description|Code Example|
 |------|------------|---------|
-|0.|Initiate Spark and Hail|See Notebook|
-|1.|Load pVCF/BGEN data, save as MatrixTable (MT)|`mt = hl.import_vcf(path)` or `mt = hl.import_bgen(path)`|
-|2.|Load Pheno file, merge with MatrixTable|`phenogeno_mt = mt.annotate_cols(**pheno_table[mt.s])`|
-|3.|Build Sample QC table from MT, use to filter MT|`sample_qc_tb = hl.sample_qc(mt);` `qc_mt = phenogeno_mt.semi_join_rows(locus_qc_tb)`|
-|4.|Build Locus QC table from MT, use to filter MT|`locus_qc_tb = hl.locus_qc(mt);` `qc_mt = qc_mt.semi_join_cols(sample_qc_tb)`|
-|5.| Run GWAS |`gwas_tb = hl.logistic_regression.rows()`|
-|6.| Visualize Results|`manhattan_plot = hl.plot.manhattan(gwas_tb.p_value)`; `show(manhattan_plot)`|
-|7.|Annotate Results with VEP or annotation db|`ann_gwas_tb = db.annotate_rows_db(gwas_tb, 'gencode'`|
+|0.|Initiate Spark and Hail|See Notebook |
+|1.|Load pVCF/BGEN data, save as MatrixTable (MT) @sec-loading_data|`mt = hl.import_vcf(path)` or `mt = hl.import_bgen(path)`|
+|2.|Load Pheno file, merge with MatrixTable @sec-load_pheno|`phenogeno_mt = mt.annotate_cols(**pheno_table[mt.s])`|
+|3.|Build Sample QC table from MT, use to filter MT @sec-sample_table|`sample_qc_tb = hl.sample_qc(mt);` `qc_mt = phenogeno_mt.semi_join_rows(locus_qc_tb)`|
+|4.|Build Locus QC table from MT, use to filter MT @sec-variant_table|`locus_qc_tb = hl.locus_qc(mt);` `qc_mt = qc_mt.semi_join_cols(sample_qc_tb)`|
+|5.| Run GWAS @sec-gwas |`gwas_tb = hl.logistic_regression.rows()`|
+|6.| Visualize Results @sec-visualize|`manhattan_plot = hl.plot.manhattan(gwas_tb.p_value)`; `show(manhattan_plot)`|
+|7.|Annotate Results with VEP or annotation db @sec-annotate|`ann_gwas_tb = db.annotate_rows_db(gwas_tb, 'gencode'`|
 |8.|Save results to CSV, export chromosomes as BGEN file|See Notebook|
+
+## 
+
+
+## Load pVCF/BGEN data, save as MatrixTable {#sec-loading_data}
+
+```{python}
+#| eval: false
+#| trusted: true
+# read MT
+mt_url="dnax://database-GQYV2Bj04bPg9X3KfFyj2jyY/geno.mt"
+mt = hl.read_matrix_table(mt_url)
+```
+
+```{python}
+#| eval: false
+#| trusted: true
+mt.rows().show()
+```
+
+## Load Pheno File, merge with MatrixTable {#sec-load_pheno}
+
+
+
+## Build Sample QC table from MT, use to filter MT {#sec-sample_table}
+
+## Build Variant QC table from MT, use to filter MT {#sec-variant_table}
+
+## Run GWAS {#sec-gwas}
+
+## Visualize Results {#sec-visualize}
+
+## Annotate GWAS table {#sec-annotate}
+
 

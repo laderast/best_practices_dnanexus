@@ -227,7 +227,7 @@ workflows/.  ## project-specific workflows
 notebooks/.  ## Jupyter Notebooks
 ```
 
-# Tags: Know Them, Love Them, Use Them
+## Tags: Know Them, Love Them, Use Them
 
 One of the ways to become a power user on the DNAnexus platform is to utilize tags when you generate output. This is important for reproducible analysis.  
 

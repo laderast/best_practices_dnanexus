@@ -7,13 +7,6 @@ title: "Hail on DNAnexus"
 After reading this chapter, you should be able to:
 
   - **Explain** basic Hail terms and concepts
-  - **Import data** into a Hail MatrixTable from pVCF and BGEN formats
-  - **Merge** phenotypic data into the MatrixTable
-  - **QC** and **Filter** Variant data for use in a GWAS using Hail
-  - **QC** and **Filter** Sample data for use in GWAS with Hail
-  - **Run** GWAS on a Hail MatrixTable 
-  - **Annotate** Hail MatrixTables with internal DNAnexus resources 
-  - **Export** results from Hail to CSV format
 
 
 ## What is Hail?
