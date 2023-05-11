@@ -93,7 +93,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./02-gwas.html" rel="next">
+<link href="./01-Hail-Skills.html" rel="next">
 <link href="./dx_extract_dataset_R.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -128,6 +128,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </head>
 
 <body class="nav-sidebar floating">
+
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -188,7 +189,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02-gwas.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">GWAS using Hail</span></a>
+  <a href="./01-Hail-Skills.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Hail Skills: Working with Hail Tables and MatrixTables</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-gwas.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">GWAS using Hail</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -241,14 +247,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 data-number="5.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">5.1</span> Learning Objectives</h2>
 <p>After reading this chapter, you should be able to:</p>
 <ul>
-<li><strong>Explain</strong> basic Hail terms and concepts</li>
-<li><strong>Import data</strong> into a Hail MatrixTable from pVCF and BGEN formats</li>
-<li><strong>Merge</strong> phenotypic data into the MatrixTable</li>
-<li><strong>QC</strong> and <strong>Filter</strong> Variant data for use in a GWAS using Hail</li>
-<li><strong>QC</strong> and <strong>Filter</strong> Sample data for use in GWAS with Hail</li>
-<li><strong>Run</strong> GWAS on a Hail MatrixTable</li>
-<li><strong>Annotate</strong> Hail MatrixTables with internal DNAnexus resources</li>
-<li><strong>Export</strong> results from Hail to CSV format</li>
+<li><strong>Explain</strong> basic Hail terms and concepts, including Hail Tables and Hail MatrixTables</li>
+<li><strong>Monitor</strong> progress using the Spark UI</li>
+<li><strong>Execute</strong> Hail operations on Tables and MatrixTables, including annotating, filtering, and joining</li>
 </ul>
 </section>
 <section id="what-is-hail" class="level2" data-number="5.2">
@@ -512,6 +513,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./dx_extract_dataset_R.html" class="pagination-link">
@@ -519,8 +521,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./02-gwas.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">GWAS using Hail</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./01-Hail-Skills.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Hail Skills: Working with Hail Tables and MatrixTables</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
