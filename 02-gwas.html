@@ -222,7 +222,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#filter-sample-qc-table" id="toc-filter-sample-qc-table" class="nav-link" data-scroll-target="#filter-sample-qc-table"><span class="toc-section-number">6.6.1</span>  Filter sample QC Table</a></li>
   <li><a href="#filter-mt-with-sample-qc-table" id="toc-filter-mt-with-sample-qc-table" class="nav-link" data-scroll-target="#filter-mt-with-sample-qc-table"><span class="toc-section-number">6.6.2</span>  Filter MT with Sample QC Table</a></li>
   </ul></li>
-  <li><a href="#sec-variant_table" id="toc-sec-variant_table" class="nav-link" data-scroll-target="#sec-variant_table"><span class="toc-section-number">6.7</span>  Build Variant QC table from MT, use to filter MT</a></li>
+  <li><a href="#sec-variant_table" id="toc-sec-variant_table" class="nav-link" data-scroll-target="#sec-variant_table"><span class="toc-section-number">6.7</span>  Build Variant QC table from MT, use to filter MT</a>
+  <ul class="collapse">
+  <li><a href="#a-extract-locus-qc-table" id="toc-a-extract-locus-qc-table" class="nav-link" data-scroll-target="#a-extract-locus-qc-table"><span class="toc-section-number">6.7.1</span>  4a) Extract Locus QC table</a></li>
+  </ul></li>
   <li><a href="#sec-gwas" id="toc-sec-gwas" class="nav-link" data-scroll-target="#sec-gwas"><span class="toc-section-number">6.8</span>  Run GWAS</a></li>
   <li><a href="#sec-visualize" id="toc-sec-visualize" class="nav-link" data-scroll-target="#sec-visualize"><span class="toc-section-number">6.9</span>  Visualize GWAS results</a></li>
   <li><a href="#sec-annotate" id="toc-sec-annotate" class="nav-link" data-scroll-target="#sec-annotate"><span class="toc-section-number">6.10</span>  Annotate GWAS results</a></li>
@@ -1016,7 +1019,7 @@ Row key: ['locus', 'alleles']
 <h2 data-number="6.6" class="anchored" data-anchor-id="sec-sample_table"><span class="header-section-number">6.6</span> Filter MT using Sample QC Tables</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="02-gwas_files/figure-html/122b2655-1-efd67be3-b00e-4fdb-87c8-abdb90bc57e5.png" class="img-fluid figure-img"></p>
+<p><img src="02-gwas_files/figure-html/03b513ad-1-efd67be3-b00e-4fdb-87c8-abdb90bc57e5.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">image.png</figcaption><p></p>
 </figure>
 </div>
@@ -1471,11 +1474,12 @@ Num samples after filtering: 50062</code></pre>
 </section>
 <section id="sec-variant_table" class="level2" data-number="6.7">
 <h2 data-number="6.7" class="anchored" data-anchor-id="sec-variant_table"><span class="header-section-number">6.7</span> Build Variant QC table from MT, use to filter MT</h2>
-<section id="a-extract-locus-qc-table" class="level4" data-number="6.7.0.1">
-<h4 data-number="6.7.0.1" class="anchored" data-anchor-id="a-extract-locus-qc-table"><span class="header-section-number">6.7.0.1</span> 4a) Extract Locus QC table</h4>
+<p>Similar to the Sample QC, we can calculate a variant QC table for our MatrixTable, and extract it as a separate table and store it in DNAX. Then we can filter on this table, and use <code>.semi_join_rows()</code> to filter our MatrixTable.</p>
+<section id="a-extract-locus-qc-table" class="level3" data-number="6.7.1">
+<h3 data-number="6.7.1" class="anchored" data-anchor-id="a-extract-locus-qc-table"><span class="header-section-number">6.7.1</span> 4a) Extract Locus QC table</h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="02-gwas_files/figure-html/3f814abf-1-8cddc2b5-6e38-4373-a251-b0ae3157a2cf.png" class="img-fluid figure-img"></p>
+<p><img src="02-gwas_files/figure-html/1f90644a-1-8cddc2b5-6e38-4373-a251-b0ae3157a2cf.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">image.png</figcaption><p></p>
 </figure>
 </div>
@@ -1711,7 +1715,7 @@ Key: ['locus', 'alleles']
 ----------------------------------------</code></pre>
 </div>
 </div>
-<p>Let’s filter for loci that have: - an AF value between 0.001-0.999, - a HWE p-value greater or equal to 1e-10, - a call rate greater or equal to 0.9</p>
+<p>Let’s filter for loci that have: - an allele frequency (<code>AF</code>) value between 0.001-0.999, - a Hardy-Weinberg Equilibrium p-value (<code>p_value_hwe</code>) greater or equal to 1e-10, - a call rate (<code>call_rate</code>) greater or equal to 0.9</p>
 <div class="cell" data-trusted="true" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter QC Table using expressions</span></span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: Viewing the structure of the locus QC table in from the cell above </span></span>
@@ -1740,15 +1744,15 @@ Key: ['locus', 'alleles']
 Num loci after filtering: 39952</code></pre>
 </div>
 </div>
-</section>
-<section id="b-filter-mt-with-variant-qc-tables" class="level4" data-number="6.7.0.2">
-<h4 data-number="6.7.0.2" class="anchored" data-anchor-id="b-filter-mt-with-variant-qc-tables"><span class="header-section-number">6.7.0.2</span> 4b) Filter MT with variant QC Tables</h4>
+<section id="b-filter-mt-with-variant-qc-tables" class="level4" data-number="6.7.1.1">
+<h4 data-number="6.7.1.1" class="anchored" data-anchor-id="b-filter-mt-with-variant-qc-tables"><span class="header-section-number">6.7.1.1</span> 4b) Filter MT with variant QC Tables</h4>
 <p>Now we can use <code>.semi_join_rows()</code> to filter our <code>phenogeno_mt</code> with <code>locus_qc_tb</code>.</p>
 <div class="cell" data-trusted="true" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the MT using the locus QC Table</span></span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>qc_mt <span class="op">=</span> qc_mt.semi_join_rows(locus_qc_tb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>After filtereing, we have reduced the number of loci in our MatrixTable to be 39952 rows.</p>
 <div class="cell" data-trusted="true" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># DON'T RUN in class</span></span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="co"># View MT after QC filters</span></span>
@@ -1978,8 +1982,10 @@ Row key: ['locus', 'alleles']
 </div>
 </section>
 </section>
+</section>
 <section id="sec-gwas" class="level2" data-number="6.8">
 <h2 data-number="6.8" class="anchored" data-anchor-id="sec-gwas"><span class="header-section-number">6.8</span> Run GWAS</h2>
+<p>Now that we’ve done our filtering, we can now run our GWAS on our filtered MatrixTable.</p>
 <p>Quick reminder that our pheno file has a lot of missing values, so we’re going to be dropping a bunch of samples when we do our analysis.</p>
 <div class="cell" data-trusted="true" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>qc_mt.ccs.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2421,6 +2427,7 @@ Key: ['locus', 'alleles']
 </script>
 </div>
 </div>
+<p>We can generate a Manhattan Plot on our p-values using <code>hl.plot.manhattan()</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>manhattan_plot <span class="op">=</span> hl.plot.manhattan(gwas_tb.p_value)</span>
 <span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>show(manhattan_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2428,7 +2435,8 @@ Key: ['locus', 'alleles']
 </section>
 <section id="sec-annotate" class="level2" data-number="6.10">
 <h2 data-number="6.10" class="anchored" data-anchor-id="sec-annotate"><span class="header-section-number">6.10</span> Annotate GWAS results</h2>
-<p>Now that we have our GWAS results, we’ll annotate our file using Hail’s experimental DB, which is hosted on Open Data on AWS. This resource is not available in the RAP region. Here we’re going to add GENCODE annotations to our matrix. There are a lot of other annotations available in the DB as well.</p>
+<p>Now that we have our GWAS results, we’ll annotate our file using Hail’s experimental DB, which is hosted on Open Data on AWS.</p>
+<p>Note that this resource is not available in the RAP region. Here we’re going to add GENCODE annotations to our matrix. There are a lot of other annotations available in the DB as well.</p>
 <p>There is the query builder if you have access to the experimental annotations. This will help you write your <code>db.annotate_rows_db()</code> statement.</p>
 <p>https://hail.is/docs/0.2/annotation_database_ui.html#database-query</p>
 <div class="cell" data-trusted="true" data-execution_count="18">
@@ -2493,6 +2501,7 @@ Key: ['locus', 'alleles']
 </div>
 <p>If we want to output BGEN files, there is no direct way for the notebook to write data into the project, so we will first write into HDFS (see https://documentation.dnanexus.com/developer/apps/developing-spark-apps#spark-cluster-management-software).</p>
 <p>After writing out the BGEN files to HDFS, we can then move the data to the project in the next step as above.</p>
+<p>Note that we can also do this in a single step by using <code>dxFUSE</code> in <code>-limitedWrite</code> mode.</p>
 <p><em>Additional documentation: https://hail.is/docs/0.2/methods/impex.html#hail.methods.export_bgen</em></p>
 <div class="cell" data-trusted="true" data-execution_count="38">
 <div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a set of unique chromosomes found in MT</span></span>
