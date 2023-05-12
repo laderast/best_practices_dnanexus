@@ -13,7 +13,8 @@ book:
     - "13-spark-on-dnanexus.qmd"
     - "dx_extract_dataset_R.ipynb"
 #    - "dx_extract_dataset_python.ipynb"
-    - "14-hail-on-dnanexus.qmd"
+#    - "14-hail-on-dnanexus.qmd"
+    - "01-Hail-Skills.ipynb"
     - "02-gwas.ipynb"
     - references.qmd
 

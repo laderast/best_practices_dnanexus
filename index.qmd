@@ -59,7 +59,14 @@ In your issue, please note the following:
 - What your issue was
 - Which section, and line you found problematic or wouldn't run
 
-If you're quarto/GitHub savvy, you can fork and file a pull request for typos/edits. If you're not, you can file an issue.
+If you have large edits: If you're quarto/GitHub savvy, you can fork and file a pull request for typos/edits. If you're not, you can file an issue.
 
 Just be aware that this is not my primary job - I'll try to be as responsive as I can.
 
+***As-Is Software Disclaimer***
+
+This content in this book is delivered “As-Is”. Notwithstanding anything to the contrary, DNAnexus will have no warranty, support, liability or other obligations with respect to Materials provided hereunder.
+
+## Licensing
+
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.

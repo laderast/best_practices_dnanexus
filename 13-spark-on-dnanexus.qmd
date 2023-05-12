@@ -2,24 +2,35 @@
 title: "Spark on the DNAnexus Platform"
 ---
 
+## Learning Objectives
+
+By the end of this chapter, you should be able to:
+
+  - **Describe** the basic use cases for Spark on the DNAnexus platform.
+  - **Describe** the basic components of a Spark Cluster and how data is partitioned and processed by tasks
+  - **Explain** the multiple filesystems involved with working with Spark JupyterLab on the DNAnexus Platform and how to **transfer** files between them
+  - **Articulate** when to use a Spark Cluster to query an Apollo Dataset
+  - **Monitor** Spark Jobs in the Spark UI on a cluster
+  - **Describe** Lazy evaluation in a Spark cluster and how chains of commands are compiled into execution plans in the Spark cluster.
+
 In this Chapter, we will discuss some of the intricacies behind working with Spark and on the DNAnexus platform.
 
-I highly recommend that you go over the Cloud Computing Concepts chapter from Bash for Bioinformatics before you start tackling this. 
+I highly recommend that you go over the [Cloud Computing Concepts](https://laderast.github.io/bash_for_bioinformatics/03-cloud-computing-basics.html) chapter from Bash for Bioinformatics before you start tackling this in case you need a quick refresher.
 
 ## Do I need Spark?
 
 As we'll discover, Spark is made for working with very large datasets. The datasets themselves might be very *long* (have billions of rows), or very *wide* (millions of columns).
 
-A lot of datasets aren't this big. Especially with tools such as [Apache Arrow](https://arrow.apache.org/), interactive analysis can handle data in the billion row range. Arrow support exists for both R (within the `DBI`/`tidyverse`/`arrow` packages), and Python (Pandas 2.0 now uses Arrow for its backend).
+Very large data that is used for Phenotyping, such as Electronic Health Record (EHR) or other Real World Data (RWD) can definitely benefit from working with Spark. When this data is ingested into Spark, it is available as an Apollo Dataset and can be used in large scale queries or visualization tools such as [Cohort Browser](https://documentation.dnanexus.com/user/cohort-browser).
 
-Genomic Data is often the exception for this. Whole Genome Sequencing outputs usually have hundreds of millions of variants, and with datasets such as UK Biobank, this is multiplied by a very large number of participants. We'll see in the next chapter that a framework exists for genomic analysis built on Spark called Hail.
+Genomic Data is another good use-case. Whole Genome Sequencing outputs usually have hundreds of millions of variants, and with datasets such as UK Biobank, this is multiplied by a very large number of participants. We'll see in the next chapter that a framework exists for genomic analysis built on Spark called Hail.
 
 :::{.callout-note}
 ## Spark/Hail on The Core Platform
 
-Please note that working with Spark requires an Apollo License if you are on the Core Platform. For more information, [please contact DNAnexus sales](mailto:sales@dnanexus.com).
+Please note that working with Spark on the DNAnexus platform requires an Apollo License if you are on the Core Platform. For more information, [please contact DNAnexus sales](mailto:sales@dnanexus.com).
 
-If you are on UKB RAP, the Pheno Data is stored as a Spark Database, so you do not have to have a license on RAP. You also have access to the Hail configurations of Spark JupyterLab as well.
+If you are on UKB RAP, the Pheno Data is stored as a Spark Database/Dataset, so you do not have to have an Apollo license to access it. On RAP, you also have access to the Hail configurations of Spark JupyterLab as well.
 :::
 
 ## Spark Concepts
@@ -31,35 +42,33 @@ On the platform, Spark is used to work with ingested Pheno Data either indirectl
 :::{.callout-note}
 ## Par-what-now?
 
-You may have heard of *Parquet* files and wondered how they relate to database objects on the platform. They are a way to store data in a format called *columnar* storage.
+You may have heard of *Parquet* files and wondered how they relate to database objects on the platform. They are a way to store data in a format called [*columnar* storage](https://www.codingninjas.com/codestudio/library/introduction-to-columnar-databases).
 
 It turns out it is faster for retrieval and searching to store data not by *rows*, but by *columns*. This is really helpful because the data is sorted by *data* type and it's easier to traverse for this reason. 
 
-Apache Spark is the scalable solution to using columnar formats such as Parquet. There are a number of *database engines* that are fast at searching and traversing these types of files. Some examples are Snowflake and Apache Arrow. 
+Apache Spark is the scalable solution to using columnar formats such as Parquet. There are a number of *database engines* that are fast at searching and traversing these types of files. Some examples are [Snowflake](https://www.snowflake.com/en/why-snowflake/) and [Apache Arrow](https://arrow.apache.org/overview/). 
 
-On the DNAnexus platform, certain data objects (called Dataset and Database objects) are actually stored in Parquet format, for rapid searching and querying using Apache Spark.
+On the DNAnexus platform, certain data objects (called Dataset Objects and Database objects) are actually stored in Parquet format, for rapid searching and querying using Apache Spark.
 :::
 
 
 ### What is Spark?
 
-Apache Spark is a framework for working with large datasets that won't fit into memory on a single computer. Instead, we use what's called a Spark Cluster. Specifically, we request the Spark Cluster as part of a Spark JupyterLab configuration. 
+Apache Spark is a framework for working with large datasets that won't fit into memory on a single computer. Instead, we use what's called a Spark Cluster, which is a cluster of machines that we request when we start Spark JupyterLab. Specifically, we request the Spark Cluster as part of a Spark JupyterLab configuration. 
 
-The main pieces of a Spark Cluster are the *Driver Node*, and the *executors*, which correspond to individual cores on a *Worker Node*. Individual worker nodes have processes known as *Executors* that will run on their portion of the data.
+::: {#fig-spark}
+![Spark Architecture.](images/spark-arch.png)
+:::
 
-Spark lets us analyse large datasets by *partitioning* the data into smaller pieces that are made available to the cluster via the Hadoop File System. Each executor gains access to a piece of the data, and executes *tasks* assigned to it on this piece of the data. 
+The main pieces of a Spark Cluster are the *Driver Node*, a *Cluster manager* (which manages resources on the Worker Nodes), and the *Worker Nodes*. Individual worker nodes have processes known as *Executors* that will run on their portion of the data (@fig-spark).
 
-The Driver Node directs the individual executors by assigning *tasks*. These individual tasks are part of an overall execution plan.
+Spark lets us analyse large datasets by *partitioning* the data into smaller pieces that are made available to the cluster via the Hadoop File System. Each executor gains access to a set of these data partitions, and they execute *tasks* assigned to by the Cluster Manager on their set of partitions. 
+
+The Driver Node directs the individual executors by assigning *tasks*. These individual tasks are part of an overall *execution plan*.
 
 This link is a good introduction to [Spark Terminology](https://mageswaran1989.medium.com/spark-jargon-for-starters-af1fd8117ada).
 
-## Spark and Lazy Evaluation
-
-One thing that is extremely important to know is that Spark executes operations in a *Lazy* manner. This is opposed to something like R or Python which executes commands right away (a *greedy* manner).
-
-When we run Spark operations, we are usually building chains of operations. 
-
-## The Four Filesystems (and how to avoid one)
+## The Three (or Four) Filesystems
 
 ```{mermaid}
 %%| label: fig-full-graph
@@ -76,16 +85,16 @@ flowchart TD
 ```
 
 
-Using Spark on DNAnexus effectively requires us to be familiar with 4 different file systems (@fig-full-graph):
+Using Spark on DNAnexus effectively requires us to be familiar with at least 3 different file systems (@fig-full-graph):
 
 - **dxFUSE** file system - used to directly access project storage. We access this using `file:///mnt/project/` in our scripts. For example, if we need to access a file named `chr1.tar.gz`, we refer to it as `file:///mnt/project/chr1.tar.gz`. Mounted at the start of JupyterLab; to access 
 - **Hadoop** File System (HDFS) - Distributed File System for the Spark Cluster. We access this using the `hdfs://` protocol. This is the filesystem that Spark uses by default. When we load Spark DataFrames, this is where the Parquet files belonging to them live.
 - **DNAX** S3 Bucket - contains ingested data and other data loaded and saved to a database in Spark. This is a separate S3 bucket. We interact with ingested Pheno and Geno Data using a special protocol called `dnax://`. Ingested data that is stored here is accessed through connecting to the DNAX database that holds it. Part of why Cohort Browser works with very large data is that the ingested data is stored in this bucket.
-- **Driver Node** File System - our waypoint for getting things into and out of the Hadoop File System and to/from Project Storage. Since we run JupyterLab on the Driver Node, we use `hdfs dfs -put`/`hdfs dfs -get` to transfer to/from the Driver Node to the Hadoop File system (see below), and use `dx download` to work with Project Storage files, and `dx upload` to transfer files back into project storage.
+- **Driver Node** File System - one waypoint for getting things into and out of the Hadoop File System and to/from Project Storage. Since we run JupyterLab on the Driver Node, we use `hdfs dfs -put`/`hdfs dfs -get` to transfer to/from the Driver Node to the Hadoop File system (see below), and use `dx download` to work with Project Storage files, and `dx upload` to transfer files back into project storage.
 
-Whenever possible, *we want to avoid using the Driver node to transfer files to any of the other filesystems*. That is because we are limited to the disk space and memory of the file node. To overcome this, there are direct connections between HDFS and the Project Storage using dxFUSE that will let us stream the data.
+Whenever possible, *we want to avoid using the Driver node to transfer files to any of the other filesystems*. That is because we are limited to the disk space and memory of the Driver node, and it is easy to run out of memory and disk space when using it to transfer files. To overcome this, there are direct connections between HDFS and the Project Storage using dxFUSE that will let us stream the data.
 
-The TL;DR (too long; didn't read) to this all is:
+Overall advice when working in a Spark Cluster:
 
 1. Try to avoid transfers through the Driver node (`hdfs dfs -get`/`dx upload`), as you are limited to the memory/disk space of the Driver node. You can specify a file path directly from project storage by putting a `file:///mnt/project/` before the file path (@fig-from-project).
 
@@ -99,7 +108,7 @@ flowchart TD
     C --> D[DNAX\nS3 Storage]
 ```
 
-2. When possible, use dxFUSE with glob wildcards (such as `*.tar.gz` or `chr*`) to directly stream files into HDFS (Spark Cluster Storage) from project storage by using `file:///mnt/project/` URLs (@fig-dxfuse-glob). For example, we could load a set of pVCF files with `hl.read_vcf("file:///mnt/project/data/pVCF/*.vcf.gz")`) 
+2. When possible, use dxFUSE with glob wildcards (such as `*.tar.gz` or `chr*`) to directly stream files into HDFS (Spark Cluster Storage) from project storage by using `file:///mnt/project/` URLs (@fig-dxfuse-glob). For example, we could load a set of pVCF files as a Hail MatrixTable with `hl.read_vcf("file:///mnt/project/data/pVCF/*.vcf.gz")`) 
 
 ```{mermaid}
 %%| label: fig-dxfuse-glob
@@ -134,16 +143,16 @@ flowchart TD
     D[DNAX\nS3 Storage] -->|dnax://my_db/geno.mt|C
 ```
 
-5. More advanced usage - you can connect Spark to other S3 buckets using the `s3://` protocol. You will need to authenticate before connecting.
+5. More advanced usage - you can connect Spark to other S3 buckets using the `s3://` protocol. You may need to authenticate before connecting.
 
 :::{.callout-note}
 ## Accessing Spark Databases on DNAnexus
 
 One issue I see a lot of people get tripped up with is with Database Access. One thing to know is that Spark databases cannot be moved from project to project. Once the data is ingested into a database object, it can't be copied to a new project.
 
-**For a user to access the data in a Spark Database, they must have at least VIEW level access to the project that contains it on the platform.** 
+**For a user to access the data in a Spark Database, they must have at least VIEW level access to the project that contains it on the platform.** This includes anyone who is utilizing your database/dataset in Cohort Browser.
 
-Note that *Datasets* (not *Databases*) can be copied to new projects. However, to actually access the data in Cohort Browser, the project that contains the database needs to be viewable by the user.
+Note that Apollo *Datasets* (not *Databases*) can be copied to new projects. However, to actually access the data in Cohort Browser, the project that contains the database needs to be viewable by the user.
 :::
 
 
@@ -173,15 +182,35 @@ The Spark UI is really helpful in understanding how Spark translates a series of
 
 
 
+## Spark and Lazy Evaluation
+
+One thing that is extremely important to know is that Spark executes operations in a *Lazy* manner. This is opposed to a language like R or Python which executes commands right away (a *greedy* manner).
+
+There are a number of commands that make Spark immediately start calculating a result, including:
+
+  - `.count()`
+  - `.show()`
+  - `.write()`
+  - `.collect()`
+
+When we run Spark operations, we are usually building chains of operations. For example, we might want to `.filter()` on a column, `.select()` columns of data, or aggregate (summarize) columns.
+
+Spark builds up these chains of commands until it sees it needs to execute an operation. For example:
+
+```
+df.filter(df("sex_code")==2).select().show(5)
+```
+
+
 ## Extracting PhenoData with `dx extract_dataset`
 
 First of all, you may not need to use Spark JupyterLab if you just want to extract Pheno Data from a Dataset and you know the fields.
 
-There is a utility within dx-toolkit called `dx extract_dataset` that will retrieve pheno data in the form of a CSV. It uses Spark, but the Spark is executed by the Thrift Server (the same Spark Cluster that serves the data for Cohort Browser). 
+There is a utility within [dx-toolkit](https://documentation.dnanexus.com/downloads#dnanexus-platform-sdk) (the CLI tools for working with the DNAnexus platform) called `dx extract_dataset` that will retrieve pheno data in the form of a CSV. It uses Spark, but the Spark is executed by the [Thrift Server](https://documentation.dnanexus.com/user/spark/connect-to-thrift) (the same Spark Cluster that also serves the data for Cohort Browser). 
 
-You will need a list of field ids to retrieve them.
+You will need a list of entity/field ids to retrieve them. For more info, please refer to the R Notebook (@sec-dxex-R) and the Python Notebook ().
 
-However, there are good reasons to work with the Spark Database directly. Number one is that your Cohort query will not run on the Thrift Server. If your query is complex and takes two minutes to execute, the Thrift Server will timeout. In that case, you need to run your own Spark JupyterLab cluster and extract the data using Spark itself.
+However, there are good reasons to work with the Spark Database directly. Number one is that your Cohort query will not run on the Thrift Server. If your query is complex and takes two minutes to execute, the Thrift Server will timeout. In that case, you will need to run your own Spark JupyterLab cluster and extract the data using `pyspark` (for Python users), or `sparklyr` (for R users) itself.
 
 ## Connecting with `PySpark` (For Python Users)
 

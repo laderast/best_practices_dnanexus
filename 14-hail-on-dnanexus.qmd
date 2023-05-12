@@ -6,7 +6,9 @@ title: "Hail on DNAnexus"
 
 After reading this chapter, you should be able to:
 
-  - **Explain** basic Hail terms and concepts
+  - **Explain** basic Hail terms and concepts, including Hail Tables and Hail MatrixTables
+  - **Monitor** progress using the Spark UI
+  - **Execute** Hail operations on Tables and MatrixTables, including annotating, filtering, and joining
 
 
 ## What is Hail?
