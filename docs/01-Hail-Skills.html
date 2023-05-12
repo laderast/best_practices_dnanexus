@@ -1,0 +1,1929 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Best Practices on the DNAnexus Platform - 5&nbsp; Hail Skills and Concepts</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./02-gwas.html" rel="next">
+<link href="./dx_extract_dataset_R.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Hail Skills and Concepts</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Best Practices on the DNAnexus Platform</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-object-based-file-systems.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Object Based File Systems</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-project_management.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Project and File Management</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-spark-on-dnanexus.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Spark on the DNAnexus Platform</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dx_extract_dataset_R.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><code>dx extract_dataset</code> in R</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01-Hail-Skills.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Hail Skills and Concepts</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-gwas.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">GWAS using Hail</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="toc-section-number">5.1</span>  Learning Objectives</a></li>
+  <li><a href="#what-is-hail" id="toc-what-is-hail" class="nav-link" data-scroll-target="#what-is-hail"><span class="toc-section-number">5.2</span>  What is Hail?</a>
+  <ul class="collapse">
+  <li><a href="#vocabulary" id="toc-vocabulary" class="nav-link" data-scroll-target="#vocabulary"><span class="toc-section-number">5.2.1</span>  Vocabulary</a></li>
+  </ul></li>
+  <li><a href="#initialize-spark-and-hail" id="toc-initialize-spark-and-hail" class="nav-link" data-scroll-target="#initialize-spark-and-hail"><span class="toc-section-number">5.3</span>  Initialize Spark and Hail</a></li>
+  <li><a href="#important-data-structures-in-hail-tables-and-matrixtables" id="toc-important-data-structures-in-hail-tables-and-matrixtables" class="nav-link" data-scroll-target="#important-data-structures-in-hail-tables-and-matrixtables"><span class="toc-section-number">5.4</span>  Important Data Structures in Hail: Tables and MatrixTables</a></li>
+  <li><a href="#hail-table" id="toc-hail-table" class="nav-link" data-scroll-target="#hail-table"><span class="toc-section-number">5.5</span>  Hail Table</a></li>
+  <li><a href="#load-in-a-table-from-project-storage" id="toc-load-in-a-table-from-project-storage" class="nav-link" data-scroll-target="#load-in-a-table-from-project-storage"><span class="toc-section-number">5.6</span>  Load in a Table from Project Storage</a>
+  <ul class="collapse">
+  <li><a href="#quick-hail-table-eda" id="toc-quick-hail-table-eda" class="nav-link" data-scroll-target="#quick-hail-table-eda"><span class="toc-section-number">5.6.1</span>  Quick Hail Table EDA</a></li>
+  <li><a href="#diving-into-individual-row-fields" id="toc-diving-into-individual-row-fields" class="nav-link" data-scroll-target="#diving-into-individual-row-fields"><span class="toc-section-number">5.6.2</span>  Diving into individual row fields</a></li>
+  </ul></li>
+  <li><a href="#transforming-hail-tables" id="toc-transforming-hail-tables" class="nav-link" data-scroll-target="#transforming-hail-tables"><span class="toc-section-number">5.7</span>  Transforming Hail Tables</a>
+  <ul class="collapse">
+  <li><a href="#specifying-new-columns-using-.annotate" id="toc-specifying-new-columns-using-.annotate" class="nav-link" data-scroll-target="#specifying-new-columns-using-.annotate"><span class="toc-section-number">5.7.1</span>  Specifying new columns using .annotate()</a></li>
+  <li><a href="#filtering-our-pheno_table-using-.filter" id="toc-filtering-our-pheno_table-using-.filter" class="nav-link" data-scroll-target="#filtering-our-pheno_table-using-.filter"><span class="toc-section-number">5.7.2</span>  Filtering our pheno_table using <code>.filter()</code></a></li>
+  </ul></li>
+  <li><a href="#getting-categorical-breakdowns" id="toc-getting-categorical-breakdowns" class="nav-link" data-scroll-target="#getting-categorical-breakdowns"><span class="toc-section-number">5.8</span>  Getting Categorical Breakdowns</a></li>
+  <li><a href="#plotting-the-hail-table" id="toc-plotting-the-hail-table" class="nav-link" data-scroll-target="#plotting-the-hail-table"><span class="toc-section-number">5.9</span>  Plotting the Hail Table</a></li>
+  <li><a href="#working-with-matrixtables" id="toc-working-with-matrixtables" class="nav-link" data-scroll-target="#working-with-matrixtables"><span class="toc-section-number">5.10</span>  Working with MatrixTables</a></li>
+  <li><a href="#run-hails-sample-qc-method-on-a-matrixtable" id="toc-run-hails-sample-qc-method-on-a-matrixtable" class="nav-link" data-scroll-target="#run-hails-sample-qc-method-on-a-matrixtable"><span class="toc-section-number">5.11</span>  Run Hail’s Sample QC method on a MatrixTable</a></li>
+  <li><a href="#create-sample-qc-table-and-save-in-apollo-database" id="toc-create-sample-qc-table-and-save-in-apollo-database" class="nav-link" data-scroll-target="#create-sample-qc-table-and-save-in-apollo-database"><span class="toc-section-number">5.12</span>  4) Create Sample QC Table and save in Apollo Database</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Hail Skills and Concepts</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="learning-objectives" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">5.1</span> Learning Objectives</h2>
+<p>After reading this chapter, you should be able to:</p>
+<ul>
+<li><strong>Explain</strong> basic Hail terms and concepts, including Hail Tables and Hail MatrixTables</li>
+<li><strong>Monitor</strong> progress using the Spark UI</li>
+<li><strong>Execute</strong> Hail operations on Tables and MatrixTables, including annotating, filtering, and joining</li>
+<li><strong>Calculate</strong> Sample QC metrics and save as a Hail Table in DNAX</li>
+</ul>
+</section>
+<section id="what-is-hail" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="what-is-hail"><span class="header-section-number">5.2</span> What is Hail?</h2>
+<p>Hail is a genomics framework built on top of Spark to allow for scalable genomics queries. It uses many of the same concepts (partitions, executors, plans) but it is genomics focused.</p>
+<p>For example, the Hail MatrixFrame can be QC’ed, and then filtered on these QC metrics.</p>
+<section id="vocabulary" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="vocabulary"><span class="header-section-number">5.2.1</span> Vocabulary</h3>
+<p>DNAnexus Specific:</p>
+<ul>
+<li><strong>DNAX</strong> - S3 bucket for storing Apollo Databases and Tables - accessed with the <code>dnax://</code> protocol</li>
+<li><strong>Database Object</strong> - data object on platform that represents a parquet database - has a unique identifier.</li>
+</ul>
+<p>Hail Specific Terminology:</p>
+<ul>
+<li><strong>Spark Driver</strong> - the “boss” of the Spark cluster - hosts the Spark UI</li>
+<li><strong>Spark Worker</strong> - individual nodes that house executors</li>
+<li><strong>Hail Executor</strong> - individual cores/CPUs within a worker - Executors are assigned tasks, identical to Spark.</li>
+<li><strong>Data Partition</strong> - portion of the data that is accessed by worker in parquet columnar format</li>
+<li><strong>Key</strong> - unique identifier for rows or columns
+<ul>
+<li>row keys: <em>rsid + alleles</em></li>
+<li>column keys: <em>sample IDs</em></li>
+</ul></li>
+</ul>
+<p>In the rest of this chapter, we’ll discuss some of the operations that can be done on Hail Tables and MatrixTables, the two fundamental data structures of Hail.</p>
+</section>
+</section>
+<section id="initialize-spark-and-hail" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="initialize-spark-and-hail"><span class="header-section-number">5.3</span> Initialize Spark and Hail</h2>
+<p>Make sure to open up the Spark Interface at <a href="https://job-url:8081/jobs/" class="uri">https://job-url:8081/jobs/</a></p>
+<p>This notebook shows how to perform sample QC on a Hail MatrixTable as a pre-GWAS step and save it as a Table to an Apollo database (dnax://) on the DNAnexus platform. See documentation for guidance on launch specs for the JupyterLab with Spark Cluster app for different data sizes: https://documentation.dnanexus.com/science/using-hail-to-analyze-genomic-data</p>
+<p>Note: For population scale data, samples may be referred to as individuals. In this notebook, the word “sample” will be used.</p>
+<p>Pre-conditions for running this notebook successfully: - There is an existing Hail MatrixTable in DNAX</p>
+<div class="cell" data-trusted="true" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Running this cell will output a red-colored message- this is expected.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># The 'Welcome to Hail' message in the output will indicate that Hail is ready to use in the notebook.</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.sql <span class="im">import</span> SparkSession</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> hail <span class="im">as</span> hl</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>builder <span class="op">=</span> (</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    SparkSession</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    .builder</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    .enableHiveSupport()</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>spark <span class="op">=</span> builder.getOrCreate()</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>hl.init(sc<span class="op">=</span>spark.sparkContext)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>pip-installed Hail requires additional configuration options in Spark referring
+  to the path to the Hail Python module directory HAIL_DIR,
+  e.g. /path/to/python/site-packages/hail:
+    spark.jars=HAIL_DIR/hail-all-spark.jar
+    spark.driver.extraClassPath=HAIL_DIR/hail-all-spark.jar
+    spark.executor.extraClassPath=./hail-all-spark.jarRunning on Apache Spark version 2.4.4
+SparkUI available at http://ip-172-31-34-162.ec2.internal:8081
+Welcome to
+     __  __     &lt;&gt;__
+    / /_/ /__  __/ /
+   / __  / _ `/ / /
+  /_/ /_/\_,_/_/_/   version 0.2.78-b17627756568
+LOGGING: writing to /opt/notebooks/hail-20230418-1956-0.2.78-b17627756568.log</code></pre>
+</div>
+</div>
+<p>Now we are ready to connect and do work with Hail.</p>
+<p>Note that you should only initialize one time in a notebook. If you try to initialize multiple times, then you will get an error.</p>
+<p>If that happens, restart the notebook kernel (<strong>Notebook</strong> &gt; <strong>Restart Kernel</strong> in the menu) and start executing all over again.</p>
+</section>
+<section id="important-data-structures-in-hail-tables-and-matrixtables" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="important-data-structures-in-hail-tables-and-matrixtables"><span class="header-section-number">5.4</span> Important Data Structures in Hail: Tables and MatrixTables</h2>
+<p>Before we get started with doing a GWAS in Hail, let’s talk about the data structures we’ll work with. <em>Hail Tables</em> and <em>Hail MatrixTables</em>.</p>
+<p>One of the hardest things to understand about Hail data structures is that they are actually linked data structures. It’s easiest to think of them as data tables with attached metadata.</p>
+</section>
+<section id="hail-table" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="hail-table"><span class="header-section-number">5.5</span> Hail Table</h2>
+<p>The fundamental data structure in Hail is the Hail Table.</p>
+<p>I think of Hail Tables as a regular data table with a set of metadata fields. These metadata fields are known as <strong>global fields</strong>. You can think of them as annotations for the entire table, such as the instrument used to generate the table, the software version used to process the data, etc.</p>
+<p>The tabular data itself are called <strong>row fields</strong>.</p>
+</section>
+<section id="load-in-a-table-from-project-storage" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="load-in-a-table-from-project-storage"><span class="header-section-number">5.6</span> Load in a Table from Project Storage</h2>
+<p>The first thing we’ll do in hail is load a pheno file from project storage.</p>
+<p>We’ll use <code>hl.import_table()</code> for this. We have to specify our key for the file. In our table, we have both <code>fid</code> (family ID) and <code>iid</code> (individual ID). We will use <code>iid</code> (individual ID) as our key.</p>
+<div class="cell" data-trusted="true" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import the pheno CSV file as a Hail Table</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>pheno_table <span class="op">=</span> hl.import_table(<span class="st">"file:///mnt/project/data/ukbb_100k_bmi_casecontrol.csv"</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                              delimiter<span class="op">=</span><span class="st">','</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                              impute<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                              key<span class="op">=</span><span class="st">'iid'</span>) <span class="co"># specify the column that will be the key (values must match what is in the MT 's' column)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>2023-04-18 19:57:56 Hail: INFO: Reading table to impute column types
+2023-04-18 19:58:01 Hail: INFO: Finished type imputation
+  Loading field 'fid' as type str (imputed)
+  Loading field 'iid' as type str (imputed)
+  Loading field 'father_iid' as type int32 (imputed)
+  Loading field 'mother_iid' as type int32 (imputed)
+  Loading field 'sex_code' as type int32 (imputed)
+  Loading field 'case_control_status' as type int32 (imputed)</code></pre>
+</div>
+</div>
+<section id="quick-hail-table-eda" class="level3" data-number="5.6.1">
+<h3 data-number="5.6.1" class="anchored" data-anchor-id="quick-hail-table-eda"><span class="header-section-number">5.6.1</span> Quick Hail Table EDA</h3>
+<p>We want to confirm that we loaded the data correctly. There are four really helpful methods to help with this:</p>
+<ul>
+<li><code>.describe()</code> - gives the fields and their data types for our Hail Table</li>
+<li><code>.count()</code> - counts the number of rows in our Hail Table</li>
+<li><code>.show()</code> - shows the first few rows of our dataset.</li>
+<li><code>.summarize()</code> - gives us information about missing values and data types.</li>
+</ul>
+<p>Let’s start with <code>.describe()</code> on our loaded Pheno Table. This method will show the different fields associated with our Hail Table. Note that the actual table is referred to as <code>Row fields</code>, and you can see the names of the individual columns in the dataset.</p>
+<div class="cell" data-trusted="true" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pheno_table.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>----------------------------------------
+Global fields:
+    None
+----------------------------------------
+Row fields:
+    'fid': str 
+    'iid': str 
+    'father_iid': int32 
+    'mother_iid': int32 
+    'sex_code': int32 
+    'case_control_status': int32 
+----------------------------------------
+Key: ['iid']
+----------------------------------------</code></pre>
+</div>
+</div>
+<p>If we do a count, we can see that it counts the number of rows in our table. This can be really helpful in confirming the data was loaded correctly.</p>
+<p>Keep in mind that with larger tables, the <code>.count()</code> operation can take some time to execute. That’s because it is a command that needs to be done on all of the partitions of the dataset.</p>
+<div class="cell" data-trusted="true" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pheno_table.count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>19884</code></pre>
+</div>
+</div>
+<p><code>.show()</code> will show us the first few rows of our Hail Table. Similar to Spark, if we pass an integer to <code>.show()</code> (like <code>.show(10)</code>) it will show that number of rows instead.</p>
+<div class="cell" data-trusted="true" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pheno_table.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<table><thead><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td></tr><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">fid</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">iid</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">father_iid</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">mother_iid</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">sex_code</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">case_control_status</div></td></tr><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">str</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">str</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int32</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int32</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int32</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int32</td></tr>
+</thead><tbody><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10003"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10003"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10014"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10014"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10020"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10020"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10021"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10021"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10023"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10023"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10036"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10036"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10037"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10037"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10047"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10047"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10056"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10056"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td></tr>
+</tbody></table><p style="background: #fdd; padding: 0.4em;">showing top 10 rows</p>
+</div>
+</div>
+<p>Calling <code>.summarize()</code> on a Hail Table will give you an overview of missing values and data types for each of your columns in your Hail Table. This is always extremely helpful in order to confirm the data was loaded and parsed correctly.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pheno_table.summarize()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="diving-into-individual-row-fields" class="level3" data-number="5.6.2">
+<h3 data-number="5.6.2" class="anchored" data-anchor-id="diving-into-individual-row-fields"><span class="header-section-number">5.6.2</span> Diving into individual row fields</h3>
+<p>For our <code>pheno_table</code>, we can also show a column by using the <code>.</code> accessor with <code>.show()</code>. By default, it will show the column along wi†h the row key for the dataset (<code>iid</code>)</p>
+<div class="cell" data-trusted="true" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pheno_table.case_control_status.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<table><thead><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td></tr><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">iid</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">case_control_status</div></td></tr><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">str</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int32</td></tr>
+</thead><tbody><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10003"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10014"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10020"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10021"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10023"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10036"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10037"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10047"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10056"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td></tr>
+</tbody></table><p style="background: #fdd; padding: 0.4em;">showing top 10 rows</p>
+</div>
+</div>
+<p>An additional method we can use on numeric columns is <code>.summarize()</code>, which will give a numeric summary of the column. Since we don’t have a numeric column, we’ll do it on the <code>sex_code</code> column:</p>
+<div class="cell" data-trusted="true" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>pheno_table.sex_code.summarize()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<p>19884 records.</p><b>sex_code</b> (<i>int32</i>):<ul><table><tbody><tr><td>Non-missing</td><td>19884 (100.00%)</td></tr><tr><td>Missing</td><td>0</td></tr><tr><td>Minimum</td><td>1</td></tr><tr><td>Maximum</td><td>2</td></tr><tr><td>Mean</td><td>1.54</td></tr><tr><td>Std Dev</td><td>0.50</td></tr></tbody></table></ul>
+</div>
+</div>
+</section>
+</section>
+<section id="transforming-hail-tables" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="transforming-hail-tables"><span class="header-section-number">5.7</span> Transforming Hail Tables</h2>
+<p>There are multiple operations we can do on a Hail Table (let’s call our Hail Table as <code>ht</code> here):</p>
+<ul>
+<li><code>ht.filter()</code></li>
+<li><code>ht.annotate()</code></li>
+</ul>
+<p>Let’s investigate these.</p>
+<section id="specifying-new-columns-using-.annotate" class="level3" data-number="5.7.1">
+<h3 data-number="5.7.1" class="anchored" data-anchor-id="specifying-new-columns-using-.annotate"><span class="header-section-number">5.7.1</span> Specifying new columns using .annotate()</h3>
+<p>We can define new columns in our Hail Table using the <code>.annotate()</code> method. This is a lot like the <code>mutate()</code> function in R/Tidyverse. We can compute new values based on other columns in our dataset.</p>
+<p>Here we’re subtracting 1 from both the <code>sex_code</code> and <code>case_control_status</code> columns so that we can use them as a phenotype and a covariate in our downstream analysis.</p>
+<div class="cell" data-trusted="true" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pheno_table2 <span class="op">=</span> pheno_table.annotate(sc<span class="op">=</span> pheno_table.sex_code <span class="op">-</span><span class="dv">1</span>, ccs<span class="op">=</span>pheno_table.case_control_status <span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>pheno_table2.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>2023-04-18 21:01:24 Hail: INFO: Coerced sorted dataset</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+
+<table><thead><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td></tr><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">fid</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">iid</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">father_iid</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">mother_iid</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">sex_code</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">case_control_status</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">sc</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">ccs</div></td></tr><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">str</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">str</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int32</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int32</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int32</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int32</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int32</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int32</td></tr>
+</thead><tbody><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10003"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10003"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10014"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10014"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10020"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10020"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10021"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10021"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10023"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10023"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10036"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10036"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10037"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10037"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10047"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10047"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10056"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10056"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td></tr>
+</tbody></table><p style="background: #fdd; padding: 0.4em;">showing top 10 rows</p>
+</div>
+</div>
+</section>
+<section id="filtering-our-pheno_table-using-.filter" class="level3" data-number="5.7.2">
+<h3 data-number="5.7.2" class="anchored" data-anchor-id="filtering-our-pheno_table-using-.filter"><span class="header-section-number">5.7.2</span> Filtering our pheno_table using <code>.filter()</code></h3>
+<p>The <code>.filter()</code> method is used a lot in Hail, for subsetting tables. We’ll leverage this ability to filter on our QC tables and then subset our MatrixTable with our filtered table. Here we will select those in the table that have a <code>.sc</code> of 0. We assign it into the <code>pheno3</code> object.</p>
+<div class="cell" data-trusted="true" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>pheno3 <span class="op">=</span> pheno_table2.<span class="bu">filter</span>(pheno_table2.sc <span class="op">==</span> <span class="dv">0</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>pheno3.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>2023-04-18 20:01:22 Hail: INFO: Coerced sorted dataset</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+
+<table><thead><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td></tr><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">fid</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">iid</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">father_iid</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">mother_iid</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">sex_code</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">case_control_status</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">sc</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">ccs</div></td></tr><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">str</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">str</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int32</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int32</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int32</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int32</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int32</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int32</td></tr>
+</thead><tbody><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10020"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10020"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10023"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10023"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10037"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10037"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10047"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10047"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10056"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10056"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10074"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10074"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10077"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10077"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10082"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10082"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10092"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10092"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td></tr>
+</tbody></table><p style="background: #fdd; padding: 0.4em;">showing top 10 rows</p>
+</div>
+</div>
+</section>
+</section>
+<section id="getting-categorical-breakdowns" class="level2" data-number="5.8">
+<h2 data-number="5.8" class="anchored" data-anchor-id="getting-categorical-breakdowns"><span class="header-section-number">5.8</span> Getting Categorical Breakdowns</h2>
+<p>We can count categories using <code>pheno3.aggregate()</code> and <code>hl.agg.counter()</code>. Here we’re getting the categorical breakdown of the recoded Case Constrol Status variable <code>pheno3.ccs</code>.</p>
+<p>Keep in mind that these operations can be expensive to calculate in terms of CPU time. That doesn’t mean that you shouldn’t do it, but even getting descriptive statistics on a Hail Table can take some time.</p>
+<p>In our case, our <code>pheno3</code> Hail Table is pretty small, so we can go ahead and get information about the categorical breakdown for this variable.</p>
+<div class="cell" data-trusted="true" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pheno3.aggregate(hl.agg.counter(pheno3.ccs))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>frozendict({0: 4637, 1: 4503})</code></pre>
+</div>
+</div>
+</section>
+<section id="plotting-the-hail-table" class="level2" data-number="5.9">
+<h2 data-number="5.9" class="anchored" data-anchor-id="plotting-the-hail-table"><span class="header-section-number">5.9</span> Plotting the Hail Table</h2>
+<p>We can plot the Hail Table using <code>hl.plot.histogram()</code> on our columns of interest. There are a number of different kinds of plots in <code>hl.plot</code>.</p>
+<p>The first thing we need to do is to load some modules from <code>Bokeh</code>, which will make our graphs more interactive.</p>
+<div class="cell" data-trusted="true" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> bokeh.io <span class="im">import</span> output_notebook, show</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>output_notebook()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+    <div class="bk-root">
+        <a href="https://bokeh.org" target="_blank" class="bk-logo bk-logo-small bk-logo-notebook"></a>
+        <span id="1787">Loading BokehJS ...</span>
+    </div>
+</div>
+<div class="cell-output cell-output-display">
+
+<script type="application/javascript">
+
+(function(root) {
+  function now() {
+    return new Date();
+  }
+
+  var force = true;
+
+  if (typeof root._bokeh_onload_callbacks === "undefined" || force === true) {
+    root._bokeh_onload_callbacks = [];
+    root._bokeh_is_loading = undefined;
+  }
+
+  var JS_MIME_TYPE = 'application/javascript';
+  var HTML_MIME_TYPE = 'text/html';
+  var EXEC_MIME_TYPE = 'application/vnd.bokehjs_exec.v0+json';
+  var CLASS_NAME = 'output_bokeh rendered_html';
+
+  /**
+   * Render data to the DOM node
+   */
+  function render(props, node) {
+    var script = document.createElement("script");
+    node.appendChild(script);
+  }
+
+  /**
+   * Handle when an output is cleared or removed
+   */
+  function handleClearOutput(event, handle) {
+    var cell = handle.cell;
+
+    var id = cell.output_area._bokeh_element_id;
+    var server_id = cell.output_area._bokeh_server_id;
+    // Clean up Bokeh references
+    if (id != null && id in Bokeh.index) {
+      Bokeh.index[id].model.document.clear();
+      delete Bokeh.index[id];
+    }
+
+    if (server_id !== undefined) {
+      // Clean up Bokeh references
+      var cmd = "from bokeh.io.state import curstate; print(curstate().uuid_to_server['" + server_id + "'].get_sessions()[0].document.roots[0]._id)";
+      cell.notebook.kernel.execute(cmd, {
+        iopub: {
+          output: function(msg) {
+            var id = msg.content.text.trim();
+            if (id in Bokeh.index) {
+              Bokeh.index[id].model.document.clear();
+              delete Bokeh.index[id];
+            }
+          }
+        }
+      });
+      // Destroy server and session
+      var cmd = "import bokeh.io.notebook as ion; ion.destroy_server('" + server_id + "')";
+      cell.notebook.kernel.execute(cmd);
+    }
+  }
+
+  /**
+   * Handle when a new output is added
+   */
+  function handleAddOutput(event, handle) {
+    var output_area = handle.output_area;
+    var output = handle.output;
+
+    // limit handleAddOutput to display_data with EXEC_MIME_TYPE content only
+    if ((output.output_type != "display_data") || (!output.data.hasOwnProperty(EXEC_MIME_TYPE))) {
+      return
+    }
+
+    var toinsert = output_area.element.find("." + CLASS_NAME.split(' ')[0]);
+
+    if (output.metadata[EXEC_MIME_TYPE]["id"] !== undefined) {
+      toinsert[toinsert.length - 1].firstChild.textContent = output.data[JS_MIME_TYPE];
+      // store reference to embed id on output_area
+      output_area._bokeh_element_id = output.metadata[EXEC_MIME_TYPE]["id"];
+    }
+    if (output.metadata[EXEC_MIME_TYPE]["server_id"] !== undefined) {
+      var bk_div = document.createElement("div");
+      bk_div.innerHTML = output.data[HTML_MIME_TYPE];
+      var script_attrs = bk_div.children[0].attributes;
+      for (var i = 0; i < script_attrs.length; i++) {
+        toinsert[toinsert.length - 1].firstChild.setAttribute(script_attrs[i].name, script_attrs[i].value);
+      }
+      // store reference to server id on output_area
+      output_area._bokeh_server_id = output.metadata[EXEC_MIME_TYPE]["server_id"];
+    }
+  }
+
+  function register_renderer(events, OutputArea) {
+
+    function append_mime(data, metadata, element) {
+      // create a DOM node to render to
+      var toinsert = this.create_output_subarea(
+        metadata,
+        CLASS_NAME,
+        EXEC_MIME_TYPE
+      );
+      this.keyboard_manager.register_events(toinsert);
+      // Render to node
+      var props = {data: data, metadata: metadata[EXEC_MIME_TYPE]};
+      render(props, toinsert[toinsert.length - 1]);
+      element.append(toinsert);
+      return toinsert
+    }
+
+    /* Handle when an output is cleared or removed */
+    events.on('clear_output.CodeCell', handleClearOutput);
+    events.on('delete.Cell', handleClearOutput);
+
+    /* Handle when a new output is added */
+    events.on('output_added.OutputArea', handleAddOutput);
+
+    /**
+     * Register the mime type and append_mime function with output_area
+     */
+    OutputArea.prototype.register_mime_type(EXEC_MIME_TYPE, append_mime, {
+      /* Is output safe? */
+      safe: true,
+      /* Index of renderer in `output_area.display_order` */
+      index: 0
+    });
+  }
+
+  // register the mime type if in Jupyter Notebook environment and previously unregistered
+  if (root.Jupyter !== undefined) {
+    var events = require('base/js/events');
+    var OutputArea = require('notebook/js/outputarea').OutputArea;
+
+    if (OutputArea.prototype.mime_types().indexOf(EXEC_MIME_TYPE) == -1) {
+      register_renderer(events, OutputArea);
+    }
+  }
+
+  
+  if (typeof (root._bokeh_timeout) === "undefined" || force === true) {
+    root._bokeh_timeout = Date.now() + 5000;
+    root._bokeh_failed_load = false;
+  }
+
+  var NB_LOAD_WARNING = {'data': {'text/html':
+     "<div style='background-color: #fdd'>\n"+
+     "<p>\n"+
+     "BokehJS does not appear to have successfully loaded. If loading BokehJS from CDN, this \n"+
+     "may be due to a slow or bad network connection. Possible fixes:\n"+
+     "</p>\n"+
+     "<ul>\n"+
+     "<li>re-rerun `output_notebook()` to attempt to load from CDN again, or</li>\n"+
+     "<li>use INLINE resources instead, as so:</li>\n"+
+     "</ul>\n"+
+     "<code>\n"+
+     "from bokeh.resources import INLINE\n"+
+     "output_notebook(resources=INLINE)\n"+
+     "</code>\n"+
+     "</div>"}};
+
+  function display_loaded() {
+    var el = document.getElementById("1787");
+    if (el != null) {
+      el.textContent = "BokehJS is loading...";
+    }
+    if (root.Bokeh !== undefined) {
+      if (el != null) {
+        el.textContent = "BokehJS " + root.Bokeh.version + " successfully loaded.";
+      }
+    } else if (Date.now() < root._bokeh_timeout) {
+      setTimeout(display_loaded, 100)
+    }
+  }
+
+
+  function run_callbacks() {
+    try {
+      root._bokeh_onload_callbacks.forEach(function(callback) {
+        if (callback != null)
+          callback();
+      });
+    } finally {
+      delete root._bokeh_onload_callbacks
+    }
+    console.debug("Bokeh: all callbacks have finished");
+  }
+
+  function load_libs(css_urls, js_urls, callback) {
+    if (css_urls == null) css_urls = [];
+    if (js_urls == null) js_urls = [];
+
+    root._bokeh_onload_callbacks.push(callback);
+    if (root._bokeh_is_loading > 0) {
+      console.debug("Bokeh: BokehJS is being loaded, scheduling callback at", now());
+      return null;
+    }
+    if (js_urls == null || js_urls.length === 0) {
+      run_callbacks();
+      return null;
+    }
+    console.debug("Bokeh: BokehJS not loaded, scheduling load and callback at", now());
+    root._bokeh_is_loading = css_urls.length + js_urls.length;
+
+    function on_load() {
+      root._bokeh_is_loading--;
+      if (root._bokeh_is_loading === 0) {
+        console.debug("Bokeh: all BokehJS libraries/stylesheets loaded");
+        run_callbacks()
+      }
+    }
+
+    function on_error() {
+      console.error("failed to load " + url);
+    }
+
+    for (var i = 0; i < css_urls.length; i++) {
+      var url = css_urls[i];
+      const element = document.createElement("link");
+      element.onload = on_load;
+      element.onerror = on_error;
+      element.rel = "stylesheet";
+      element.type = "text/css";
+      element.href = url;
+      console.debug("Bokeh: injecting link tag for BokehJS stylesheet: ", url);
+      document.body.appendChild(element);
+    }
+
+    for (var i = 0; i < js_urls.length; i++) {
+      var url = js_urls[i];
+      var element = document.createElement('script');
+      element.onload = on_load;
+      element.onerror = on_error;
+      element.async = false;
+      element.src = url;
+      console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
+      document.head.appendChild(element);
+    }
+  };var element = document.getElementById("1787");
+  if (element == null) {
+    console.error("Bokeh: ERROR: autoload.js configured with elementid '1787' but no matching script tag was found. ")
+    return false;
+  }
+
+  function inject_raw_css(css) {
+    const element = document.createElement("style");
+    element.appendChild(document.createTextNode(css));
+    document.body.appendChild(element);
+  }
+
+  
+  var js_urls = ["https://cdn.pydata.org/bokeh/release/bokeh-1.4.0.min.js", "https://cdn.pydata.org/bokeh/release/bokeh-widgets-1.4.0.min.js", "https://cdn.pydata.org/bokeh/release/bokeh-tables-1.4.0.min.js", "https://cdn.pydata.org/bokeh/release/bokeh-gl-1.4.0.min.js"];
+  var css_urls = [];
+  
+
+  var inline_js = [
+    function(Bokeh) {
+      Bokeh.set_log_level("info");
+    },
+    function(Bokeh) {
+    
+    
+    }
+  ];
+
+  function run_inline_js() {
+    
+    if (root.Bokeh !== undefined || force === true) {
+      
+    for (var i = 0; i < inline_js.length; i++) {
+      inline_js[i].call(root, root.Bokeh);
+    }
+    if (force === true) {
+        display_loaded();
+      }} else if (Date.now() < root._bokeh_timeout) {
+      setTimeout(run_inline_js, 100);
+    } else if (!root._bokeh_failed_load) {
+      console.log("Bokeh: BokehJS failed to load within specified timeout.");
+      root._bokeh_failed_load = true;
+    } else if (force !== true) {
+      var cell = $(document.getElementById("1787")).parents('.cell').data().cell;
+      cell.output_area.append_execute_result(NB_LOAD_WARNING)
+    }
+
+  }
+
+  if (root._bokeh_is_loading === 0) {
+    console.debug("Bokeh: BokehJS loaded, going straight to plotting");
+    run_inline_js();
+  } else {
+    load_libs(css_urls, js_urls, function() {
+      console.debug("Bokeh: BokehJS plotting callback run at", now());
+      run_inline_js();
+    });
+  }
+}(window));
+</script>
+</div>
+</div>
+<p>Now we can use <code>hl.plot.histogram()</code> on columns in our Hail Table. We’ll see that the plotting works similarly for MatrixTables.</p>
+<div class="cell" data-trusted="true" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> hl.plot.histogram(pheno_table2.ccs, title<span class="op">=</span><span class="st">'Distribution of Cases/Controls'</span>, legend<span class="op">=</span><span class="st">'ccs'</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>show(p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+
+
+
+
+
+  <div class="bk-root" id="5f712faa-ce71-4e35-837a-a3b3384514da" data-root-id="1788"></div>
+</div>
+<div class="cell-output cell-output-display">
+<script type="application/javascript">
+(function(root) {
+  function embed_document(root) {
+    
+  var docs_json = {"188eac7d-5d2b-40a5-acf7-e17893427153":{"roots":{"references":[{"attributes":{"background_fill_color":{"value":"#EEEEEE"},"below":[{"id":"1799","type":"LinearAxis"}],"center":[{"id":"1803","type":"Grid"},{"id":"1808","type":"Grid"},{"id":"1833","type":"Legend"}],"left":[{"id":"1804","type":"LinearAxis"}],"renderers":[{"id":"1825","type":"GlyphRenderer"}],"title":{"id":"1789","type":"Title"},"toolbar":{"id":"1815","type":"Toolbar"},"x_range":{"id":"1791","type":"Range1d"},"x_scale":{"id":"1795","type":"LinearScale"},"y_range":{"id":"1793","type":"DataRange1d"},"y_scale":{"id":"1797","type":"LinearScale"}},"id":"1788","subtype":"Figure","type":"Plot"},{"attributes":{},"id":"1795","type":"LinearScale"},{"attributes":{"callback":null},"id":"1793","type":"DataRange1d"},{"attributes":{"label":{"value":"ccs"},"renderers":[{"id":"1825","type":"GlyphRenderer"}]},"id":"1834","type":"LegendItem"},{"attributes":{"axis_label":"ccs","formatter":{"id":"1828","type":"BasicTickFormatter"},"ticker":{"id":"1800","type":"BasicTicker"}},"id":"1799","type":"LinearAxis"},{"attributes":{},"id":"1830","type":"BasicTickFormatter"},{"attributes":{"source":{"id":"1822","type":"ColumnDataSource"}},"id":"1826","type":"CDSView"},{"attributes":{},"id":"1828","type":"BasicTickFormatter"},{"attributes":{},"id":"1800","type":"BasicTicker"},{"attributes":{},"id":"1888","type":"Selection"},{"attributes":{"data_source":{"id":"1822","type":"ColumnDataSource"},"glyph":{"id":"1823","type":"Quad"},"hover_glyph":null,"muted_glyph":null,"nonselection_glyph":{"id":"1824","type":"Quad"},"selection_glyph":null,"view":{"id":"1826","type":"CDSView"}},"id":"1825","type":"GlyphRenderer"},{"attributes":{"active_drag":"auto","active_inspect":"auto","active_multi":null,"active_scroll":"auto","active_tap":"auto","tools":[{"id":"1809","type":"PanTool"},{"id":"1810","type":"WheelZoomTool"},{"id":"1811","type":"BoxZoomTool"},{"id":"1812","type":"SaveTool"},{"id":"1813","type":"ResetTool"},{"id":"1814","type":"HelpTool"}]},"id":"1815","type":"Toolbar"},{"attributes":{"items":[{"id":"1834","type":"LegendItem"}]},"id":"1833","type":"Legend"},{"attributes":{},"id":"1814","type":"HelpTool"},{"attributes":{},"id":"1797","type":"LinearScale"},{"attributes":{"overlay":{"id":"1832","type":"BoxAnnotation"}},"id":"1811","type":"BoxZoomTool"},{"attributes":{"ticker":{"id":"1800","type":"BasicTicker"}},"id":"1803","type":"Grid"},{"attributes":{"bottom_units":"screen","fill_alpha":{"value":0.5},"fill_color":{"value":"lightgrey"},"left_units":"screen","level":"overlay","line_alpha":{"value":1.0},"line_color":{"value":"black"},"line_dash":[4,4],"line_width":{"value":2},"render_mode":"css","right_units":"screen","top_units":"screen"},"id":"1832","type":"BoxAnnotation"},{"attributes":{},"id":"1889","type":"UnionRenderers"},{"attributes":{},"id":"1805","type":"BasicTicker"},{"attributes":{},"id":"1812","type":"SaveTool"},{"attributes":{"callback":null,"end":1.05,"start":-0.05},"id":"1791","type":"Range1d"},{"attributes":{"axis_label":"Frequency","formatter":{"id":"1830","type":"BasicTickFormatter"},"ticker":{"id":"1805","type":"BasicTicker"}},"id":"1804","type":"LinearAxis"},{"attributes":{},"id":"1810","type":"WheelZoomTool"},{"attributes":{"bottom":{"value":0},"fill_alpha":{"value":0.1},"fill_color":{"value":"#1f77b4"},"left":{"field":"left"},"line_alpha":{"value":0.1},"line_color":{"value":"#1f77b4"},"right":{"field":"right"},"top":{"field":"top"}},"id":"1824","type":"Quad"},{"attributes":{},"id":"1813","type":"ResetTool"},{"attributes":{"bottom":{"value":0},"fill_color":{"value":"#1f77b4"},"left":{"field":"left"},"right":{"field":"right"},"top":{"field":"top"}},"id":"1823","type":"Quad"},{"attributes":{"text":"Distribution of Cases/Controls"},"id":"1789","type":"Title"},{"attributes":{},"id":"1809","type":"PanTool"},{"attributes":{"dimension":1,"ticker":{"id":"1805","type":"BasicTicker"}},"id":"1808","type":"Grid"},{"attributes":{"callback":null,"data":{"left":[0.0,0.02,0.04,0.06,0.08,0.1,0.12,0.14,0.16,0.18,0.2,0.22,0.24,0.26,0.28,0.3,0.32,0.34,0.36,0.38,0.4,0.42,0.44,0.46,0.48,0.5,0.52,0.54,0.56,0.58,0.6,0.62,0.64,0.66,0.68,0.7000000000000001,0.72,0.74,0.76,0.78,0.8,0.8200000000000001,0.84,0.86,0.88,0.9,0.92,0.9400000000000001,0.96,0.98],"right":[0.02,0.04,0.06,0.08,0.1,0.12,0.14,0.16,0.18,0.2,0.22,0.24,0.26,0.28,0.3,0.32,0.34,0.36,0.38,0.4,0.42,0.44,0.46,0.48,0.5,0.52,0.54,0.56,0.58,0.6,0.62,0.64,0.66,0.68,0.7000000000000001,0.72,0.74,0.76,0.78,0.8,0.8200000000000001,0.84,0.86,0.88,0.9,0.92,0.9400000000000001,0.96,0.98,1.0],"top":[9942,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9942]},"selected":{"id":"1888","type":"Selection"},"selection_policy":{"id":"1889","type":"UnionRenderers"}},"id":"1822","type":"ColumnDataSource"}],"root_ids":["1788"]},"title":"Bokeh Application","version":"1.4.0"}};
+  var render_items = [{"docid":"188eac7d-5d2b-40a5-acf7-e17893427153","roots":{"1788":"5f712faa-ce71-4e35-837a-a3b3384514da"}}];
+  root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
+
+  }
+  if (root.Bokeh !== undefined) {
+    embed_document(root);
+  } else {
+    var attempts = 0;
+    var timer = setInterval(function(root) {
+      if (root.Bokeh !== undefined) {
+        clearInterval(timer);
+        embed_document(root);
+      } else {
+        attempts++;
+        if (attempts > 100) {
+          clearInterval(timer);
+          console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing");
+        }
+      }
+    }, 10, root)
+  }
+})(window);
+</script>
+</div>
+</div>
+<div class="cell" data-trusted="true" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> hl.plot.histogram(pheno_table2.sc, <span class="bu">range</span><span class="op">=</span>(<span class="dv">0</span>,<span class="dv">1</span>), bins<span class="op">=</span><span class="dv">100</span>, title<span class="op">=</span><span class="st">'Distribution of Gender'</span>, legend<span class="op">=</span><span class="st">'sc'</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>show(p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+
+
+
+
+
+  <div class="bk-root" id="7694def3-adf2-47e4-adfe-83f14d8bc1df" data-root-id="1939"></div>
+</div>
+<div class="cell-output cell-output-display">
+<script type="application/javascript">
+(function(root) {
+  function embed_document(root) {
+    
+  var docs_json = {"d5c71939-3d23-408d-bf52-e438c3cc6cdd":{"roots":{"references":[{"attributes":{"background_fill_color":{"value":"#EEEEEE"},"below":[{"id":"1950","type":"LinearAxis"}],"center":[{"id":"1954","type":"Grid"},{"id":"1959","type":"Grid"},{"id":"1984","type":"Legend"}],"left":[{"id":"1955","type":"LinearAxis"}],"renderers":[{"id":"1976","type":"GlyphRenderer"}],"title":{"id":"1940","type":"Title"},"toolbar":{"id":"1966","type":"Toolbar"},"x_range":{"id":"1942","type":"Range1d"},"x_scale":{"id":"1946","type":"LinearScale"},"y_range":{"id":"1944","type":"DataRange1d"},"y_scale":{"id":"1948","type":"LinearScale"}},"id":"1939","subtype":"Figure","type":"Plot"},{"attributes":{"callback":null},"id":"1944","type":"DataRange1d"},{"attributes":{},"id":"1960","type":"PanTool"},{"attributes":{"dimension":1,"ticker":{"id":"1956","type":"BasicTicker"}},"id":"1959","type":"Grid"},{"attributes":{},"id":"1946","type":"LinearScale"},{"attributes":{},"id":"1961","type":"WheelZoomTool"},{"attributes":{},"id":"1956","type":"BasicTicker"},{"attributes":{},"id":"1963","type":"SaveTool"},{"attributes":{"axis_label":"Frequency","formatter":{"id":"1981","type":"BasicTickFormatter"},"ticker":{"id":"1956","type":"BasicTicker"}},"id":"1955","type":"LinearAxis"},{"attributes":{},"id":"1965","type":"HelpTool"},{"attributes":{},"id":"2048","type":"UnionRenderers"},{"attributes":{},"id":"2047","type":"Selection"},{"attributes":{"bottom":{"value":0},"fill_alpha":{"value":0.1},"fill_color":{"value":"#1f77b4"},"left":{"field":"left"},"line_alpha":{"value":0.1},"line_color":{"value":"#1f77b4"},"right":{"field":"right"},"top":{"field":"top"}},"id":"1975","type":"Quad"},{"attributes":{"overlay":{"id":"1983","type":"BoxAnnotation"}},"id":"1962","type":"BoxZoomTool"},{"attributes":{"active_drag":"auto","active_inspect":"auto","active_multi":null,"active_scroll":"auto","active_tap":"auto","tools":[{"id":"1960","type":"PanTool"},{"id":"1961","type":"WheelZoomTool"},{"id":"1962","type":"BoxZoomTool"},{"id":"1963","type":"SaveTool"},{"id":"1964","type":"ResetTool"},{"id":"1965","type":"HelpTool"}]},"id":"1966","type":"Toolbar"},{"attributes":{"axis_label":"sc","formatter":{"id":"1979","type":"BasicTickFormatter"},"ticker":{"id":"1951","type":"BasicTicker"}},"id":"1950","type":"LinearAxis"},{"attributes":{},"id":"1981","type":"BasicTickFormatter"},{"attributes":{"source":{"id":"1973","type":"ColumnDataSource"}},"id":"1977","type":"CDSView"},{"attributes":{},"id":"1948","type":"LinearScale"},{"attributes":{"text":"Distribution of Gender"},"id":"1940","type":"Title"},{"attributes":{},"id":"1979","type":"BasicTickFormatter"},{"attributes":{"bottom":{"value":0},"fill_color":{"value":"#1f77b4"},"left":{"field":"left"},"right":{"field":"right"},"top":{"field":"top"}},"id":"1974","type":"Quad"},{"attributes":{},"id":"1951","type":"BasicTicker"},{"attributes":{"ticker":{"id":"1951","type":"BasicTicker"}},"id":"1954","type":"Grid"},{"attributes":{"items":[{"id":"1985","type":"LegendItem"}]},"id":"1984","type":"Legend"},{"attributes":{"callback":null,"data":{"left":[0.0,0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1,0.11,0.12,0.13,0.14,0.15,0.16,0.17,0.18,0.19,0.2,0.21,0.22,0.23,0.24,0.25,0.26,0.27,0.28,0.29,0.3,0.31,0.32,0.33,0.34,0.35000000000000003,0.36,0.37,0.38,0.39,0.4,0.41000000000000003,0.42,0.43,0.44,0.45,0.46,0.47000000000000003,0.48,0.49,0.5,0.51,0.52,0.53,0.54,0.55,0.56,0.5700000000000001,0.58,0.59,0.6,0.61,0.62,0.63,0.64,0.65,0.66,0.67,0.68,0.6900000000000001,0.7000000000000001,0.71,0.72,0.73,0.74,0.75,0.76,0.77,0.78,0.79,0.8,0.81,0.8200000000000001,0.8300000000000001,0.84,0.85,0.86,0.87,0.88,0.89,0.9,0.91,0.92,0.93,0.9400000000000001,0.9500000000000001,0.96,0.97,0.98,0.99],"right":[0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1,0.11,0.12,0.13,0.14,0.15,0.16,0.17,0.18,0.19,0.2,0.21,0.22,0.23,0.24,0.25,0.26,0.27,0.28,0.29,0.3,0.31,0.32,0.33,0.34,0.35000000000000003,0.36,0.37,0.38,0.39,0.4,0.41000000000000003,0.42,0.43,0.44,0.45,0.46,0.47000000000000003,0.48,0.49,0.5,0.51,0.52,0.53,0.54,0.55,0.56,0.5700000000000001,0.58,0.59,0.6,0.61,0.62,0.63,0.64,0.65,0.66,0.67,0.68,0.6900000000000001,0.7000000000000001,0.71,0.72,0.73,0.74,0.75,0.76,0.77,0.78,0.79,0.8,0.81,0.8200000000000001,0.8300000000000001,0.84,0.85,0.86,0.87,0.88,0.89,0.9,0.91,0.92,0.93,0.9400000000000001,0.9500000000000001,0.96,0.97,0.98,0.99,1.0],"top":[9140,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10744]},"selected":{"id":"2047","type":"Selection"},"selection_policy":{"id":"2048","type":"UnionRenderers"}},"id":"1973","type":"ColumnDataSource"},{"attributes":{"callback":null,"end":1.05,"start":-0.05},"id":"1942","type":"Range1d"},{"attributes":{"bottom_units":"screen","fill_alpha":{"value":0.5},"fill_color":{"value":"lightgrey"},"left_units":"screen","level":"overlay","line_alpha":{"value":1.0},"line_color":{"value":"black"},"line_dash":[4,4],"line_width":{"value":2},"render_mode":"css","right_units":"screen","top_units":"screen"},"id":"1983","type":"BoxAnnotation"},{"attributes":{"label":{"value":"sc"},"renderers":[{"id":"1976","type":"GlyphRenderer"}]},"id":"1985","type":"LegendItem"},{"attributes":{},"id":"1964","type":"ResetTool"},{"attributes":{"data_source":{"id":"1973","type":"ColumnDataSource"},"glyph":{"id":"1974","type":"Quad"},"hover_glyph":null,"muted_glyph":null,"nonselection_glyph":{"id":"1975","type":"Quad"},"selection_glyph":null,"view":{"id":"1977","type":"CDSView"}},"id":"1976","type":"GlyphRenderer"}],"root_ids":["1939"]},"title":"Bokeh Application","version":"1.4.0"}};
+  var render_items = [{"docid":"d5c71939-3d23-408d-bf52-e438c3cc6cdd","roots":{"1939":"7694def3-adf2-47e4-adfe-83f14d8bc1df"}}];
+  root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
+
+  }
+  if (root.Bokeh !== undefined) {
+    embed_document(root);
+  } else {
+    var attempts = 0;
+    var timer = setInterval(function(root) {
+      if (root.Bokeh !== undefined) {
+        clearInterval(timer);
+        embed_document(root);
+      } else {
+        attempts++;
+        if (attempts > 100) {
+          clearInterval(timer);
+          console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing");
+        }
+      }
+    }, 10, root)
+  }
+})(window);
+</script>
+</div>
+</div>
+</section>
+<section id="working-with-matrixtables" class="level2" data-number="5.10">
+<h2 data-number="5.10" class="anchored" data-anchor-id="working-with-matrixtables"><span class="header-section-number">5.10</span> Working with MatrixTables</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="01-Hail-Skills_files/figure-html/a268e47c-1-877e371c-7c8f-4f93-8fb1-01e9408d4f8b.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">image.png</figcaption><p></p>
+</figure>
+</div>
+<p>MatrixTables are an extension of HailTables. They work like a 2-D matrix with two tables that are attached to them:</p>
+<ol type="1">
+<li><p>Columns fields (Sample Based Operations), accessed using <code>.cols()</code></p></li>
+<li><p>Row fields (Variant based operations. accessed using <code>.rows()</code></p></li>
+</ol>
+<p>If you remember this, it makes MatrixTable operations more understandable.</p>
+<p>We’ll load in a MatrixTable that I’ve already created. This was created from the pVCF files in the <code>Geno_Data/</code> directory using the <code>hl.import_vcf()</code> function, and then written to a dnax database using <code>mt.write()</code>. (see <code>supplementary_notebooks/01_import_pVCF.ipynb</code>).</p>
+<p>Note the url has the format <code>dnax://database-id/mt-name</code>, where <code>database_id</code> is the actual database id. You can find this from the database name in a project by the following:</p>
+<div class="cell" data-trusted="true" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read MT</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>mt_url<span class="op">=</span><span class="st">"dnax://database-GQYV2Bj04bPg9X3KfFyj2jyY/geno.mt"</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>mt <span class="op">=</span> hl.read_matrix_table(mt_url)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can see from using <code>.describe()</code> that there are Column and Row fields. There are a lot more row fields than column fields. When we merge in Pheno Data to our MatrixTable, we’ll see more column fields will be added by that operation.</p>
+<div class="cell" data-trusted="true" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># View structure of MT before QC</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>mt.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>----------------------------------------
+Global fields:
+    None
+----------------------------------------
+Column fields:
+    's': str
+----------------------------------------
+Row fields:
+    'locus': locus&lt;GRCh38&gt;
+    'alleles': array&lt;str&gt;
+    'rsid': str
+    'qual': float64
+    'filters': set&lt;str&gt;
+    'info': struct {
+        AC: array&lt;int32&gt;, 
+        AF: array&lt;float64&gt;, 
+        AN: int32, 
+        BaseQRankSum: float64, 
+        ClippingRankSum: float64, 
+        DB: bool, 
+        DP: int32, 
+        FS: float64, 
+        InbreedingCoeff: float64, 
+        MQ: float64, 
+        MQRankSum: float64, 
+        QD: float64, 
+        ReadPosRankSum: float64, 
+        SOR: float64, 
+        VQSLOD: float64, 
+        VQSR_culprit: str, 
+        VQSR_NEGATIVE_TRAIN_SITE: bool, 
+        VQSR_POSITIVE_TRAIN_SITE: bool, 
+        GQ_HIST_ALT: array&lt;str&gt;, 
+        DP_HIST_ALT: array&lt;str&gt;, 
+        AB_HIST_ALT: array&lt;str&gt;, 
+        GQ_HIST_ALL: str, 
+        DP_HIST_ALL: str, 
+        AB_HIST_ALL: str, 
+        AC_AFR: array&lt;int32&gt;, 
+        AC_AMR: array&lt;int32&gt;, 
+        AC_ASJ: array&lt;int32&gt;, 
+        AC_EAS: array&lt;int32&gt;, 
+        AC_FIN: array&lt;int32&gt;, 
+        AC_NFE: array&lt;int32&gt;, 
+        AC_OTH: array&lt;int32&gt;, 
+        AC_SAS: array&lt;int32&gt;, 
+        AC_Male: array&lt;int32&gt;, 
+        AC_Female: array&lt;int32&gt;, 
+        AN_AFR: int32, 
+        AN_AMR: int32, 
+        AN_ASJ: int32, 
+        AN_EAS: int32, 
+        AN_FIN: int32, 
+        AN_NFE: int32, 
+        AN_OTH: int32, 
+        AN_SAS: int32, 
+        AN_Male: int32, 
+        AN_Female: int32, 
+        AF_AFR: array&lt;float64&gt;, 
+        AF_AMR: array&lt;float64&gt;, 
+        AF_ASJ: array&lt;float64&gt;, 
+        AF_EAS: array&lt;float64&gt;, 
+        AF_FIN: array&lt;float64&gt;, 
+        AF_NFE: array&lt;float64&gt;, 
+        AF_OTH: array&lt;float64&gt;, 
+        AF_SAS: array&lt;float64&gt;, 
+        AF_Male: array&lt;float64&gt;, 
+        AF_Female: array&lt;float64&gt;, 
+        GC_AFR: array&lt;int32&gt;, 
+        GC_AMR: array&lt;int32&gt;, 
+        GC_ASJ: array&lt;int32&gt;, 
+        GC_EAS: array&lt;int32&gt;, 
+        GC_FIN: array&lt;int32&gt;, 
+        GC_NFE: array&lt;int32&gt;, 
+        GC_OTH: array&lt;int32&gt;, 
+        GC_SAS: array&lt;int32&gt;, 
+        GC_Male: array&lt;int32&gt;, 
+        GC_Female: array&lt;int32&gt;, 
+        AC_raw: array&lt;int32&gt;, 
+        AN_raw: int32, 
+        AF_raw: array&lt;float64&gt;, 
+        GC_raw: array&lt;int32&gt;, 
+        GC: array&lt;int32&gt;, 
+        Hom_AFR: array&lt;int32&gt;, 
+        Hom_AMR: array&lt;int32&gt;, 
+        Hom_ASJ: array&lt;int32&gt;, 
+        Hom_EAS: array&lt;int32&gt;, 
+        Hom_FIN: array&lt;int32&gt;, 
+        Hom_NFE: array&lt;int32&gt;, 
+        Hom_OTH: array&lt;int32&gt;, 
+        Hom_SAS: array&lt;int32&gt;, 
+        Hom_Male: array&lt;int32&gt;, 
+        Hom_Female: array&lt;int32&gt;, 
+        Hom_raw: array&lt;int32&gt;, 
+        Hom: array&lt;int32&gt;, 
+        STAR_AC: int32, 
+        STAR_AC_raw: int32, 
+        STAR_Hom: int32, 
+        POPMAX: array&lt;str&gt;, 
+        AC_POPMAX: array&lt;int32&gt;, 
+        AN_POPMAX: array&lt;int32&gt;, 
+        AF_POPMAX: array&lt;float64&gt;, 
+        DP_MEDIAN: array&lt;int32&gt;, 
+        DREF_MEDIAN: array&lt;float64&gt;, 
+        GQ_MEDIAN: array&lt;int32&gt;, 
+        AB_MEDIAN: array&lt;float64&gt;, 
+        AS_RF: array&lt;float64&gt;, 
+        AS_FilterStatus: array&lt;str&gt;, 
+        AS_RF_POSITIVE_TRAIN: array&lt;int32&gt;, 
+        AS_RF_NEGATIVE_TRAIN: array&lt;int32&gt;, 
+        AC_AFR_Male: array&lt;int32&gt;, 
+        AC_AMR_Male: array&lt;int32&gt;, 
+        AC_ASJ_Male: array&lt;int32&gt;, 
+        AC_EAS_Male: array&lt;int32&gt;, 
+        AC_FIN_Male: array&lt;int32&gt;, 
+        AC_NFE_Male: array&lt;int32&gt;, 
+        AC_OTH_Male: array&lt;int32&gt;, 
+        AC_SAS_Male: array&lt;int32&gt;, 
+        AC_AFR_Female: array&lt;int32&gt;, 
+        AC_AMR_Female: array&lt;int32&gt;, 
+        AC_ASJ_Female: array&lt;int32&gt;, 
+        AC_EAS_Female: array&lt;int32&gt;, 
+        AC_FIN_Female: array&lt;int32&gt;, 
+        AC_NFE_Female: array&lt;int32&gt;, 
+        AC_OTH_Female: array&lt;int32&gt;, 
+        AC_SAS_Female: array&lt;int32&gt;, 
+        AN_AFR_Male: int32, 
+        AN_AMR_Male: int32, 
+        AN_ASJ_Male: int32, 
+        AN_EAS_Male: int32, 
+        AN_FIN_Male: int32, 
+        AN_NFE_Male: int32, 
+        AN_OTH_Male: int32, 
+        AN_SAS_Male: int32, 
+        AN_AFR_Female: int32, 
+        AN_AMR_Female: int32, 
+        AN_ASJ_Female: int32, 
+        AN_EAS_Female: int32, 
+        AN_FIN_Female: int32, 
+        AN_NFE_Female: int32, 
+        AN_OTH_Female: int32, 
+        AN_SAS_Female: int32, 
+        AF_AFR_Male: array&lt;float64&gt;, 
+        AF_AMR_Male: array&lt;float64&gt;, 
+        AF_ASJ_Male: array&lt;float64&gt;, 
+        AF_EAS_Male: array&lt;float64&gt;, 
+        AF_FIN_Male: array&lt;float64&gt;, 
+        AF_NFE_Male: array&lt;float64&gt;, 
+        AF_OTH_Male: array&lt;float64&gt;, 
+        AF_SAS_Male: array&lt;float64&gt;, 
+        AF_AFR_Female: array&lt;float64&gt;, 
+        AF_AMR_Female: array&lt;float64&gt;, 
+        AF_ASJ_Female: array&lt;float64&gt;, 
+        AF_EAS_Female: array&lt;float64&gt;, 
+        AF_FIN_Female: array&lt;float64&gt;, 
+        AF_NFE_Female: array&lt;float64&gt;, 
+        AF_OTH_Female: array&lt;float64&gt;, 
+        AF_SAS_Female: array&lt;float64&gt;, 
+        GC_AFR_Male: array&lt;int32&gt;, 
+        GC_AMR_Male: array&lt;int32&gt;, 
+        GC_ASJ_Male: array&lt;int32&gt;, 
+        GC_EAS_Male: array&lt;int32&gt;, 
+        GC_FIN_Male: array&lt;int32&gt;, 
+        GC_NFE_Male: array&lt;int32&gt;, 
+        GC_OTH_Male: array&lt;int32&gt;, 
+        GC_SAS_Male: array&lt;int32&gt;, 
+        GC_AFR_Female: array&lt;int32&gt;, 
+        GC_AMR_Female: array&lt;int32&gt;, 
+        GC_ASJ_Female: array&lt;int32&gt;, 
+        GC_EAS_Female: array&lt;int32&gt;, 
+        GC_FIN_Female: array&lt;int32&gt;, 
+        GC_NFE_Female: array&lt;int32&gt;, 
+        GC_OTH_Female: array&lt;int32&gt;, 
+        GC_SAS_Female: array&lt;int32&gt;, 
+        Hemi_AFR: array&lt;int32&gt;, 
+        Hemi_AMR: array&lt;int32&gt;, 
+        Hemi_ASJ: array&lt;int32&gt;, 
+        Hemi_EAS: array&lt;int32&gt;, 
+        Hemi_FIN: array&lt;int32&gt;, 
+        Hemi_NFE: array&lt;int32&gt;, 
+        Hemi_OTH: array&lt;int32&gt;, 
+        Hemi_SAS: array&lt;int32&gt;, 
+        Hemi: array&lt;int32&gt;, 
+        Hemi_raw: array&lt;int32&gt;, 
+        STAR_Hemi: int32
+    }
+----------------------------------------
+Entry fields:
+    'GT': call
+    'AD': array&lt;int32&gt;
+    'DP': int32
+    'GQ': int32
+    'PL': array&lt;int32&gt;
+----------------------------------------
+Column key: ['s']
+Row key: ['locus', 'alleles']
+----------------------------------------</code></pre>
+</div>
+</div>
+<p>We can see the actual genotype calls for each locus and each sample using <code>mt.GT.show()</code>:</p>
+<div class="cell" data-trusted="true" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>mt.GT.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<table><thead><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td></tr><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">'sample_1_0'</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">'sample_1_1'</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">'sample_1_2'</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">'sample_1_3'</div></td></tr><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">locus</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">alleles</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">GT</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">GT</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">GT</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">GT</div></td></tr><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">locus&lt;GRCh38&gt;</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">array&lt;str&gt;</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">call</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">call</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">call</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">call</td></tr>
+</thead><tbody><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">chr1:12198</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">["G","C"]</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1/1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">chr1:12237</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">["G","A"]</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1/1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">chr1:12259</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">["G","C"]</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1/1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">chr1:12266</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">["G","A"]</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1/1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">chr1:12272</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">["G","A"]</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/1</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">chr1:12554</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">["A","G"]</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">chr1:12559</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">["G","A"]</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">chr1:12573</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">["T","C"]</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">chr1:12586</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">["C","T"]</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">chr1:12596</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">["C","A"]</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0/0</td></tr>
+</tbody></table><p style="background: #fdd; padding: 0.4em;">showing top 10 rows</p>
+<p style="background: #fdd; padding: 0.4em;">showing the first 4 of 100000 columns</p>
+</div>
+</div>
+<p>If we do a <code>.show()</code> operation on <code>mt.row_key</code> we will retrieve the keys used in the row operations. Here they are a combination of locus position and the allele at that position.</p>
+<div class="cell" data-trusted="true" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>mt.row_key.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<table><thead><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td></tr><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">locus</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">alleles</div></td></tr><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">locus&lt;GRCh38&gt;</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">array&lt;str&gt;</td></tr>
+</thead><tbody><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">chr1:12198</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">["G","C"]</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">chr1:12237</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">["G","A"]</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">chr1:12259</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">["G","C"]</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">chr1:12266</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">["G","A"]</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">chr1:12272</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">["G","A"]</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">chr1:12554</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">["A","G"]</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">chr1:12559</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">["G","A"]</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">chr1:12573</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">["T","C"]</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">chr1:12586</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">["C","T"]</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">chr1:12596</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">["C","A"]</td></tr>
+</tbody></table><p style="background: #fdd; padding: 0.4em;">showing top 10 rows</p>
+</div>
+</div>
+<p>If we do a <code>mt.rows().show()</code>, we can see the row fields themselves. Remember our keys for this table are <code>locus_id</code> and <code>allele</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>mt.rows().show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="01-Hail-Skills_files/figure-html/5c9c47ed-1-3dc5a474-b028-4f3b-a693-6723ab3fe360.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">image.png</figcaption><p></p>
+</figure>
+</div>
+<p>We can access a row field (here AF = Allele Frequency) by first going into the <code>.info</code> slot and then accessing the <code>AF</code> field within it. Keep this in mind for when you are using <code>.filter_rows()</code>, since it’s how you will accesss the fields.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>mt.info.AF.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If we use <code>mt.aggregate_entries()</code> and <code>hl.agg.counter()</code> on <code>mt.GT.n_alt_alleles()</code>, we will get the distribution of zygosities for our entire MatrixTable.</p>
+<div class="cell" data-trusted="true">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>mt.aggregate_entries(hl.agg.counter(mt.GT.n_alt_alleles()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="run-hails-sample-qc-method-on-a-matrixtable" class="level2" data-number="5.11">
+<h2 data-number="5.11" class="anchored" data-anchor-id="run-hails-sample-qc-method-on-a-matrixtable"><span class="header-section-number">5.11</span> Run Hail’s Sample QC method on a MatrixTable</h2>
+<p>If we use <code>hl.sample_qc()</code> on our MatrixTable, it will create a new MatrixTable that has the QC information attached. You’ll notice that we have an additional column field called <code>mt.sample_qc</code>. This is a nested column field - it will contain additional metrics within in.</p>
+<p>Note that we’re not going to create the sample QC table here - we will load it from the DNAX store when we do our GWAS. This is because it takes some time to calculate. For more about sample QC, refer to the OpenBio Sample QC notebook here: https://github.com/dnanexus/OpenBio/blob/master/hail_tutorial/sample_qc.ipynb</p>
+<p><em>Additional documentation: https://hail.is/docs/0.2/methods/genetics.html#hail.methods.sample_qc</em></p>
+<div class="cell" data-trusted="true" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># DON'T RUN in class</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Run sample-level QC</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>qc_mt <span class="op">=</span> hl.sample_qc(mt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-trusted="true" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># View structure of MT after QC</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Don't Run this cell</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>qc_mt.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>----------------------------------------
+
+Global fields:
+
+    None
+
+----------------------------------------
+
+Column fields:
+
+    's': str
+
+    'sample_qc': struct {
+
+        dp_stats: struct {
+
+            mean: float64, 
+
+            stdev: float64, 
+
+            min: float64, 
+
+            max: float64
+
+        }, 
+
+        gq_stats: struct {
+
+            mean: float64, 
+
+            stdev: float64, 
+
+            min: float64, 
+
+            max: float64
+
+        }, 
+
+        call_rate: float64, 
+
+        n_called: int64, 
+
+        n_not_called: int64, 
+
+        n_filtered: int64, 
+
+        n_hom_ref: int64, 
+
+        n_het: int64, 
+
+        n_hom_var: int64, 
+
+        n_non_ref: int64, 
+
+        n_singleton: int64, 
+
+        n_snp: int64, 
+
+        n_insertion: int64, 
+
+        n_deletion: int64, 
+
+        n_transition: int64, 
+
+        n_transversion: int64, 
+
+        n_star: int64, 
+
+        r_ti_tv: float64, 
+
+        r_het_hom_var: float64, 
+
+        r_insertion_deletion: float64
+
+    }
+
+----------------------------------------
+
+Row fields:
+
+    'locus': locus&lt;GRCh38&gt;
+
+    'alleles': array&lt;str&gt;
+
+    'rsid': str
+
+    'qual': float64
+
+    'filters': set&lt;str&gt;
+
+    'info': struct {
+
+        AC: array&lt;int32&gt;, 
+
+        AF: array&lt;float64&gt;, 
+
+        AN: int32, 
+
+        BaseQRankSum: float64, 
+
+        ClippingRankSum: float64, 
+
+        DB: bool, 
+
+        DP: int32, 
+
+        FS: float64, 
+
+        InbreedingCoeff: float64, 
+
+        MQ: float64, 
+
+        MQRankSum: float64, 
+
+        QD: float64, 
+
+        ReadPosRankSum: float64, 
+
+        SOR: float64, 
+
+        VQSLOD: float64, 
+
+        VQSR_culprit: str, 
+
+        VQSR_NEGATIVE_TRAIN_SITE: bool, 
+
+        VQSR_POSITIVE_TRAIN_SITE: bool, 
+
+        GQ_HIST_ALT: array&lt;str&gt;, 
+
+        DP_HIST_ALT: array&lt;str&gt;, 
+
+        AB_HIST_ALT: array&lt;str&gt;, 
+
+        GQ_HIST_ALL: str, 
+
+        DP_HIST_ALL: str, 
+
+        AB_HIST_ALL: str, 
+
+        AC_AFR: array&lt;int32&gt;, 
+
+        AC_AMR: array&lt;int32&gt;, 
+
+        AC_ASJ: array&lt;int32&gt;, 
+
+        AC_EAS: array&lt;int32&gt;, 
+
+        AC_FIN: array&lt;int32&gt;, 
+
+        AC_NFE: array&lt;int32&gt;, 
+
+        AC_OTH: array&lt;int32&gt;, 
+
+        AC_SAS: array&lt;int32&gt;, 
+
+        AC_Male: array&lt;int32&gt;, 
+
+        AC_Female: array&lt;int32&gt;, 
+
+        AN_AFR: int32, 
+
+        AN_AMR: int32, 
+
+        AN_ASJ: int32, 
+
+        AN_EAS: int32, 
+
+        AN_FIN: int32, 
+
+        AN_NFE: int32, 
+
+        AN_OTH: int32, 
+
+        AN_SAS: int32, 
+
+        AN_Male: int32, 
+
+        AN_Female: int32, 
+
+        AF_AFR: array&lt;float64&gt;, 
+
+        AF_AMR: array&lt;float64&gt;, 
+
+        AF_ASJ: array&lt;float64&gt;, 
+
+        AF_EAS: array&lt;float64&gt;, 
+
+        AF_FIN: array&lt;float64&gt;, 
+
+        AF_NFE: array&lt;float64&gt;, 
+
+        AF_OTH: array&lt;float64&gt;, 
+
+        AF_SAS: array&lt;float64&gt;, 
+
+        AF_Male: array&lt;float64&gt;, 
+
+        AF_Female: array&lt;float64&gt;, 
+
+        GC_AFR: array&lt;int32&gt;, 
+
+        GC_AMR: array&lt;int32&gt;, 
+
+        GC_ASJ: array&lt;int32&gt;, 
+
+        GC_EAS: array&lt;int32&gt;, 
+
+        GC_FIN: array&lt;int32&gt;, 
+
+        GC_NFE: array&lt;int32&gt;, 
+
+        GC_OTH: array&lt;int32&gt;, 
+
+        GC_SAS: array&lt;int32&gt;, 
+
+        GC_Male: array&lt;int32&gt;, 
+
+        GC_Female: array&lt;int32&gt;, 
+
+        AC_raw: array&lt;int32&gt;, 
+
+        AN_raw: int32, 
+
+        AF_raw: array&lt;float64&gt;, 
+
+        GC_raw: array&lt;int32&gt;, 
+
+        GC: array&lt;int32&gt;, 
+
+        Hom_AFR: array&lt;int32&gt;, 
+
+        Hom_AMR: array&lt;int32&gt;, 
+
+        Hom_ASJ: array&lt;int32&gt;, 
+
+        Hom_EAS: array&lt;int32&gt;, 
+
+        Hom_FIN: array&lt;int32&gt;, 
+
+        Hom_NFE: array&lt;int32&gt;, 
+
+        Hom_OTH: array&lt;int32&gt;, 
+
+        Hom_SAS: array&lt;int32&gt;, 
+
+        Hom_Male: array&lt;int32&gt;, 
+
+        Hom_Female: array&lt;int32&gt;, 
+
+        Hom_raw: array&lt;int32&gt;, 
+
+        Hom: array&lt;int32&gt;, 
+
+        STAR_AC: int32, 
+
+        STAR_AC_raw: int32, 
+
+        STAR_Hom: int32, 
+
+        POPMAX: array&lt;str&gt;, 
+
+        AC_POPMAX: array&lt;int32&gt;, 
+
+        AN_POPMAX: array&lt;int32&gt;, 
+
+        AF_POPMAX: array&lt;float64&gt;, 
+
+        DP_MEDIAN: array&lt;int32&gt;, 
+
+        DREF_MEDIAN: array&lt;float64&gt;, 
+
+        GQ_MEDIAN: array&lt;int32&gt;, 
+
+        AB_MEDIAN: array&lt;float64&gt;, 
+
+        AS_RF: array&lt;float64&gt;, 
+
+        AS_FilterStatus: array&lt;str&gt;, 
+
+        AS_RF_POSITIVE_TRAIN: array&lt;int32&gt;, 
+
+        AS_RF_NEGATIVE_TRAIN: array&lt;int32&gt;, 
+
+        AC_AFR_Male: array&lt;int32&gt;, 
+
+        AC_AMR_Male: array&lt;int32&gt;, 
+
+        AC_ASJ_Male: array&lt;int32&gt;, 
+
+        AC_EAS_Male: array&lt;int32&gt;, 
+
+        AC_FIN_Male: array&lt;int32&gt;, 
+
+        AC_NFE_Male: array&lt;int32&gt;, 
+
+        AC_OTH_Male: array&lt;int32&gt;, 
+
+        AC_SAS_Male: array&lt;int32&gt;, 
+
+        AC_AFR_Female: array&lt;int32&gt;, 
+
+        AC_AMR_Female: array&lt;int32&gt;, 
+
+        AC_ASJ_Female: array&lt;int32&gt;, 
+
+        AC_EAS_Female: array&lt;int32&gt;, 
+
+        AC_FIN_Female: array&lt;int32&gt;, 
+
+        AC_NFE_Female: array&lt;int32&gt;, 
+
+        AC_OTH_Female: array&lt;int32&gt;, 
+
+        AC_SAS_Female: array&lt;int32&gt;, 
+
+        AN_AFR_Male: int32, 
+
+        AN_AMR_Male: int32, 
+
+        AN_ASJ_Male: int32, 
+
+        AN_EAS_Male: int32, 
+
+        AN_FIN_Male: int32, 
+
+        AN_NFE_Male: int32, 
+
+        AN_OTH_Male: int32, 
+
+        AN_SAS_Male: int32, 
+
+        AN_AFR_Female: int32, 
+
+        AN_AMR_Female: int32, 
+
+        AN_ASJ_Female: int32, 
+
+        AN_EAS_Female: int32, 
+
+        AN_FIN_Female: int32, 
+
+        AN_NFE_Female: int32, 
+
+        AN_OTH_Female: int32, 
+
+        AN_SAS_Female: int32, 
+
+        AF_AFR_Male: array&lt;float64&gt;, 
+
+        AF_AMR_Male: array&lt;float64&gt;, 
+
+        AF_ASJ_Male: array&lt;float64&gt;, 
+
+        AF_EAS_Male: array&lt;float64&gt;, 
+
+        AF_FIN_Male: array&lt;float64&gt;, 
+
+        AF_NFE_Male: array&lt;float64&gt;, 
+
+        AF_OTH_Male: array&lt;float64&gt;, 
+
+        AF_SAS_Male: array&lt;float64&gt;, 
+
+        AF_AFR_Female: array&lt;float64&gt;, 
+
+        AF_AMR_Female: array&lt;float64&gt;, 
+
+        AF_ASJ_Female: array&lt;float64&gt;, 
+
+        AF_EAS_Female: array&lt;float64&gt;, 
+
+        AF_FIN_Female: array&lt;float64&gt;, 
+
+        AF_NFE_Female: array&lt;float64&gt;, 
+
+        AF_OTH_Female: array&lt;float64&gt;, 
+
+        AF_SAS_Female: array&lt;float64&gt;, 
+
+        GC_AFR_Male: array&lt;int32&gt;, 
+
+        GC_AMR_Male: array&lt;int32&gt;, 
+
+        GC_ASJ_Male: array&lt;int32&gt;, 
+
+        GC_EAS_Male: array&lt;int32&gt;, 
+
+        GC_FIN_Male: array&lt;int32&gt;, 
+
+        GC_NFE_Male: array&lt;int32&gt;, 
+
+        GC_OTH_Male: array&lt;int32&gt;, 
+
+        GC_SAS_Male: array&lt;int32&gt;, 
+
+        GC_AFR_Female: array&lt;int32&gt;, 
+
+        GC_AMR_Female: array&lt;int32&gt;, 
+
+        GC_ASJ_Female: array&lt;int32&gt;, 
+
+        GC_EAS_Female: array&lt;int32&gt;, 
+
+        GC_FIN_Female: array&lt;int32&gt;, 
+
+        GC_NFE_Female: array&lt;int32&gt;, 
+
+        GC_OTH_Female: array&lt;int32&gt;, 
+
+        GC_SAS_Female: array&lt;int32&gt;, 
+
+        Hemi_AFR: array&lt;int32&gt;, 
+
+        Hemi_AMR: array&lt;int32&gt;, 
+
+        Hemi_ASJ: array&lt;int32&gt;, 
+
+        Hemi_EAS: array&lt;int32&gt;, 
+
+        Hemi_FIN: array&lt;int32&gt;, 
+
+        Hemi_NFE: array&lt;int32&gt;, 
+
+        Hemi_OTH: array&lt;int32&gt;, 
+
+        Hemi_SAS: array&lt;int32&gt;, 
+
+        Hemi: array&lt;int32&gt;, 
+
+        Hemi_raw: array&lt;int32&gt;, 
+
+        STAR_Hemi: int32
+
+    }
+
+----------------------------------------
+
+Entry fields:
+
+    'GT': call
+
+    'AD': array&lt;int32&gt;
+
+    'DP': int32
+
+    'GQ': int32
+
+    'PL': array&lt;int32&gt;
+
+----------------------------------------
+
+Column key: ['s']
+
+Row key: ['locus', 'alleles']
+
+----------------------------------------</code></pre>
+</div>
+</div>
+<p>We can see that a new column field called ‘sample_qc’ has been added the MT. Note that the <code>sample_qc</code> field is not calculated yet. If we do a <code>.show()</code>, then we will calculate the QC metrics.</p>
+<p>This step took a long time to calculate, over 20 minutes on a six node instance (<code>mem2_ssd1_v2_x8</code>), so we won’t calculate it.</p>
+<div class="cell" data-trusted="true" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>timeit</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>qc_mt.cols().show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>2023-04-11 16:20:15 Hail: WARN: cols(): Resulting column table is sorted by 'col_key'.
+
+    To preserve matrix table column order, first unkey columns with 'key_cols_by()'</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+
+<table><thead><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="26"><div style="text-align: left;"></div></td></tr><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="26"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">sample_qc</div></td></tr><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="4"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">dp_stats</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="4"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">gq_stats</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td></tr><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">s</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">mean</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">stdev</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">min</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">max</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">mean</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">stdev</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">min</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">max</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">call_rate</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">n_called</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">n_not_called</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">n_filtered</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">n_hom_ref</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">n_het</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">n_hom_var</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">n_non_ref</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">n_singleton</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">n_snp</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">n_insertion</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">n_deletion</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">n_transition</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">n_transversion</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">n_star</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">r_ti_tv</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">r_het_hom_var</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">r_insertion_deletion</div></td></tr><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">str</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">float64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">float64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">float64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">float64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">float64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">float64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">float64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">float64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">float64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">int64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">float64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">float64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">float64</td></tr>
+</thead><tbody><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_0"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">9.90e-01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3369261</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">34252</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3355042</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">9260</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">4959</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">14219</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">5</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">16921</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">997</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1379</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">11724</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">5197</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2.26e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.87e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">7.23e-01</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_1"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">9.90e-01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3370000</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">33513</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3355843</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">9177</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">4980</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">14157</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">16877</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">949</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1425</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">11640</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">5237</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2.22e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.84e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">6.66e-01</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">9.90e-01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3371138</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">32375</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3357104</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">9121</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">4913</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">14034</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">16724</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">982</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1356</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">11596</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">5128</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2.26e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.86e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">7.24e-01</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_100"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">9.90e-01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3369744</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">33769</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3355741</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">9113</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">4890</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">14003</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">16635</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1004</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1368</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">11567</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">5068</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2.28e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.86e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">7.34e-01</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_1000"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">9.90e-01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3369661</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">33852</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3355634</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">9190</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">4837</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">14027</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">16604</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">995</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1361</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">11540</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">5064</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2.28e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.90e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">7.31e-01</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10000"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">9.90e-01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3368966</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">34547</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3354842</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">9237</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">4887</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">14124</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">16749</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">986</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1387</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">11647</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">5102</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2.28e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.89e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">7.11e-01</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10001"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">9.90e-01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3368745</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">34768</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3354682</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">9160</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">4903</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">14063</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">16732</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1006</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1337</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">11633</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">5099</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2.28e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.87e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">7.52e-01</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10002"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">9.90e-01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3368654</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">34859</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3354586</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">9102</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">4966</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">14068</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">4</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">16792</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">973</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1389</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">11634</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">5158</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2.26e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.83e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">7.01e-01</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10003"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">9.90e-01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3371010</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">32503</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3356918</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">9221</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">4871</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">14092</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">16674</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">998</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1413</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">11508</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">5166</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2.23e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.89e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">7.06e-01</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">"sample_1_10004"</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NaN</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">NA</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">9.90e-01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3368964</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">34549</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">3354902</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">9205</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">4857</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">14062</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">16693</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1029</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1332</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">11563</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">5130</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">0</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">2.25e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.90e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">7.73e-01</td></tr>
+</tbody></table><p style="background: #fdd; padding: 0.4em;">showing top 10 rows</p>
+</div>
+</div>
+<p>We see that there is a column in <code>qc_mt.sample_qc</code> called <code>call_rate</code>. We can access it using:</p>
+<p><code>qc_mt.sample_qc.call_rate</code> or <code>qc_mt["sample_qc"]["call_rate"]</code> if we want to do something with it.</p>
+</section>
+<section id="create-sample-qc-table-and-save-in-apollo-database" class="level2" data-number="5.12">
+<h2 data-number="5.12" class="anchored" data-anchor-id="create-sample-qc-table-and-save-in-apollo-database"><span class="header-section-number">5.12</span> 4) Create Sample QC Table and save in Apollo Database</h2>
+<p>Now that we have calculated our sample qc metrics, we can save them as a separate table. We are mostly doing this for convenience and speed.</p>
+<p>In our case, this has already been done and calculated, so we’re just showing the process of storing a MatrixTable into <code>dnax</code>.</p>
+<p>Note we could also do <code>mt.write("dnax://{db_name}/geno.mt")</code> and store the MatrixTable into dnax as well. Using <code>dnax</code> is helpful because Hail can read the MatrixTable directly from <code>dnax</code>.</p>
+<div class="cell" data-trusted="true" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create Hail Table from MT</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="co"># note we use .cols() to access the column (sample) fields</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>qc_tb <span class="op">=</span> qc_mt.cols()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-trusted="true" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define database and table name</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: It is recommended to only use lowercase letters for the database name.</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># If uppercase lettering is used, the database name will be lowercased when creating the database.</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>db_name <span class="op">=</span> <span class="st">"db_mt_test2"</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>tb_name <span class="op">=</span> <span class="st">"sample_qc.ht"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-trusted="true" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># DON'T RUN in class</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Create database in DNAX</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>stmt <span class="op">=</span> <span class="ss">f"CREATE DATABASE IF NOT EXISTS </span><span class="sc">{</span>db_name<span class="sc">}</span><span class="ss"> LOCATION 'dnax://'"</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(stmt)</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>spark.sql(stmt).show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CREATE DATABASE IF NOT EXISTS db_mt_test2 LOCATION 'dnax://'
+
+++
+
+||
+
+++
+
+++
+
+</code></pre>
+</div>
+</div>
+<div class="cell" data-trusted="true">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># DON'T RUN in class</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Store Table in DNAXc</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dxpy</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="co"># find database ID of newly created database using a dxpy method</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>db_uri <span class="op">=</span> dxpy.find_one_data_object(name<span class="op">=</span><span class="ss">f"</span><span class="sc">{</span>db_name<span class="sc">}</span><span class="ss">"</span>, classname<span class="op">=</span><span class="st">"database"</span>)[<span class="st">'id'</span>]</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="ss">f"dnax://</span><span class="sc">{</span>db_uri<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>tb_name<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Before this step, the Hail Table is just an object in memory. To persist it and be able to access </span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a><span class="co"># it later, the notebook needs to write it into a persistent filesystem (in this case DNAX).</span></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a><span class="co"># See https://hail.is/docs/0.2/hail.Table.html#hail.Table.write for additional documentation.</span></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>qc_tb.write(url) <span class="co"># Note: output should describe size of Table (i.e. number of rows, partitions)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./dx_extract_dataset_R.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><code>dx extract_dataset</code> in R</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./02-gwas.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">GWAS using Hail</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
