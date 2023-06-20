@@ -8,7 +8,6 @@ The goal of this chapter is to show how the DNAnexus filesystem is different fro
 
 1. **Compare** and **contrast** differences between object-based file systems and POSIX filesystems
 1. **Explain** the role of metadata and folders in organizing data and outputs
-1. **Set up** a project for reproducible analysis
 1. **Tag** and **utilize** tags for selecting files and separating output from multiple jobs.
 
 

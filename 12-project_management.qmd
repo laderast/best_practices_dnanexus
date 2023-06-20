@@ -8,6 +8,7 @@ Successful project management at scale on the DNAnexus platform does require pla
 - **Utilize** different management strategies for administering your data to users
 - **Describe** the roles that can be assigned to projects and how they interact with them
 - **Annotate** your data with essential metadata such as tags and properties
+- **Initialize** projects with a helpful file structure for reproducible research.
 
 ## Checklist for Successful Project Management
 
@@ -53,7 +54,7 @@ Creating an org is important because an organization owns and administers the fo
 - Access to files within projects administered by the org
 - [Creating an Audit Trail](https://documentation.dnanexus.com/admin/audit-trail) for the Organization
 
-The Org Administrator has power over all projects and members in the Org. They are able to: 
+The **Org Administrator** has power over all projects and members in the Org. They are able to: 
 
 - Add and remove members to an org and change their access level
 - Make themselves members of any project in the Org

@@ -130,7 +130,7 @@
     "href": "12-project_management.html#learning-objectives",
     "title": "2  Project and File Management",
     "section": "2.1 Learning Objectives",
-    "text": "2.1 Learning Objectives\n\nExplain the role of organizations in project and member management\nUtilize different management strategies for administering your data to users\nDescribe the roles that can be assigned to projects and how they interact with them\nAnnotate your data with essential metadata such as tags and properties"
+    "text": "2.1 Learning Objectives\n\nExplain the role of organizations in project and member management\nUtilize different management strategies for administering your data to users\nDescribe the roles that can be assigned to projects and how they interact with them\nAnnotate your data with essential metadata such as tags and properties\nInitialize projects with a helpful file structure for reproducible research."
   },
   {
     "objectID": "12-project_management.html#checklist-for-successful-project-management",
