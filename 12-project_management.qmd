@@ -77,7 +77,7 @@ Controlling such data through its own organization may make much more sense for 
 
 Additionally, project admins can [enable PHI Restrictions within a project](https://documentation.dnanexus.com/getting-started/key-concepts/projects#phi-data-protection).
 
-[Enabling an audit trail](https://documentation.dnanexus.com/admin/audit-trail) for the org also becomes very important, in order to be compliant with regulations such as 21 CFR Part 11. In short, an org admin will create a project for which the audit logs will be stored, 
+[Enabling an audit trail](https://documentation.dnanexus.com/admin/audit-trail) for the org also becomes very important, in order to be compliant with regulations such as 21 CFR Part 11. In short, an org admin will create a project where the audit logs will be stored, so that your group is compliant.
 :::
 
 ## A Base Project: A Data Project for All Your Org's Data
@@ -163,7 +163,7 @@ flowchart LR
 
 Given this structure, you will want to avoid having too many files within a project. 
 
-A good rule of thumb is to shoot for around 10,000 file objects total in a project. Going larger than this may impact the speed of your file searches. 
+A good rule of thumb is to shoot for around 10,000 objects total in a project. Going larger than this may impact the speed of your file searches. 
 
 :::{.callout-note}
 ## Destructive Processes on the DNAnexus platform
@@ -176,7 +176,6 @@ There are certain operations on the platform that are destructive; that is, ther
 Making your org users aware of these operations is important. 
 
 There is also the option to *disallow deletion* within a project to avoid issues like this. This is recommended especially in audit log projects to insure integrity of the audit logs.
-
 :::
 
 # Project Administration
