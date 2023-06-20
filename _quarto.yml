@@ -1,6 +1,7 @@
 freeze: true
 project:
   type: book
+  output-dir: docs
 
 book:
   title: "Best Practices on the DNAnexus Platform"
