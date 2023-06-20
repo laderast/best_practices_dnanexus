@@ -23,7 +23,7 @@ The goal of this chapter is to show how the DNAnexus filesystem is different fro
 
 ## Review: POSIX Filesystems
 
-You may be familar with *POSIX* (Portable Operating System Interface) file systems as a way to organize your data in folders. The *POSIX* standard basically defines the filesystem API so that they will be compatible with other file systems.
+You may be familiar with *POSIX* (Portable Operating System Interface) file systems as a way to organize your data in folders. The *POSIX* standard basically defines the filesystem API so that they will be compatible with other file systems.
 
 In POSIX filesystems, the main way to find/refer to a file is through its *path*. What does this mean?
 
@@ -50,7 +50,7 @@ In the same folder. That violates our ability to find a file in the system.
 
 ## Object Based Filesystems are different
 
-In contrast, *object-based filesystems* do not organize data like a POSIX filesystem. Each file object (such as a csv file, or a BAM file) has a unique identifier that identifies the data object. This unique identifier (like `file-aagejFHEJSEI`) serves as the main pointer to locate the data object, rather than a path. We'll see that we can define paths and folders for DNAnexus file objects, but they are part of the metadata for file objects.
+In contrast, *object-based filesystems* do not organize data like a POSIX filesystem. Each file object (such as a csv file, or a BAM file) has a unique identifier that identifies the data object. This unique identifier (like `file-aagejFHEJSEI`) serves as the main pointer to locate the data object, rather than a path. We'll see that we can define paths and folders for DNAnexus file objects, but they are stored as part of the metadata for file objects.
 
 File objects also have metadata that can be attached to them. This metadata can be:
 
@@ -65,7 +65,7 @@ File objects also have metadata that can be attached to them. This metadata can 
 
 On the DNAnexus platform, both the *filename* and its path are considered **metadata**. This *metadata* is considered as part of the object, along with the *data* portion of the object. 
 
-Importantly, *folders are not considered objects on the platform* - folders only exist within the metadata for the file objects. 
+Importantly, *folders are not considered objects on the platform* - folders only exist within the metadata for file objects. 
 
 The other issue is that *the metadata for an object has no requirements to be unique*, unlike paths. Which means you can have duplicates with the same file name in the same folder. 
 
@@ -121,16 +121,16 @@ Copying has an important definition on the platform: *it means copying a file fr
 
 When we copy a file from one project to another, a new physical copy is not made. The reference to the original file is copied. The data is identical and points to the same location on the platform, and the metadata is copied to the new project.
 
-This is quite nice in that you are not doubly charged for storage on the platform. You do have the ability to [clone files](https://documentation.dnanexus.com/developer/api/data-containers/cloning#specification) into a different project - that way a physical copy of the data is created.  
+This is quite nice in that you are not doubly charged for storage on the platform. You do have the ability to [clone files](https://documentation.dnanexus.com/developer/api/data-containers/cloning#specification) into a different project - if you clone a file, a new physical copy of the data is created.  
 
-Once the metadata is copied into the new project, there is no syncing of the metadata between the two projects. User 1 is free to modify the metadata in Project A and changes are not made to the metadata in Project B. 
+Once the metadata is copied into the new project, there is no syncing of the metadata between the two projects. User 1 is free to modify the metadata in Project A (the original project) and changes are not made to the metadata in Project B (the derived project). 
 
 :::{.callout-note}
 ## Regions on the DNAnexus Platform
 
 All projects live within a region. As DNAnexus is built on both AWS and Azure, they map to regions within these service providers. [Check here](https://documentation.dnanexus.com/developer/api/regions#available-regions) for a table of how the DNAnexus region maps to the service providers.
 
-For example, the UKB RAP region (`eu-west-2`) is unique and only limited to projects within the scope of UKB.
+For example, the UKB RAP region (`eu-west-2`) is unique and only limited to projects within the scope of UK Biobank.
 
 <https://documentation.dnanexus.com/developer/api/regions>
 :::
@@ -138,7 +138,9 @@ For example, the UKB RAP region (`eu-west-2`) is unique and only limited to proj
 
 ### Advantages of Object Based Filesystems
 
-The DNAnexus platform is only one example of an object-based filesystem. Other examples include Amazon S3 (Simple Storage Service), Microsoft Azure Blob Storage, and Google Cloud Storage. Why does the world run on object based filesystems? There are a lot of advantages. 
+The DNAnexus platform is only one example of an object-based filesystem. Other examples include Amazon S3 (Simple Storage Service), Microsoft Azure Blob Storage, and Google Cloud Storage. 
+
+Why does the world run on object based filesystems? There are a lot of advantages. 
 
 - **Highly scalable.** This is the main reason given for using an object-based system. Given that unique identifier, the data part of the object can be very large.
 - **Fast Retrieval.** Object-based filesystems let us work with arbitrarily large file sizes, and we can actually stream files to and from workers.
@@ -147,11 +149,11 @@ The DNAnexus platform is only one example of an object-based filesystem. Other e
 
 ### Disadvantages of Object Based Filesystems
 
-Coming from folder based filesystems, it can be a bit of a mind-bender getting used to object-based filesystems. Some of the disadvantages of Object Based Filesystems include:
+Coming from folder-based/POSIX filesystems, it can be a bit of a mind-bender getting used to object-based filesystems. Some of the disadvantages of Object Based Filesystems include:
 
-- **Objects are immutable**. You can't edit an object in place. If you modify a file on a worker, you can't overwrite the original file object. A new file object must be created. (If you work with JupyterLab and save a notebook, a new file object is created in the place of the old file object. The old file object persists in a folder called `.Notebook_archive`.)
-- **You have to be careful when generating outputs**. You can end up with two different objects with the same filename, and it can be some work to disambiguate these objects.
-- **It's confusing.** You can actually have two files with the same filename in the same folder, because it is part of the changeable metadaa. Disambiguating these two files without using file-ids can be difficult. There are rules that govern this.
+- **Objects are immutable**. Once an object is created, you are not able to modify it or edit it in place. If you modify a file on a worker, you can't overwrite the original file object. A new file object must be created. (If you work with JupyterLab and save a notebook, a new file object is created in the place of the old file object. The old file object persists in a folder called `.Notebook_archive`.)
+- **You have to be careful when generating outputs**. This can be difficult if you have to resume a set of failed jobs in a new run. You can end up with two different objects with the same filename, and it can be some work to disambiguate these objects.
+- **It's confusing.** You can actually have two files with the same filename in the same folder, because it is part of the changeable metadata. Disambiguating these two files without using file-ids can be difficult. There are rules that govern this.
 - **Metadata is much more important with file management.** Seriously, use tags for everything, including jobs and files. It will make working with multiple files much easier. And if you are on UKB RAP, leverage the file property metadata (`eid` and `field_id`) to help you select the files you want to process.
 
 
@@ -177,7 +179,7 @@ project-XXXXX:file-YYYYYYYYY
 
 ## Batch Tagging
 
-Remember, we can leverage `xargs` for tagging multiple files:
+So, we need to tag files. Remember, we can leverage `xargs` for tagging multiple files. In this example, we pipe the output of `dx find data` into `xargs` to batch tag them.
 
 ```{bash}
 #| eval: false
@@ -218,7 +220,7 @@ An administrator can then run a monthly job that archives the files with these t
 
 You might ask about the role of [dxFUSE](https://github.com/dnanexus/dxfuse) with the Object Based Filesystem.
 
-In short, dxFUSE makes the Object Based Filesystem of DNAnexus act like a POSIX filesystem. Specifically, if there are multiple objects with the same name within a folder, it provides a way to specify these objects using file paths.
+In short, dxFUSE makes the Object Based Filesystem of DNAnexus act like a POSIX filesystem. Specifically, if there are multiple objects with the same name within a folder, it provides a way to [specify these objects using file paths](https://github.com/dnanexus/dxfuse).
 
 One important thing to remember: dxFUSE is only mounted once when you start the JupyterLab App. You will have to use the `dxfuse` command to remount it to see any files you've added to project storage after opening JupyterLab.
 
@@ -236,5 +238,4 @@ dxfuse -limitedWrite
 
 Once you have remounted with `-limitedWrite`, you'll be able to specify `file:///mnt/project` urls in your `.write()` command. This is especially useful when calculating and saving BGEN Index files.
 
-In addition to dxFUSE, there are a number of other POSIX/Object translation layers that try to make object-based file systems more POSIX-like, such as JuiceFS (for S3).
 

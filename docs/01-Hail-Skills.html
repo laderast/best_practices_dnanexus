@@ -263,6 +263,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><strong>Execute</strong> Hail operations on Tables and MatrixTables, including annotating, filtering, and joining</li>
 <li><strong>Calculate</strong> Sample QC metrics and save as a Hail Table in DNAX</li>
 </ul>
+<div class="callout callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>This chapter shows how to perform sample QC on a Hail MatrixTable as a pre-GWAS step and save it as a Table to an Apollo database (dnax://) on the DNAnexus platform. See documentation for guidance on launch specs for the JupyterLab with Spark Cluster app for different data sizes: https://documentation.dnanexus.com/science/using-hail-to-analyze-genomic-data</p>
+<p>Note: For population scale data, samples may be referred to as individuals. In this chapter, the word “sample” will be used.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="what-is-hail" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="what-is-hail"><span class="header-section-number">5.2</span> What is Hail?</h2>
@@ -293,9 +304,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="initialize-spark-and-hail" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="initialize-spark-and-hail"><span class="header-section-number">5.3</span> Initialize Spark and Hail</h2>
 <p>Make sure to open up the Spark Interface at <a href="https://job-url:8081/jobs/" class="uri">https://job-url:8081/jobs/</a></p>
-<p>This notebook shows how to perform sample QC on a Hail MatrixTable as a pre-GWAS step and save it as a Table to an Apollo database (dnax://) on the DNAnexus platform. See documentation for guidance on launch specs for the JupyterLab with Spark Cluster app for different data sizes: https://documentation.dnanexus.com/science/using-hail-to-analyze-genomic-data</p>
-<p>Note: For population scale data, samples may be referred to as individuals. In this notebook, the word “sample” will be used.</p>
-<p>Pre-conditions for running this notebook successfully: - There is an existing Hail MatrixTable in DNAX</p>
 <div class="cell" data-trusted="true" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Running this cell will output a red-colored message- this is expected.</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># The 'Welcome to Hail' message in the output will indicate that Hail is ready to use in the notebook.</span></span>
@@ -934,7 +942,7 @@ Key: ['iid']
 <h2 data-number="5.10" class="anchored" data-anchor-id="working-with-matrixtables"><span class="header-section-number">5.10</span> Working with MatrixTables</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="01-Hail-Skills_files/figure-html/a268e47c-1-877e371c-7c8f-4f93-8fb1-01e9408d4f8b.png" class="img-fluid figure-img"></p>
+<p><img src="01-Hail-Skills_files/figure-html/312b19cf-1-877e371c-7c8f-4f93-8fb1-01e9408d4f8b.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">image.png</figcaption><p></p>
 </figure>
 </div>
@@ -1201,7 +1209,7 @@ Row key: ['locus', 'alleles']
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="01-Hail-Skills_files/figure-html/5c9c47ed-1-3dc5a474-b028-4f3b-a693-6723ab3fe360.png" class="img-fluid figure-img"></p>
+<p><img src="01-Hail-Skills_files/figure-html/ae7c26e2-1-3dc5a474-b028-4f3b-a693-6723ab3fe360.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">image.png</figcaption><p></p>
 </figure>
 </div>

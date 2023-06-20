@@ -270,7 +270,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="review-posix-filesystems" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="review-posix-filesystems"><span class="header-section-number">1.3</span> Review: POSIX Filesystems</h2>
-<p>You may be familar with <em>POSIX</em> (Portable Operating System Interface) file systems as a way to organize your data in folders. The <em>POSIX</em> standard basically defines the filesystem API so that they will be compatible with other file systems.</p>
+<p>You may be familiar with <em>POSIX</em> (Portable Operating System Interface) file systems as a way to organize your data in folders. The <em>POSIX</em> standard basically defines the filesystem API so that they will be compatible with other file systems.</p>
 <p>In POSIX filesystems, the main way to find/refer to a file is through its <em>path</em>. What does this mean?</p>
 <p>For example, if my file is called <code>chr1.vcf.gz</code> and it is located in the directory <code>/Geno_Data</code>, we’d refer to it using the <em>full path</em>:</p>
 <pre><code>/Geno_Data/chr1.vcf.gz</code></pre>
@@ -283,7 +283,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="object-based-filesystems-are-different" class="level2" data-number="1.4">
 <h2 data-number="1.4" class="anchored" data-anchor-id="object-based-filesystems-are-different"><span class="header-section-number">1.4</span> Object Based Filesystems are different</h2>
-<p>In contrast, <em>object-based filesystems</em> do not organize data like a POSIX filesystem. Each file object (such as a csv file, or a BAM file) has a unique identifier that identifies the data object. This unique identifier (like <code>file-aagejFHEJSEI</code>) serves as the main pointer to locate the data object, rather than a path. We’ll see that we can define paths and folders for DNAnexus file objects, but they are part of the metadata for file objects.</p>
+<p>In contrast, <em>object-based filesystems</em> do not organize data like a POSIX filesystem. Each file object (such as a csv file, or a BAM file) has a unique identifier that identifies the data object. This unique identifier (like <code>file-aagejFHEJSEI</code>) serves as the main pointer to locate the data object, rather than a path. We’ll see that we can define paths and folders for DNAnexus file objects, but they are stored as part of the metadata for file objects.</p>
 <p>File objects also have metadata that can be attached to them. This metadata can be:</p>
 <table class="table">
 <thead>
@@ -327,7 +327,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 <p>On the DNAnexus platform, both the <em>filename</em> and its path are considered <strong>metadata</strong>. This <em>metadata</em> is considered as part of the object, along with the <em>data</em> portion of the object.</p>
-<p>Importantly, <em>folders are not considered objects on the platform</em> - folders only exist within the metadata for the file objects.</p>
+<p>Importantly, <em>folders are not considered objects on the platform</em> - folders only exist within the metadata for file objects.</p>
 <p>The other issue is that <em>the metadata for an object has no requirements to be unique</em>, unlike paths. Which means you can have duplicates with the same file name in the same folder.</p>
 <p>I know, this can be very distressing for most people. You can have two objects with the same file name, but they are considered distinct objects because they have unique identifiers.</p>
 <p><a href="https://www.ibm.com/cloud/blog/object-vs-file-vs-block-storage" class="uri">https://www.ibm.com/cloud/blog/object-vs-file-vs-block-storage</a></p>
@@ -400,8 +400,8 @@ cloudAccount          "cloudaccount-dnanexus"</code></pre>
 <h2 data-number="1.7" class="anchored" data-anchor-id="copying-files-from-one-project-to-another"><span class="header-section-number">1.7</span> Copying Files from One Project to Another</h2>
 <p>Copying has an important definition on the platform: <em>it means copying a file from one project to another project.</em> It doesn’t refer to duplicating a file within a project.</p>
 <p>When we copy a file from one project to another, a new physical copy is not made. The reference to the original file is copied. The data is identical and points to the same location on the platform, and the metadata is copied to the new project.</p>
-<p>This is quite nice in that you are not doubly charged for storage on the platform. You do have the ability to <a href="https://documentation.dnanexus.com/developer/api/data-containers/cloning#specification">clone files</a> into a different project - that way a physical copy of the data is created.</p>
-<p>Once the metadata is copied into the new project, there is no syncing of the metadata between the two projects. User 1 is free to modify the metadata in Project A and changes are not made to the metadata in Project B.</p>
+<p>This is quite nice in that you are not doubly charged for storage on the platform. You do have the ability to <a href="https://documentation.dnanexus.com/developer/api/data-containers/cloning#specification">clone files</a> into a different project - if you clone a file, a new physical copy of the data is created.</p>
+<p>Once the metadata is copied into the new project, there is no syncing of the metadata between the two projects. User 1 is free to modify the metadata in Project A (the original project) and changes are not made to the metadata in Project B (the derived project).</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -413,13 +413,14 @@ Regions on the DNAnexus Platform
 </div>
 <div class="callout-body-container callout-body">
 <p>All projects live within a region. As DNAnexus is built on both AWS and Azure, they map to regions within these service providers. <a href="https://documentation.dnanexus.com/developer/api/regions#available-regions">Check here</a> for a table of how the DNAnexus region maps to the service providers.</p>
-<p>For example, the UKB RAP region (<code>eu-west-2</code>) is unique and only limited to projects within the scope of UKB.</p>
+<p>For example, the UKB RAP region (<code>eu-west-2</code>) is unique and only limited to projects within the scope of UK Biobank.</p>
 <p><a href="https://documentation.dnanexus.com/developer/api/regions" class="uri">https://documentation.dnanexus.com/developer/api/regions</a></p>
 </div>
 </div>
 <section id="advantages-of-object-based-filesystems" class="level3" data-number="1.7.1">
 <h3 data-number="1.7.1" class="anchored" data-anchor-id="advantages-of-object-based-filesystems"><span class="header-section-number">1.7.1</span> Advantages of Object Based Filesystems</h3>
-<p>The DNAnexus platform is only one example of an object-based filesystem. Other examples include Amazon S3 (Simple Storage Service), Microsoft Azure Blob Storage, and Google Cloud Storage. Why does the world run on object based filesystems? There are a lot of advantages.</p>
+<p>The DNAnexus platform is only one example of an object-based filesystem. Other examples include Amazon S3 (Simple Storage Service), Microsoft Azure Blob Storage, and Google Cloud Storage.</p>
+<p>Why does the world run on object based filesystems? There are a lot of advantages.</p>
 <ul>
 <li><strong>Highly scalable.</strong> This is the main reason given for using an object-based system. Given that unique identifier, the data part of the object can be very large.</li>
 <li><strong>Fast Retrieval.</strong> Object-based filesystems let us work with arbitrarily large file sizes, and we can actually stream files to and from workers.</li>
@@ -429,11 +430,11 @@ Regions on the DNAnexus Platform
 </section>
 <section id="disadvantages-of-object-based-filesystems" class="level3" data-number="1.7.2">
 <h3 data-number="1.7.2" class="anchored" data-anchor-id="disadvantages-of-object-based-filesystems"><span class="header-section-number">1.7.2</span> Disadvantages of Object Based Filesystems</h3>
-<p>Coming from folder based filesystems, it can be a bit of a mind-bender getting used to object-based filesystems. Some of the disadvantages of Object Based Filesystems include:</p>
+<p>Coming from folder-based/POSIX filesystems, it can be a bit of a mind-bender getting used to object-based filesystems. Some of the disadvantages of Object Based Filesystems include:</p>
 <ul>
-<li><strong>Objects are immutable</strong>. You can’t edit an object in place. If you modify a file on a worker, you can’t overwrite the original file object. A new file object must be created. (If you work with JupyterLab and save a notebook, a new file object is created in the place of the old file object. The old file object persists in a folder called <code>.Notebook_archive</code>.)</li>
-<li><strong>You have to be careful when generating outputs</strong>. You can end up with two different objects with the same filename, and it can be some work to disambiguate these objects.</li>
-<li><strong>It’s confusing.</strong> You can actually have two files with the same filename in the same folder, because it is part of the changeable metadaa. Disambiguating these two files without using file-ids can be difficult. There are rules that govern this.</li>
+<li><strong>Objects are immutable</strong>. Once an object is created, you are not able to modify it or edit it in place. If you modify a file on a worker, you can’t overwrite the original file object. A new file object must be created. (If you work with JupyterLab and save a notebook, a new file object is created in the place of the old file object. The old file object persists in a folder called <code>.Notebook_archive</code>.)</li>
+<li><strong>You have to be careful when generating outputs</strong>. This can be difficult if you have to resume a set of failed jobs in a new run. You can end up with two different objects with the same filename, and it can be some work to disambiguate these objects.</li>
+<li><strong>It’s confusing.</strong> You can actually have two files with the same filename in the same folder, because it is part of the changeable metadata. Disambiguating these two files without using file-ids can be difficult. There are rules that govern this.</li>
 <li><strong>Metadata is much more important with file management.</strong> Seriously, use tags for everything, including jobs and files. It will make working with multiple files much easier. And if you are on UKB RAP, leverage the file property metadata (<code>eid</code> and <code>field_id</code>) to help you select the files you want to process.</li>
 </ul>
 </section>
@@ -453,7 +454,7 @@ Regions on the DNAnexus Platform
 </section>
 <section id="batch-tagging" class="level2" data-number="1.9">
 <h2 data-number="1.9" class="anchored" data-anchor-id="batch-tagging"><span class="header-section-number">1.9</span> Batch Tagging</h2>
-<p>Remember, we can leverage <code>xargs</code> for tagging multiple files:</p>
+<p>So, we need to tag files. Remember, we can leverage <code>xargs</code> for tagging multiple files. In this example, we pipe the output of <code>dx find data</code> into <code>xargs</code> to batch tag them.</p>
 <div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">dx</span> find data <span class="at">--name</span> <span class="st">"*.bam"</span> <span class="at">--brief</span> <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-I%</span> sh <span class="at">-c</span> <span class="st">"dx tag % 'bam'"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -479,7 +480,7 @@ project-GJ496B00FZfxPV5VG36FybvY:file-FpQKQk00FgkGV3Vb3jJ8xqGV
 <h2 data-number="1.11" class="anchored" data-anchor-id="what-about-dxfuse"><span class="header-section-number">1.11</span> What about dxFUSE?</h2>
 <p>(See <a href="https://laderast.github.io/bash_for_bioinformatics/04-doing-work-with-dx-run.html#sec-dxfuse">Bash for Bioinformatics</a> for a introduction to dxFUSE.)</p>
 <p>You might ask about the role of <a href="https://github.com/dnanexus/dxfuse">dxFUSE</a> with the Object Based Filesystem.</p>
-<p>In short, dxFUSE makes the Object Based Filesystem of DNAnexus act like a POSIX filesystem. Specifically, if there are multiple objects with the same name within a folder, it provides a way to specify these objects using file paths.</p>
+<p>In short, dxFUSE makes the Object Based Filesystem of DNAnexus act like a POSIX filesystem. Specifically, if there are multiple objects with the same name within a folder, it provides a way to <a href="https://github.com/dnanexus/dxfuse">specify these objects using file paths</a>.</p>
 <p>One important thing to remember: dxFUSE is only mounted once when you start the JupyterLab App. You will have to use the <code>dxfuse</code> command to remount it to see any files you’ve added to project storage after opening JupyterLab.</p>
 <pre><code>dxfuse -</code></pre>
 <section id="dxfuse--limitedwrite" class="level3" data-number="1.11.1">
@@ -487,7 +488,6 @@ project-GJ496B00FZfxPV5VG36FybvY:file-FpQKQk00FgkGV3Vb3jJ8xqGV
 <p>For the most part, dxFUSE is read-only from project storage. However, it has a <code>-limitedWrite</code> option that is mostly used from writing from Spark into project storage.</p>
 <pre><code>dxfuse -limitedWrite</code></pre>
 <p>Once you have remounted with <code>-limitedWrite</code>, you’ll be able to specify <code>file:///mnt/project</code> urls in your <code>.write()</code> command. This is especially useful when calculating and saving BGEN Index files.</p>
-<p>In addition to dxFUSE, there are a number of other POSIX/Object translation layers that try to make object-based file systems more POSIX-like, such as JuiceFS (for S3).</p>
 
 
 </section>
