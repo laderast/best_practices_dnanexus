@@ -2,7 +2,11 @@
 
 ## Introduction
 
-The UK Biobank Research Analysis Platform gives you 
+The UK Biobank Research Analysis Platform (RAP) gives you the ability to work with one of the largest cohorts of people: over 500,000 participants.
+
+If you're coming from either analyzing data on your own machine or from HPC computing, there are some key differences that you will have to learn.
+
+This chapter attempts to give you the knowledge you need to work successfully on the RAP.
 
 ## Learning Objectives
 
@@ -10,7 +14,8 @@ The UK Biobank Research Analysis Platform gives you
 1. **Explain** how to process files using built in apps on RAP using Swiss Army Knife.
 1. **Identify** two key methods for extracting Pheno Data in a RAP project.
 1. **Explain** the two main strategies for listing and accessing files in a RAP project in JupyterLab or RStudio (`dx find data` versus `/mnt/project/`). 
-1. **Utilize** RStudio on RAP in a reproducible fashion.
+1. **Utilize** JupyterLab on RAP reproducibly with Python/R/bash.
+1. **Utilize** RStudio on RAP reproducibly.
 
 ## What's Different?
 
@@ -19,6 +24,12 @@ There are three main differences with UK Biobank and the Core DNAnexus Platform.
 1. You are limited to sharing within your own application ID.
 2. The participant identifiers (`eid`s) are different across applications because of the psuedonymization process.
 3. There is a `Bulk/` File Folder that contains many of the files you want to analyze.
+
+:::{.callout-note}
+## Don't forget about UK Biobank Community!
+
+The UK Biobank community is an incredible resource to ask questions, and see answers. 
+:::
 
 ## Application ID and Sharing
 
