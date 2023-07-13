@@ -148,7 +148,7 @@ flowchart TD
 :::{.callout-note}
 ## Accessing Spark Databases on DNAnexus
 
-One issue I see a lot of people get tripped up with is with Database Access. One thing to know is that Spark databases cannot be moved from project to project. Once the data is ingested into a database object, it can't be copied to a new project.
+One issue I see a lot of people get tripped up with is with Database Access. One thing to know is that *Spark databases cannot be moved from project to project*. Once the data is ingested into a database object, it can't be copied to a new project.
 
 **For a user to access the data in a Spark Database, they must have at least VIEW level access to the project that contains it on the platform.** This includes anyone who is utilizing your database/dataset in Cohort Browser.
 
@@ -210,7 +210,9 @@ There is a utility within [dx-toolkit](https://documentation.dnanexus.com/downlo
 
 You will need a list of entity/field ids to retrieve them. For more info, please refer to the R Notebook (@sec-dxex-R) and the Python Notebook ().
 
-However, there are good reasons to work with the Spark Database directly. Number one is that your Cohort query will not run on the Thrift Server. If your query is complex and takes two minutes to execute, the Thrift Server will timeout. In that case, you will need to run your own Spark JupyterLab cluster and extract the data using `pyspark` (for Python users), or `sparklyr` (for R users) itself.
+However, there are good reasons to work with the Spark Database directly. Number one is that your Cohort query will not run on the Thrift Server. If your query is complex and takes more than two minutes to execute, the Thrift Server will timeout. 
+
+In the case of a timeout, you will need to run your own Spark JupyterLab cluster and extract the data using `pyspark` (for Python users), or `sparklyr` (for R users) itself.
 
 ## Connecting with `PySpark` (For Python Users)
 
@@ -233,6 +235,8 @@ retrieve_sql = 'select .... from .... '
 df = spark.sql(retrieve_sql)
 ```
 
+
+
 ### Koalas is the Pandas version of Spark
 
 If you are familiar with Pandas, the Koalas module (from Databricks) provides a Pandas-like interface to SparkSQL queries. This way, you don't have to execute native Spark commands or SparkSQL queries. 
@@ -240,8 +244,11 @@ If you are familiar with Pandas, the Koalas module (from Databricks) provides a 
 Once you have a Spark DataFrame, you can convert it to a Koalas one by using the `.to_koalas()` method. 
 
 ```{{python}}
+import koalas as ks
 df_koalas = df.to_koalas()
 ```
+
+Once we have a Koalas DataFrame, we can use `.query()` much like for a Pandas DataFrame
 
 ## Connecting with `sparklyr` (For R Users)
 

@@ -460,7 +460,7 @@ Accessing Spark Databases on DNAnexus
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>One issue I see a lot of people get tripped up with is with Database Access. One thing to know is that Spark databases cannot be moved from project to project. Once the data is ingested into a database object, it can’t be copied to a new project.</p>
+<p>One issue I see a lot of people get tripped up with is with Database Access. One thing to know is that <em>Spark databases cannot be moved from project to project</em>. Once the data is ingested into a database object, it can’t be copied to a new project.</p>
 <p><strong>For a user to access the data in a Spark Database, they must have at least VIEW level access to the project that contains it on the platform.</strong> This includes anyone who is utilizing your database/dataset in Cohort Browser.</p>
 <p>Note that Apollo <em>Datasets</em> (not <em>Databases</em>) can be copied to new projects. However, to actually access the data in Cohort Browser, the project that contains the database needs to be viewable by the user.</p>
 </div>
@@ -511,7 +511,8 @@ Spark Cluster JupyterLab vs.&nbsp;Spark Apps
 <p>First of all, you may not need to use Spark JupyterLab if you just want to extract Pheno Data from a Dataset and you know the fields.</p>
 <p>There is a utility within <a href="https://documentation.dnanexus.com/downloads#dnanexus-platform-sdk">dx-toolkit</a> (the CLI tools for working with the DNAnexus platform) called <code>dx extract_dataset</code> that will retrieve pheno data in the form of a CSV. It uses Spark, but the Spark is executed by the <a href="https://documentation.dnanexus.com/user/spark/connect-to-thrift">Thrift Server</a> (the same Spark Cluster that also serves the data for Cohort Browser).</p>
 <p>You will need a list of entity/field ids to retrieve them. For more info, please refer to the R Notebook (<a href="dx_extract_dataset_R.html"><span>Chapter&nbsp;4</span></a>) and the Python Notebook ().</p>
-<p>However, there are good reasons to work with the Spark Database directly. Number one is that your Cohort query will not run on the Thrift Server. If your query is complex and takes two minutes to execute, the Thrift Server will timeout. In that case, you will need to run your own Spark JupyterLab cluster and extract the data using <code>pyspark</code> (for Python users), or <code>sparklyr</code> (for R users) itself.</p>
+<p>However, there are good reasons to work with the Spark Database directly. Number one is that your Cohort query will not run on the Thrift Server. If your query is complex and takes more than two minutes to execute, the Thrift Server will timeout.</p>
+<p>In the case of a timeout, you will need to run your own Spark JupyterLab cluster and extract the data using <code>pyspark</code> (for Python users), or <code>sparklyr</code> (for R users) itself.</p>
 </section>
 <section id="connecting-with-pyspark-for-python-users" class="level2" data-number="3.9">
 <h2 data-number="3.9" class="anchored" data-anchor-id="connecting-with-pyspark-for-python-users"><span class="header-section-number">3.9</span> Connecting with <code>PySpark</code> (For Python Users)</h2>
@@ -535,8 +536,10 @@ Spark Cluster JupyterLab vs.&nbsp;Spark Apps
 <p>If you are familiar with Pandas, the Koalas module (from Databricks) provides a Pandas-like interface to SparkSQL queries. This way, you don’t have to execute native Spark commands or SparkSQL queries.</p>
 <p>Once you have a Spark DataFrame, you can convert it to a Koalas one by using the <code>.to_koalas()</code> method.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df_koalas <span class="op">=</span> df.to_koalas()</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> koalas <span class="im">as</span> ks</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>df_koalas <span class="op">=</span> df.to_koalas()</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Once we have a Koalas DataFrame, we can use <code>.query()</code> much like for a Pandas DataFrame</p>
 </section>
 </section>
 <section id="connecting-with-sparklyr-for-r-users" class="level2" data-number="3.10">

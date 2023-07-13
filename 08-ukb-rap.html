@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>ukb-rap</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="08-ukb-rap_files/libs/clipboard/clipboard.min.js"></script>
+<script src="08-ukb-rap_files/libs/quarto-html/quarto.js"></script>
+<script src="08-ukb-rap_files/libs/quarto-html/popper.min.js"></script>
+<script src="08-ukb-rap_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="08-ukb-rap_files/libs/quarto-html/anchor.min.js"></script>
+<link href="08-ukb-rap_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="08-ukb-rap_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="08-ukb-rap_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="08-ukb-rap_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="08-ukb-rap_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+<section id="uk-biobank-research-analysis-platform" class="level1">
+<h1>UK Biobank Research Analysis Platform</h1>
+<section id="whats-different" class="level2">
+<h2 class="anchored" data-anchor-id="whats-different">What’s Different?</h2>
+<p>There are three main differences with UK Biobank and the Core DNAnexus Platform.</p>
+<ol type="1">
+<li>You are limited to sharing within your own application ID.</li>
+<li>The participant identifiers (<code>eid</code>s) are different across applications.</li>
+<li>There is a <code>Bulk/</code> File Folder that contains many of the files you want to analyze.</li>
+</ol>
+</section>
+<section id="application-id-and-sharing" class="level2">
+<h2 class="anchored" data-anchor-id="application-id-and-sharing">Application ID and Sharing</h2>
+<p>What is an application ID?</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/ukb_application.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">UKB Application Process</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="psuedonymization-and-participant-ids" class="level2">
+<h2 class="anchored" data-anchor-id="psuedonymization-and-participant-ids">Psuedonymization and Participant IDs</h2>
+<p>Within an application, the participant IDs (also known as EIDs) are unique, through the pseudonymization process. This process has been done to ensure security and anonymity of participants. This means that you <strong>cannot join data across applications</strong>.</p>
+<p>For example, if I’m in application ID <code>43333</code> and you’re in application <code>11111</code>, our EIDs will not correspond because we have unique EIDs. Our data files are also mapped to these unique IDs.</p>
+<p>So if I make a pheno matrix with EIDs and you want to reuse this pheno matrix in your application, it won’t work, because our EIDs don’t match up.</p>
+</section>
+<section id="bulk-files" class="level2">
+<h2 class="anchored" data-anchor-id="bulk-files">Bulk Files</h2>
+<p>The other difference with UKB RAP is that a lot of the data (image, genomics, etc) are available as files that have been dispensed into your <code>Bulk/</code> folder.</p>
+<p>Here are a few examples of searching for bulk files using <code>dx find data</code>:</p>
+<section id="search-on-field-id" class="level3">
+<h3 class="anchored" data-anchor-id="search-on-field-id">Search on Field ID</h3>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+UKB Showcase is Your Friend
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You will need to find Field IDs for particular fields that you’re interested in. Sometimes there are multiple measurements for Field IDs</p>
+</div>
+</div>
+</section>
+</section>
+<section id="example-jobs-on-ukb" class="level2">
+<h2 class="anchored" data-anchor-id="example-jobs-on-ukb">Example Jobs on UKB</h2>
+</section>
+<section id="extracting-pheno-data-from-the-rap-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="extracting-pheno-data-from-the-rap-dataset">Extracting Pheno Data from the RAP Dataset</h2>
+<p>This is a question we get a lot. I’ll explain the current two best ways to extract the pheno data:</p>
+<ol type="1">
+<li>Use the <a href="https://documentation.dnanexus.com/developer/apps/developing-spark-apps/table-exporter-application">Table Exporter App</a> to export the phenotype fields to a CSV file. You have the option to select a decoded file when you run it.</li>
+<li>Use the dx-toolkit command <a href="dx_extract_dataset_python.ipynb"><code>dx extract_dataset</code> from Python</a> or <a href="dx_extract_dataset_R.ipynb"><code>dx extract_dataset</code> from R</a> to extract raw values to a CSV file, and decode the file manually. If your query takes longer than 2 minutes to run, then you will have to start a Spark JupyterLab Cluster and run the SQL query generated by <code>dx extract_dataset</code> with the <code>--sql</code> option.</li>
+</ol>
+<p>The first thing you need to do is identify the dataset in your project. Make sure that you chose to dispense data in your project (see above), and the dataset should be in the root of your project and begin with <code>dataset-</code>.</p>
+<p>You’ll want to grab the record ID for your dataset. You can find it by selecting your dataset in the GUI and clicking the “i” button in the top-left.</p>
+</section>
+<section id="using-rrstudio-on-rap" class="level2">
+<h2 class="anchored" data-anchor-id="using-rrstudio-on-rap">Using R/RStudio on RAP</h2>
+<p>One of the nice features of RAP is that you can run R/RStudio on it.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+How running RStudio on RAP is different
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The first thing you’ll notice is that the Files tab in RStudio is isolated from the project storage.</p>
+<p>To access data in your RStudio project, you will have to use <code>dx download</code> or <code>dxFUSE</code> to load the data.</p>
+<p>Here’s a quick table that talks about the main differences with using RStudio on RAP compared to a local installation of RStudio.</p>
+<table class="table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 23%">
+<col style="width: 66%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Feature</th>
+<th>Local RStudio</th>
+<th>RStudio on RAP</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Accessing Files</td>
+<td>Has Access to your local filesystem</td>
+<td>Access files in RAP project using <code>dxfuse</code> (<code>/mnt/project/myfile.txt/</code>) or using <code>dx download</code></td>
+</tr>
+<tr class="even">
+<td>Installing Packages</td>
+<td>Use <code>install.packages()</code></td>
+<td>Init <code>renv</code> in project, then install packages</td>
+</tr>
+<tr class="odd">
+<td>Saving Projects</td>
+<td>Save files in project</td>
+<td>Use snapshot <code>dx backup-folder</code> capability to save project folder to RAP Storage</td>
+</tr>
+<tr class="even">
+<td>Opening Projects</td>
+<td>Open <code>.rproj</code> file in Project</td>
+<td>Use <code>dx restore-folder</code> to restore project folder, then open <code>.rproj</code> file</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="callout-warning callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Make sure you terminate!
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Just because you have closed your RStudio Session does not mean that the job is terminated. Use the red terminate button on the top of the RStudio interface to stop the cloud worker.</p>
+</div>
+</div>
+<section id="looking-at-files-in-your-rap-project" class="level3">
+<h3 class="anchored" data-anchor-id="looking-at-files-in-your-rap-project">Looking at files in your RAP Project</h3>
+<p>Let’s take a quick look at the files in our <code>/Bulk/</code> folder. In the RStudio console, we can use <code>list.files()</code> to do this.</p>
+<p>Note we put a <code>/mnt/project/</code> in front of <code>/Bulk/</code>. This is how we access the file system contents using <code>dxFUSE</code>.</p>
+<pre><code> list.files("/mnt/project/Bulk/")</code></pre>
+<p>The response from the console is this:</p>
+<pre><code>[1] "Activity"                                     "Brain MRI"               
+[3] "Carotid Ultrasound"                           "Electrocardiogram"        
+[5] "Exome sequences"                              "Exome sequences_Alternative exome processing"
+[7] "Exome sequences_Previous exome releases"      "Genotype Results"         
+[9] "Heart MRI"                                    "Imputation"              
+[11] "Kidney MRI"                                   "Liver MRI"               
+[13] "Pancreas MRI"                                 "Protein biomarkers"      
+[15] "Retinal Optical Coherence Tomography"         "Whole Body DXA"          
+[17] "Whole Body MRI"                               "Whole genome sequences"   </code></pre>
+<p>Say we want to dive deeper into <code>Exome sequences</code>. We can run:</p>
+<pre><code>list.files("/mnt/project/Bulk/Exome sequences")</code></pre>
+<p>And we’ll see the different formats of the Exome data:</p>
+<pre><code>[1] "Exome OQFE CRAM files"                                                   
+[2] "Exome OQFE variant call files (VCFs)"                                    
+[3] "Population level exome OQFE variants, BGEN format - final release"       
+[4] "Population level exome OQFE variants, BGEN format - interim 450k release"
+[5] "Population level exome OQFE variants, PLINK format - final release"    
+[6] "Population level exome OQFE variants, PLINK format - interim 450k release"
+[7] "Population level exome OQFE variants, pVCF format - final release"       
+[8] "Population level exome OQFE variants, pVCF format - interim 450k release" </code></pre>
+<p>Within each of these folders is a series of numbered folders that have two digits. The two digits (such as <code>11</code>) are the first two digits of the EIDs that are in the folder. For example, a file with an EID of <code>2281131</code> is going to be in <code>22/</code> folder.</p>
+<p>There are some hard limits to the number of files that can be in a folder. Thus, each set of 500K files (such as <code>1331113.vcf.gz</code>) is split up into multiple folders with about 10000 files in each.</p>
+</section>
+<section id="reproducible-research-using-rstudio-on-rap" class="level3">
+<h3 class="anchored" data-anchor-id="reproducible-research-using-rstudio-on-rap">Reproducible Research using RStudio on RAP</h3>
+<p>My key piece of advice when running RStudio on RAP is to use the following process.</p>
+<ol type="1">
+<li>Initialize a new RStudio project.</li>
+<li>Use <code>renv</code> to install packages to your RStudio Project.</li>
+<li>Load data either using <code>dx download</code> (for smaller batches of files) or dxFUSE (using paths like <code>/mnt/project/myfile.txt</code>).</li>
+<li>Use the snapshot functionality in <code>dx-toolkit</code> to save (<code>dx backup-folder-/</code>) your project into RAP Storage.</li>
+<li>To resume your work, restore (<code>dx restore-folder</code>) your project from RAP Storage.</li>
+</ol>
+</section>
+</section>
+<section id="using-jupyterlab-on-rap" class="level2">
+<h2 class="anchored" data-anchor-id="using-jupyterlab-on-rap">Using JupyterLab on RAP</h2>
+</section>
+<section id="using-statajupyterlab-on-rap" class="level2">
+<h2 class="anchored" data-anchor-id="using-statajupyterlab-on-rap">Using Stata/JupyterLab on RAP</h2>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

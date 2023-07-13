@@ -1,0 +1,8 @@
+---
+title: "Spark Apps on DNAnexus"
+---
+
+Spark Apps are a special case on the DNAnexus platform.
+
+- Querying and Integrating Geno/Pheno Data in a Notebook
+- Visualizing Geno/Pheno data using 
