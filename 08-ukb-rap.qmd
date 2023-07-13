@@ -28,7 +28,9 @@ There are three main differences with UK Biobank and the Core DNAnexus Platform.
 :::{.callout-note}
 ## Don't forget about UK Biobank Community!
 
-The UK Biobank community is an incredible resource to ask questions, and see answers. 
+The UK Biobank Community (at <https://community.dnanexus.com>) is an incredible resource to ask questions, see answers, learn about webinars/tutorials, and understand. 
+
+Just know that you're part of a huge group of researchers who are learning to use RAP and they have probably encountered similar issues to you. 
 :::
 
 ## Application ID and Sharing
