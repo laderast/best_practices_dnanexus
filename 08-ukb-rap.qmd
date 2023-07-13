@@ -50,7 +50,7 @@ Here are a few examples of searching for bulk files using `dx find data`:
 :::{.callout-note}
 ## UKB Showcase is Your Friend
 
-You will need to find Field IDs for particular fields that you're interested in. Sometimes there are multiple measurements for Field IDs
+You will need to find Field IDs for particular fields that you're interested in. Sometimes there are multiple measurements for Field IDs. 
 
 :::
 
