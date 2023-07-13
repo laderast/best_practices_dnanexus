@@ -256,14 +256,14 @@
     "href": "08-ukb-rap.html#psuedonymization-and-participant-ids",
     "title": "3  Work Effectively on the UK Biobank Research Analysis Platform",
     "section": "3.5 Psuedonymization and Participant IDs",
-    "text": "3.5 Psuedonymization and Participant IDs\nWithin an application, the participant IDs (also known as EIDs) are unique, through the pseudonymization process. This process has been done to ensure security and anonymity of participants. This means that you cannot join data across applications.\nFor example, if I’m in application ID 43333 and you’re in application 11111, our EIDs will not correspond because we have unique EIDs. Our data files are also mapped to these unique IDs.\nSo if I make a pheno matrix with EIDs and you want to reuse this pheno matrix in your application, it won’t work, because our EIDs don’t match up."
+    "text": "3.5 Psuedonymization and Participant IDs\nWithin an application, participant IDs (also known as EIDs) are unique, through the pseudonymization process. This process has been done to ensure security and anonymity of participants. This means that you cannot join data across applications.\nFor example, if I’m in application ID 43333 and you’re in application 11111, our EIDs will not correspond because we have unique EIDs. Our data files are also mapped to these unique IDs.\nSo if I make a pheno matrix with EIDs and you want to reuse this pheno matrix in your application, it won’t work, because our EIDs don’t match up."
   },
   {
     "objectID": "08-ukb-rap.html#bulk-files",
     "href": "08-ukb-rap.html#bulk-files",
     "title": "3  Work Effectively on the UK Biobank Research Analysis Platform",
     "section": "3.6 Bulk Files",
-    "text": "3.6 Bulk Files\nThe other difference with UKB RAP is that a lot of the data (image, genomics, etc) are available as files that have been dispensed into your Bulk/ folder.\nHere are a few examples of searching for bulk files using dx find data:\n\n3.6.1 Search on Field ID\n\n\n\n\n\n\nUKB Showcase is Your Friend\n\n\n\nYou will need to find Field IDs for particular fields that you’re interested in. Sometimes there are multiple measurements for Field IDs"
+    "text": "3.6 Bulk Files\nThe other difference with UKB RAP is that a lot of the data (image, genomics, etc) are available as files that have been dispensed into your Bulk/ folder.\nHere are a few examples of searching for bulk files using dx find data:\n\n3.6.1 Search on Field ID\n\n\n3.6.2 Search on EID\n\n\n\n\n\n\nUKB Showcase is Your Friend\n\n\n\nWhen you work with the UKB Pheno Data, you will need to find Field IDs for particular fields that you’re interested in. Sometimes there are multiple measurements/instances for Field IDs.\nTo understand the structure of the data (and what field IDs to grab), I highly recommend using UKB Showcase to browse the fields."
   },
   {
     "objectID": "08-ukb-rap.html#example-jobs-on-ukb",

@@ -155,6 +155,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#bulk-files" id="toc-bulk-files" class="nav-link" data-scroll-target="#bulk-files"><span class="toc-section-number">3.6</span>  Bulk Files</a>
   <ul class="collapse">
   <li><a href="#search-on-field-id" id="toc-search-on-field-id" class="nav-link" data-scroll-target="#search-on-field-id"><span class="toc-section-number">3.6.1</span>  Search on Field ID</a></li>
+  <li><a href="#search-on-eid" id="toc-search-on-eid" class="nav-link" data-scroll-target="#search-on-eid"><span class="toc-section-number">3.6.2</span>  Search on EID</a></li>
   </ul></li>
   <li><a href="#example-jobs-on-ukb" id="toc-example-jobs-on-ukb" class="nav-link" data-scroll-target="#example-jobs-on-ukb"><span class="toc-section-number">3.7</span>  Example Jobs on UKB</a></li>
   <li><a href="#extracting-pheno-data-from-the-rap-dataset" id="toc-extracting-pheno-data-from-the-rap-dataset" class="nav-link" data-scroll-target="#extracting-pheno-data-from-the-rap-dataset"><span class="toc-section-number">3.8</span>  Extracting Pheno Data from the RAP Dataset</a></li>
@@ -223,7 +224,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="psuedonymization-and-participant-ids" class="level2" data-number="3.5">
 <h2 data-number="3.5" class="anchored" data-anchor-id="psuedonymization-and-participant-ids"><span class="header-section-number">3.5</span> Psuedonymization and Participant IDs</h2>
-<p>Within an application, the participant IDs (also known as EIDs) are unique, through the pseudonymization process. This process has been done to ensure security and anonymity of participants. This means that you <strong>cannot join data across applications</strong>.</p>
+<p>Within an application, participant IDs (also known as EIDs) are unique, through the pseudonymization process. This process has been done to ensure security and anonymity of participants. This means that you <strong>cannot join data across applications</strong>.</p>
 <p>For example, if I’m in application ID <code>43333</code> and you’re in application <code>11111</code>, our EIDs will not correspond because we have unique EIDs. Our data files are also mapped to these unique IDs.</p>
 <p>So if I make a pheno matrix with EIDs and you want to reuse this pheno matrix in your application, it won’t work, because our EIDs don’t match up.</p>
 </section>
@@ -233,6 +234,9 @@ ul.task-list li input[type="checkbox"] {
 <p>Here are a few examples of searching for bulk files using <code>dx find data</code>:</p>
 <section id="search-on-field-id" class="level3" data-number="3.6.1">
 <h3 data-number="3.6.1" class="anchored" data-anchor-id="search-on-field-id"><span class="header-section-number">3.6.1</span> Search on Field ID</h3>
+</section>
+<section id="search-on-eid" class="level3" data-number="3.6.2">
+<h3 data-number="3.6.2" class="anchored" data-anchor-id="search-on-eid"><span class="header-section-number">3.6.2</span> Search on EID</h3>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -243,7 +247,8 @@ UKB Showcase is Your Friend
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>You will need to find Field IDs for particular fields that you’re interested in. Sometimes there are multiple measurements for Field IDs</p>
+<p>When you work with the UKB Pheno Data, you will need to find Field IDs for particular fields that you’re interested in. Sometimes there are multiple measurements/instances for Field IDs.</p>
+<p>To understand the structure of the data (and what field IDs to grab), I highly recommend using <a href="https://biobank.ndph.ox.ac.uk/showcase/">UKB Showcase</a> to browse the fields.</p>
 </div>
 </div>
 </section>
