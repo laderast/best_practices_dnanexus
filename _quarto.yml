@@ -11,6 +11,7 @@ book:
     - "index.qmd"
     - "10-object-based-file-systems.qmd"
     - "12-project_management.qmd"
+    - "08-ukb-rap.qmd"
     - "13-spark-on-dnanexus.qmd"
     - "dx_extract_dataset_R.ipynb"
 #    - "dx_extract_dataset_python.ipynb"

@@ -1,11 +1,23 @@
-# UK Biobank Research Analysis Platform
+# Work Effectively on the UK Biobank Research Analysis Platform
+
+## Introduction
+
+The UK Biobank Research Analysis Platform gives you 
+
+## Learning Objectives
+
+1. **Explain** key differences with the Research Analysis Platform (RAP) and the core DNAnexus platform.
+1. **Explain** how to process files using built in apps on RAP using Swiss Army Knife.
+1. **Identify** two key methods for extracting Pheno Data in a RAP project.
+1. **Explain** the two main strategies for listing and accessing files in a RAP project in JupyterLab or RStudio (`dx find data` versus `/mnt/project/`). 
+1. **Utilize** RStudio on RAP in a reproducible fashion.
 
 ## What's Different?
 
 There are three main differences with UK Biobank and the Core DNAnexus Platform.
 
 1. You are limited to sharing within your own application ID.
-2. The participant identifiers (`eid`s) are different across applications.
+2. The participant identifiers (`eid`s) are different across applications because of the psuedonymization process.
 3. There is a `Bulk/` File Folder that contains many of the files you want to analyze.
 
 ## Application ID and Sharing
@@ -16,7 +28,7 @@ What is an application ID?
 
 ## Psuedonymization and Participant IDs
 
-Within an application, the participant IDs (also known as EIDs) are unique, through the pseudonymization process. This process has been done to ensure security and anonymity of participants. This means that you **cannot join data across applications**. 
+Within an application, participant IDs (also known as EIDs) are unique, through the pseudonymization process. This process has been done to ensure security and anonymity of participants. This means that you **cannot join data across applications**. 
 
 For example, if I'm in application ID `43333` and you're in application `11111`, our EIDs will not correspond because we have unique EIDs. Our data files are also mapped to these unique IDs.
 
@@ -29,6 +41,11 @@ The other difference with UKB RAP is that a lot of the data (image, genomics, et
 Here are a few examples of searching for bulk files using `dx find data`:
 
 ### Search on Field ID
+
+
+### Search on EID
+
+
 
 :::{.callout-note}
 ## UKB Showcase is Your Friend
@@ -139,25 +156,30 @@ There are some hard limits to the number of files that can be in a folder. Thus,
 My key piece of advice when running RStudio on RAP is to use the following process. 
 
 1. Initialize a new RStudio project.
-1. Use `renv` to install packages to your RStudio Project.
+1. Use `renv` to install packages to your RStudio Project with `install.packages()`
 1. Load data either using `dx download` (for smaller batches of files) or dxFUSE (using paths like `/mnt/project/myfile.txt`).
-1. Use the snapshot functionality in `dx-toolkit` to save (`dx backup-folder-/`) your project into RAP Storage.
+1. Do your work, saving it in an `Rmarkdown` or `quarto` document.
+1. Run `renv::snapshot()` in your RStudio project.
+1. Use the `dx-toolkit` snapshot functionality in `dx-toolkit` to save (`dx backup-folder-/`) your project into RAP Storage. (`dx-backup-folder -d /.Backups/my_project.tar.gz`)
 1. To resume your work, restore (`dx restore-folder`) your project from RAP Storage.
+1. To install more packages, use `renv::activate()`, `install.packages()`, and then `renv::snapshot()`. 
 
-:::{,callout-note}
+:::{.callout-note}
 ## What is `renv`?
 
 `renv` is a R Package that implements virtual environments for your RStudio project. 
 
-In short, a virtual environment allows you to completely reproduce the **software environment** (all the packages with their version numbers) in your project. Each project has its own library of packages. This is also handy in that you can work with projects that each have their own version of a package.
+In short, a virtual environment allows you to completely reproduce the **software environment** (all the packages with their version numbers) in your project. 
+
+Each project has its own library of packages. This is also handy in that you can work with multiple projects that each have their own version of a package.
 
 :::
 
 
-This seems to be a lot of extra work. Why? Well, this process alleviates a lot of complaints:
+This seems to be a lot of extra work. Why do it? Well, this process alleviates a lot of complaints about working with a cloud instance of RStudio:
 
-1. It allows you to resume work on a RStudio project without having to reinstall packages or redownload data.
-1. It ties your packages to version numbers. Sharing an RStudio Project with `renv`means that your collaborators can install an identical software environment and reproduce your work.
+1. It allows you to resume work on a RStudio project without having to reinstall packages or redownload data. Everything is saved
+1. It ties your packages to version numbers. Sharing an RStudio Project with `renv`initialized means that your collaborators can install an identical software environment and reproduce your work.
 
 
 ## Using JupyterLab on RAP
