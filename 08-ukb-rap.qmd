@@ -86,10 +86,6 @@ The first thing you need to do is identify the dataset in your project. Make sur
 You'll want to grab the record ID for your dataset. You can find it by selecting your dataset in the GUI and clicking the "i" button in the top-left. 
 
 
-```{bash}
-
-```
-
 ## Using JupyterLab on RAP
 
 
@@ -106,6 +102,10 @@ One of the nice features of RAP is that you can run R/RStudio on it.
 The first thing you'll notice is that the Files tab in RStudio is isolated from the project storage. 
 
 To access data in your RStudio project, you will have to use `dx download` or `dxFUSE` to load the data. 
+
+The second thing you might notice is that your installed libraries are not installed when you open a session.
+
+These two issues make working with RStudio on RAP different than working with RStudio on your own machine.
 
 Here's a quick table that talks about the main differences with using RStudio on RAP compared to a local installation of RStudio. 
 
@@ -179,7 +179,7 @@ My key piece of advice when running RStudio on RAP is to use the following proce
 1. Initialize a new RStudio project.
 1. Use `renv` to install packages to your RStudio Project with `install.packages()`
 1. Load data either using `dx download` (for smaller batches of files) or dxFUSE (using paths like `/mnt/project/myfile.txt`).
-1. Do your work, saving it in an `Rmarkdown` or `quarto` document.
+1. Do your work, saving it as an `Rmarkdown` or `quarto` document.
 1. Run `renv::snapshot()` in your RStudio project.
 1. Use the `dx-toolkit` snapshot functionality in `dx-toolkit` to save (`dx backup-folder-/`) your project into RAP Storage. (`dx-backup-folder -d /.Backups/my_project.tar.gz`)
 1. To resume your work, restore (`dx restore-folder`) your project from RAP Storage.
@@ -192,7 +192,7 @@ My key piece of advice when running RStudio on RAP is to use the following proce
 
 In short, a virtual environment allows you to completely reproduce the **software environment** (all the packages with their version numbers) in your project. 
 
-Each project has its own library of packages. This is also handy in that you can work with multiple projects that each have their own version of a package.
+Each RStudio Project has its own library of packages. This is also handy in that you can work with multiple projects that each have their own version of a package.
 
 :::
 
