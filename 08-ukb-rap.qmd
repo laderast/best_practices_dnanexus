@@ -21,9 +21,11 @@ This chapter attempts to give you the knowledge you need to work successfully on
 
 There are three main differences with UK Biobank and the Core DNAnexus Platform.
 
-1. You are limited to sharing within your own application ID.
-2. The participant identifiers (`eid`s) are different across applications because of the psuedonymization process.
-3. There is a `Bulk/` File Folder that contains many of the files you want to analyze.
+1. You need to apply for access and note what fields are relevant for your work. When the UK Biobank team has reviewed it, you will be assigned an Application ID. 
+1. You are limited to sharing projects within your own application ID. All billing information is attached to the application ID, rather than to an organization.
+1. Data is *dispensed* when requested at project creation or refresh. This is both the pheno data (the `dataset`) and the Bulk, or file based data.
+1. The participant identifiers (`eid`s) are different across applications because of the psuedonymization process.
+1. There is a `Bulk/` File Folder that contains many of the files you want to analyze.
 
 :::{.callout-note}
 ## Don't forget about UK Biobank Community!
@@ -35,17 +37,29 @@ Just know that you're part of a huge group of researchers who are learning to us
 
 ## Application ID and Sharing
 
-What is an application ID? 
+When you [file an access application with UK Biobank](https://dnanexus.gitbook.io/uk-biobank-rap/frequently-asked-questions#what-is-an-access-application), you need to supply a list of fields that you will use in your research.  
 
 ![UKB Application Process](images/ukb_application.png)
 
 ## Psuedonymization and Participant IDs
 
-Within an application, participant IDs (also known as EIDs) are unique, through the pseudonymization process. This process has been done to ensure security and anonymity of participants. This means that you **cannot join data across applications**. 
+Within an application, participant IDs (also known as EIDs) are unique, through the [pseudonymization process](https://dnanexus.gitbook.io/uk-biobank-rap/frequently-asked-questions#how-are-eids-used-on-the-research-analysis-platform). This process has been done to ensure security and anonymity of participants. 
 
-For example, if I'm in application ID `43333` and you're in application `11111`, our EIDs will not correspond because we have unique EIDs. Our data files are also mapped to these unique IDs.
+This means that you **cannot join data across applications**. 
+
+For example, if I'm in application ID `43333` and you're in application `11111`, our EIDs will not correspond because we both have a set of unique EIDs. Our data files are also mapped to these unique IDs.
 
 So if I make a pheno matrix with EIDs and you want to reuse this pheno matrix in your application, it won't work, because our EIDs don't match up. 
+
+## Data Dispensal
+
+The data dispensal process ...
+
+- [Updating Dispensed Data](https://dnanexus.gitbook.io/uk-biobank-rap/getting-started/updating-dispensed-data)
+
+## Pheno/Geno Data
+
+Pheno and Processed Geno Data are stored within multiple Spark databases. These physical databases are accessed through a single entity called the *dataset*.
 
 ## Bulk Files
 
