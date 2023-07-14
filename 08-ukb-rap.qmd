@@ -19,13 +19,13 @@ This chapter attempts to give you the knowledge you need to work successfully on
 
 ## What's Different?
 
-There are three main differences with UK Biobank and the Core DNAnexus Platform.
+Here are the main differences with UK Biobank and the Core DNAnexus Platform.
 
-1. You need to apply for access and note what fields are relevant for your work. When the UK Biobank team has reviewed it, you will be assigned an Application ID. 
-1. You are limited to sharing projects within your own application ID. All billing information is attached to the application ID, rather than to an organization.
-1. Data is *dispensed* when requested at project creation or refresh. This is both the pheno data (the `dataset`) and the Bulk, or file based data.
-1. The participant identifiers (`eid`s) are different across applications because of the psuedonymization process.
-1. There is a `Bulk/` File Folder that contains many of the files you want to analyze.
+1. On UKB RAP, you need to apply for access and note what fields are relevant for your work. When the UK Biobank team has reviewed it, you will be assigned an Application ID. 
+1. On UKB RAP, you are limited to sharing projects within your own application ID. All billing information is attached to the application ID, rather than to an organization.
+1. On UKB RAP, data is *dispensed* when requested at project creation or refresh. This is both the pheno data (the `dataset`) and the Bulk, or file based data.
+1. On UKB RAP, The participant identifiers (`eid`s) are different across applications because of the psuedonymization process.
+1. On UKB RAP, there is a `Bulk/` File Folder that contains many of the files you want to analyze.
 
 :::{.callout-note}
 ## Don't forget about UK Biobank Community!
@@ -40,8 +40,20 @@ Just know that you're part of a huge group of researchers who are learning to us
 When you [file an access application with UK Biobank](https://dnanexus.gitbook.io/uk-biobank-rap/frequently-asked-questions#what-is-an-access-application), you need to supply a list of fields that you will use in your research.  
 
 ![UKB Application Process](images/ukb_application.png)
+## Data Dispensal
 
-## Psuedonymization and Participant IDs
+The [data dispensal process](https://dnanexus.gitbook.io/uk-biobank-rap/getting-started/creating-a-project#dispensing-data) begins when you create a RAP project within your application ID. When you request data to be dispensed, it may take 20 minutes to several hours for the data to appear in your project, depending on the data fields you have requested in your application.
+
+When data is dispensed, two things happen in your project:
+
+1. A `/Bulk/` folder is created in your project that contains files associated with data, such as `.vcf.gz` files, or geno data in `BGEN` format.
+1. A [`dataset`](https://dnanexus.gitbook.io/uk-biobank-rap/getting-started/working-with-ukb-data#database-and-dataset) is created in your project, which contains both the pheno data fields and the processed geno fields. This dataset consists of multiple Spark Databases. This dataset can be browsed using the [Cohort Browser](https://dnanexus.gitbook.io/uk-biobank-rap/getting-started/working-with-ukb-data#browsing-dataset-fields-using-the-cohort-browser) if you click on it in your project. 
+
+- [Updating Dispensed Data](https://dnanexus.gitbook.io/uk-biobank-rap/getting-started/updating-dispensed-data)
+
+
+
+## Pseudonymization and Participant IDs
 
 Within an application, participant IDs (also known as EIDs) are unique, through the [pseudonymization process](https://dnanexus.gitbook.io/uk-biobank-rap/frequently-asked-questions#how-are-eids-used-on-the-research-analysis-platform). This process has been done to ensure security and anonymity of participants. 
 
@@ -51,23 +63,22 @@ For example, if I'm in application ID `43333` and you're in application `11111`,
 
 So if I make a pheno matrix with EIDs and you want to reuse this pheno matrix in your application, it won't work, because our EIDs don't match up. 
 
-## Data Dispensal
-
-The data dispensal process ...
-
-- [Updating Dispensed Data](https://dnanexus.gitbook.io/uk-biobank-rap/getting-started/updating-dispensed-data)
 
 ## Pheno/Geno Data
 
-Pheno and Processed Geno Data are stored within multiple Spark databases. These physical databases are accessed through a single entity called the *dataset*.
+Pheno and Processed Geno Data are stored within multiple Spark databases. These physical databases are accessed through a single object called the *dataset*.
+
+There is a built in application called *Cohort Browser* that will let you explore data fields and derive *cohorts* by building *filters* on the data. These cohorts can be shared with others on your application. 
+
+Once you have derived cohorts, you can extract the pheno fields by using table exporter or extracting the data. 
 
 ## Bulk Files
 
 The other difference with UKB RAP is that a lot of the data (image, genomics, etc) are available as files that have been dispensed into your `Bulk/` folder. 
-
 Here are a few examples of searching for bulk files using `dx find data`:
 
 ### Search on Field ID
+
 
 
 ### Search on EID
@@ -80,15 +91,13 @@ Here are a few examples of searching for bulk files using `dx find data`:
 When you work with the UKB Pheno Data, you will need to find Field IDs for particular fields that you're interested in. Sometimes there are multiple measurements/instances for Field IDs. 
 
 To understand the structure of the data (and what field IDs to grab), I highly recommend using [UKB Showcase](https://biobank.ndph.ox.ac.uk/showcase/) to browse the fields and [search for fields of interest](https://biobank.ndph.ox.ac.uk/showcase/search.cgi). 
-
 :::
-
 
 ## Example Jobs on UKB
 
 > For a review of running jobs and useful bash tips, please check out [Bash for Bioinformatics](https://laderast.github.io/bash_for_bioinformatics/), especially the [Using `dx run`](https://laderast.github.io/bash_for_bioinformatics/04-doing-work-with-dx-run.html) and [Batch Processing](https://laderast.github.io/bash_for_bioinformatics/05-batch-processing.html) chapters.
 
-## Extracting Pheno Data from the RAP Dataset
+## Extracting Pheno Data from the RAP Dataset {#extract}
 
 This is a question we get a lot. I'll explain two ways to extract the pheno data:
 
