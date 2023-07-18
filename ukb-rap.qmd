@@ -1,16 +1,23 @@
-# Work Effectively on the UK Biobank Research Analysis Platform
+# Work Effectively on the UK Biobank Research Analysis Platform (UKB RAP)
+
+## Who This Chapter is For
+
+- You are a bioinformatician who wants to run pipelines or custom software on the UK Biobank data. 
+- You are a data scientist or epidemiologist and you want to run analyses in RStudio on UKB RAP.
+- You are a bioinformatician or data scientist who wants to work in Jupyter notebooks using JupyterLab on UKB RAP.
+- You want to explore the UKB Data using the Cohort Browser platform on UKB RAP. 
 
 ## Introduction
 
-The UK Biobank Research Analysis Platform (RAP) gives you the ability to work with one of the largest cohorts of people: over 500,000 participants.
+The UK Biobank Research Analysis Platform (UKB RAP) gives you the ability to work with one of the largest cohorts of people: over 500,000 participants.
 
 If you're coming from either analyzing data on your own machine or from HPC computing, there are some key differences that you will have to learn.
 
-This chapter attempts to give you the knowledge you need to work successfully on the RAP.
+This chapter attempts to give you the knowledge you need to work successfully on UKB RAP.
 
 ## Learning Objectives
 
-1. **Explain** key differences with the Research Analysis Platform (RAP) and the core DNAnexus platform.
+1. **Explain** key differences with the UK Biobank Research Analysis Platform (RAP) and the core DNAnexus platform.
 1. **Explain** how to process files using built in apps on RAP using Swiss Army Knife.
 1. **Identify** two key methods for extracting Pheno Data in a RAP project.
 1. **Explain** the two main strategies for listing and accessing files in a RAP project in JupyterLab or RStudio (`dx find data` versus `/mnt/project/`). 
@@ -49,9 +56,7 @@ When data is dispensed, two things happen in your project:
 1. A `/Bulk/` folder is created in your project that contains files associated with data, such as `.vcf.gz` files, or geno data in `BGEN` format.
 1. A [`dataset`](https://dnanexus.gitbook.io/uk-biobank-rap/getting-started/working-with-ukb-data#database-and-dataset) is created in your project, which contains both the pheno data fields and the processed geno fields. This dataset consists of multiple Spark Databases. This dataset can be browsed using the [Cohort Browser](https://dnanexus.gitbook.io/uk-biobank-rap/getting-started/working-with-ukb-data#browsing-dataset-fields-using-the-cohort-browser) if you click on it in your project. 
 
-- [Updating Dispensed Data](https://dnanexus.gitbook.io/uk-biobank-rap/getting-started/updating-dispensed-data)
-
-
+When the data is refreshed on RAP (which may take a few weeks to months following its release on UKB Showcase), you are able to [update the dispensed Data](https://dnanexus.gitbook.io/uk-biobank-rap/getting-started/updating-dispensed-data). 
 
 ## Pseudonymization and Participant IDs
 
@@ -66,7 +71,7 @@ So if I make a pheno matrix with EIDs and you want to reuse this pheno matrix in
 
 ## Pheno/Geno Data
 
-Pheno and Processed Geno Data are stored within multiple Spark databases. These physical databases are accessed through a single object called the *dataset*.
+Pheno and Processed Geno Data are stored within multiple Spark databases within your RAP Project. These physical databases are accessed through a single object called the *dataset*.
 
 There is a built in application called *Cohort Browser* that will let you explore data fields and derive *cohorts* by building *filters* on the data. These cohorts can be shared with others on your application. 
 
@@ -74,7 +79,8 @@ Once you have derived cohorts, you can extract the pheno fields by using table e
 
 ## Bulk Files
 
-The other difference with UKB RAP is that a lot of the data (image, genomics, etc) are available as files that have been dispensed into your `Bulk/` folder. 
+The other difference with UKB RAP is that a lot of the data (image, genomics, etc) are available as files that have been dispensed into your [`Bulk/` folder](). 
+
 Here are a few examples of searching for bulk files using `dx find data`:
 
 ### Search on Field ID
@@ -112,12 +118,22 @@ You'll want to grab the record ID for your dataset. You can find it by selecting
 ## Using JupyterLab on RAP
 
 
+
+
 ### Using Stata/JupyterLab on RAP
 
 
 ## Using R/RStudio on RAP
 
 One of the nice features of RAP is that you can run R/RStudio on it.
+
+:::{.callout-note}
+## Quick disambiguation note
+
+Because there are two kinds of projects, the RAP Project and your RStudio Project, the discussion can be confusing. 
+
+I'll refer to the RAP Project as *RAP Storage*, and the RStudio Project as a *RStudio Project*. Hopefully that will make things less ambiguous.
+:::
 
 :::{.callout-note}
 ## How running RStudio on RAP is different
@@ -134,7 +150,7 @@ Here's a quick table that talks about the main differences with using RStudio on
 
 | Feature | Local RStudio   | RStudio on RAP                        |
 |-------|---------------|-------------------------------------------|
-|Accessing Files |Has Access to your local filesystem | Access files in RAP project using `dxfuse` (`/mnt/project/myfile.txt/`) or using `dx download`|
+|Accessing Files |Has Access to your local filesystem | Access files in RAP Storage using `dxfuse` (`/mnt/project/myfile.txt/`) or using `dx download`|
 |Installing Packages|Use `install.packages()`|Init `renv` in project, then install packages|
 |Saving Projects|Save files in project|Use snapshot `dx backup-folder` capability to save project folder to RAP Storage|
 |Opening Projects|Open `.rproj` file in Project|Use `dx restore-folder` to restore project folder, then open `.rproj` file|
@@ -192,21 +208,45 @@ And we'll see the different formats of the Exome data:
 
 Within each of these folders is a series of numbered folders that have two digits. The two digits (such as `11`) are the first two digits of the EIDs that are in the folder. For example, a file with an EID of `2281131` is going to be in `22/` folder.
 
-There are some hard limits to the number of files that can be in a folder. Thus, each set of 500K files (such as `1331113.vcf.gz`) is split up into multiple folders with about 10000 files in each. 
+There are some hard limits to the number of files that can be in a folder. Thus, each set of 500K files (such as `.vcf.gz`) is split up into multiple folders with about 10000 files in each. 
 
 
 ### Reproducible Research using RStudio on RAP
 
-My key piece of advice when running RStudio on RAP is to use the following process. 
+My key piece of advice when running RStudio on RAP is to use the following process: 
+
+For starting a project:
 
 1. Initialize a new RStudio project.
-1. Use `renv` to install packages to your RStudio Project with `install.packages()`
+1. Use `renv::init()` to initialize `renv` in your RStudio Project. 
+1. Install needed packages to your RStudio Project with `install.packages()`.
+1. If you need to work with pheno data, use Table Exporter or `dx extract_dataset` to extract it to a CSV file on RAP Storage.
 1. Load data either using `dx download` (for smaller batches of files) or dxFUSE (using paths like `/mnt/project/myfile.txt`).
+
+For working in your project:
+
 1. Do your work, saving it as an `Rmarkdown` or `quarto` document.
 1. Run `renv::snapshot()` in your RStudio project.
-1. Use the `dx-toolkit` snapshot functionality in `dx-toolkit` to save (`dx backup-folder-/`) your project into RAP Storage. (`dx-backup-folder -d /.Backups/my_project.tar.gz`)
+1. Use the `dx-toolkit` snapshot functionality in `dx-toolkit` to save (`dx backup-folder`) your project into RAP Storage. (`dx-backup-folder -d /.Backups/my_project.tar.gz`)
+
+```
+dx-backup-folder -d /.Backups/rstudio_test_project.tar.gz
+```
+
+```
+Folder . was successfully saved to /.Backups/rstudio_test_project.tar.gz ( file-GBFf5vQJ9Zz93fGk0X8pV2Bf )
+```
+
+To resume a project:
+
 1. To resume your work, restore (`dx restore-folder`) your project from RAP Storage.
 1. To install more packages, use `renv::activate()`, `install.packages()`, and then `renv::snapshot()`. 
+1. Use `dx backup-folder` to save your work.
+
+
+```
+dx-restore-folder my_project.tar.gz -d my_project
+```
 
 :::{.callout-note}
 ## What is `renv`?
@@ -216,13 +256,12 @@ My key piece of advice when running RStudio on RAP is to use the following proce
 In short, a virtual environment allows you to completely reproduce the **software environment** (all the packages with their version numbers) in your project. 
 
 Each RStudio Project has its own library of packages. This is also handy in that you can work with multiple projects that each have their own version of a package.
-
 :::
 
 
 This seems to be a lot of extra work. Why do it? Well, this process alleviates a lot of complaints about working with a cloud instance of RStudio:
 
-1. It allows you to resume work on a RStudio project without having to reinstall packages or redownload data. Everything is saved
+1. It allows you to resume work on a RStudio project without having to reinstall packages or redownload data. Everything is saved in the project folder, which is then backed up to RAP Storage.
 1. It ties your packages to version numbers. Sharing an RStudio Project with `renv`initialized means that your collaborators can install an identical software environment and reproduce your work.
 
 

@@ -9,15 +9,15 @@ book:
   date: "1/23/2023"
   chapters:
     - "index.qmd"
-    - "10-object-based-file-systems.qmd"
-    - "12-project_management.qmd"
-    - "08-ukb-rap.qmd"
-    - "13-spark-on-dnanexus.qmd"
+    - "object-based-file-systems.qmd"
+    - "project_management.qmd"
+    - "ukb-rap.qmd"
+    - "spark-on-dnanexus.qmd"
     - "dx_extract_dataset_R.ipynb"
 #    - "dx_extract_dataset_python.ipynb"
 #    - "14-hail-on-dnanexus.qmd"
-    - "01-Hail-Skills.ipynb"
-    - "02-gwas.ipynb"
+    - "hail-skills.ipynb"
+    - "hail-gwas.ipynb"
     - references.qmd
 
 bibliography: references.bib

@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Best Practices on the DNAnexus Platform - 4&nbsp; Spark on the DNAnexus Platform</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./dx_extract_dataset_R.html" rel="next">
+<link href="./ukb-rap.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Spark on the DNAnexus Platform</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Best Practices on the DNAnexus Platform</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./object-based-file-systems.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Object Based File Systems</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./project_management.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Project and File Management</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ukb-rap.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Work Effectively on the UK Biobank Research Analysis Platform</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./spark-on-dnanexus.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Spark on the DNAnexus Platform</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dx_extract_dataset_R.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><code>dx extract_dataset</code> in R</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hail-skills.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Hail Skills and Concepts</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hail-gwas.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">GWAS using Hail</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="toc-section-number">4.1</span>  Learning Objectives</a></li>
+  <li><a href="#do-i-need-spark" id="toc-do-i-need-spark" class="nav-link" data-scroll-target="#do-i-need-spark"><span class="toc-section-number">4.2</span>  Do I need Spark?</a></li>
+  <li><a href="#spark-concepts" id="toc-spark-concepts" class="nav-link" data-scroll-target="#spark-concepts"><span class="toc-section-number">4.3</span>  Spark Concepts</a>
+  <ul class="collapse">
+  <li><a href="#what-is-spark" id="toc-what-is-spark" class="nav-link" data-scroll-target="#what-is-spark"><span class="toc-section-number">4.3.1</span>  What is Spark?</a></li>
+  </ul></li>
+  <li><a href="#the-three-or-four-filesystems" id="toc-the-three-or-four-filesystems" class="nav-link" data-scroll-target="#the-three-or-four-filesystems"><span class="toc-section-number">4.4</span>  The Three (or Four) Filesystems</a></li>
+  <li><a href="#balancing-cores-and-memory" id="toc-balancing-cores-and-memory" class="nav-link" data-scroll-target="#balancing-cores-and-memory"><span class="toc-section-number">4.5</span>  Balancing Cores and Memory</a></li>
+  <li><a href="#the-spark-ui" id="toc-the-spark-ui" class="nav-link" data-scroll-target="#the-spark-ui"><span class="toc-section-number">4.6</span>  The Spark UI</a></li>
+  <li><a href="#spark-and-lazy-evaluation" id="toc-spark-and-lazy-evaluation" class="nav-link" data-scroll-target="#spark-and-lazy-evaluation"><span class="toc-section-number">4.7</span>  Spark and Lazy Evaluation</a></li>
+  <li><a href="#extracting-phenodata-with-dx-extract_dataset" id="toc-extracting-phenodata-with-dx-extract_dataset" class="nav-link" data-scroll-target="#extracting-phenodata-with-dx-extract_dataset"><span class="toc-section-number">4.8</span>  Extracting PhenoData with <code>dx extract_dataset</code></a></li>
+  <li><a href="#connecting-with-pyspark-for-python-users" id="toc-connecting-with-pyspark-for-python-users" class="nav-link" data-scroll-target="#connecting-with-pyspark-for-python-users"><span class="toc-section-number">4.9</span>  Connecting with <code>PySpark</code> (For Python Users)</a>
+  <ul class="collapse">
+  <li><a href="#running-sparksql-queries-in-pyspark" id="toc-running-sparksql-queries-in-pyspark" class="nav-link" data-scroll-target="#running-sparksql-queries-in-pyspark"><span class="toc-section-number">4.9.1</span>  Running SparkSQL Queries in PySpark</a></li>
+  <li><a href="#koalas-is-the-pandas-version-of-spark" id="toc-koalas-is-the-pandas-version-of-spark" class="nav-link" data-scroll-target="#koalas-is-the-pandas-version-of-spark"><span class="toc-section-number">4.9.2</span>  Koalas is the Pandas version of Spark</a></li>
+  </ul></li>
+  <li><a href="#connecting-with-sparklyr-for-r-users" id="toc-connecting-with-sparklyr-for-r-users" class="nav-link" data-scroll-target="#connecting-with-sparklyr-for-r-users"><span class="toc-section-number">4.10</span>  Connecting with <code>sparklyr</code> (For R Users)</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Spark on the DNAnexus Platform</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="learning-objectives" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">4.1</span> Learning Objectives</h2>
+<p>By the end of this chapter, you should be able to:</p>
+<ul>
+<li><strong>Describe</strong> the basic use cases for Spark on the DNAnexus platform.</li>
+<li><strong>Describe</strong> the basic components of a Spark Cluster and how data is partitioned and processed by tasks</li>
+<li><strong>Explain</strong> the multiple filesystems involved with working with Spark JupyterLab on the DNAnexus Platform and how to <strong>transfer</strong> files between them</li>
+<li><strong>Articulate</strong> when to use a Spark Cluster to query an Apollo Dataset</li>
+<li><strong>Monitor</strong> Spark Jobs in the Spark UI on a cluster</li>
+<li><strong>Describe</strong> Lazy evaluation in a Spark cluster and how chains of commands are compiled into execution plans in the Spark cluster.</li>
+</ul>
+<p>In this Chapter, we will discuss some of the intricacies behind working with Spark and on the DNAnexus platform.</p>
+<p>I highly recommend that you go over the <a href="https://laderast.github.io/bash_for_bioinformatics/03-cloud-computing-basics.html">Cloud Computing Concepts</a> chapter from Bash for Bioinformatics before you start tackling this in case you need a quick refresher.</p>
+</section>
+<section id="do-i-need-spark" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="do-i-need-spark"><span class="header-section-number">4.2</span> Do I need Spark?</h2>
+<p>As we’ll discover, Spark is made for working with very large datasets. The datasets themselves might be very <em>long</em> (have billions of rows), or very <em>wide</em> (millions of columns).</p>
+<p>Very large data that is used for Phenotyping, such as Electronic Health Record (EHR) or other Real World Data (RWD) can definitely benefit from working with Spark. When this data is ingested into Spark, it is available as an Apollo Dataset and can be used in large scale queries or visualization tools such as <a href="https://documentation.dnanexus.com/user/cohort-browser">Cohort Browser</a>.</p>
+<p>Genomic Data is another good use-case. Whole Genome Sequencing outputs usually have hundreds of millions of variants, and with datasets such as UK Biobank, this is multiplied by a very large number of participants. We’ll see in the next chapter that a framework exists for genomic analysis built on Spark called Hail.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Spark/Hail on The Core Platform
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Please note that working with Spark on the DNAnexus platform requires an Apollo License if you are on the Core Platform. For more information, <a href="mailto:sales@dnanexus.com">please contact DNAnexus sales</a>.</p>
+<p>If you are on UKB RAP, the Pheno Data is stored as a Spark Database/Dataset, so you do not have to have an Apollo license to access it. On RAP, you also have access to the Hail configurations of Spark JupyterLab as well.</p>
+</div>
+</div>
+</section>
+<section id="spark-concepts" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="spark-concepts"><span class="header-section-number">4.3</span> Spark Concepts</h2>
+<p>In this section, we will discuss the basic concepts that you need to know before using Spark successfully on the platform.</p>
+<p>On the platform, Spark is used to work with ingested Pheno Data either indirectly using the <code>dx extract_dataset</code> functionality, or by working directly with the Spark Database using Libraries such as <code>PySpark</code> (for Python) or <code>sparklyr</code> (for R), or using <code>Spark SQL</code> to query the contents of a database.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Par-what-now?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You may have heard of <em>Parquet</em> files and wondered how they relate to database objects on the platform. They are a way to store data in a format called <a href="https://www.codingninjas.com/codestudio/library/introduction-to-columnar-databases"><em>columnar</em> storage</a>.</p>
+<p>It turns out it is faster for retrieval and searching to store data not by <em>rows</em>, but by <em>columns</em>. This is really helpful because the data is sorted by <em>data</em> type and it’s easier to traverse for this reason.</p>
+<p>Apache Spark is the scalable solution to using columnar formats such as Parquet. There are a number of <em>database engines</em> that are fast at searching and traversing these types of files. Some examples are <a href="https://www.snowflake.com/en/why-snowflake/">Snowflake</a> and <a href="https://arrow.apache.org/overview/">Apache Arrow</a>.</p>
+<p>On the DNAnexus platform, certain data objects (called Dataset Objects and Database objects) are actually stored in Parquet format, for rapid searching and querying using Apache Spark.</p>
+</div>
+</div>
+<section id="what-is-spark" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="what-is-spark"><span class="header-section-number">4.3.1</span> What is Spark?</h3>
+<p>Apache Spark is a framework for working with large datasets that won’t fit into memory on a single computer. Instead, we use what’s called a Spark Cluster, which is a cluster of machines that we request when we start Spark JupyterLab. Specifically, we request the Spark Cluster as part of a Spark JupyterLab configuration.</p>
+<div id="fig-spark" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/spark-arch.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Spark Architecture.</figcaption><p></p>
+</figure>
+</div>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4.1: <strong>?(caption)</strong></figcaption><p></p>
+</figure>
+</div>
+<p>The main pieces of a Spark Cluster are the <em>Driver Node</em>, a <em>Cluster manager</em> (which manages resources on the Worker Nodes), and the <em>Worker Nodes</em>. Individual worker nodes have processes known as <em>Executors</em> that will run on their portion of the data (<a href="#fig-spark">Figure&nbsp;<span>4.1</span></a>).</p>
+<p>Spark lets us analyse large datasets by <em>partitioning</em> the data into smaller pieces that are made available to the cluster via the Hadoop File System. Each executor gains access to a set of these data partitions, and they execute <em>tasks</em> assigned to by the Cluster Manager on their set of partitions.</p>
+<p>The Driver Node directs the individual executors by assigning <em>tasks</em>. These individual tasks are part of an overall <em>execution plan</em>.</p>
+<p>This link is a good introduction to <a href="https://mageswaran1989.medium.com/spark-jargon-for-starters-af1fd8117ada">Spark Terminology</a>.</p>
+</section>
+</section>
+<section id="the-three-or-four-filesystems" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="the-three-or-four-filesystems"><span class="header-section-number">4.4</span> The Three (or Four) Filesystems</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-full-graph" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p>
+</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-1">flowchart TD
+    A[Project Storage] --&gt;|dx download|B[Driver Node]
+    A --&gt;|dxFUSE|C 
+    B --&gt;|hdfs dfs -put|C[HDFS\nSpark Cluster]
+    B --&gt;|dx upload|A
+    C --&gt;|hdfs dfs -get|B
+    D[DNAX\nS3 Storage] --&gt;|dnax://|C
+    C --&gt;|dnax://|D
+    C --&gt;|dxFUSE -limitedWrite|A
+</pre>
+<div id="mermaid-tooltip-1" class="mermaidTooltip">
+
+</div>
+<p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4.2: The four filesystems.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Using Spark on DNAnexus effectively requires us to be familiar with at least 3 different file systems (<a href="#fig-full-graph">Figure&nbsp;<span>4.2</span></a>):</p>
+<ul>
+<li><strong>dxFUSE</strong> file system - used to directly access project storage. We access this using <code>file:///mnt/project/</code> in our scripts. For example, if we need to access a file named <code>chr1.tar.gz</code>, we refer to it as <code>file:///mnt/project/chr1.tar.gz</code>. Mounted at the start of JupyterLab; to access</li>
+<li><strong>Hadoop</strong> File System (HDFS) - Distributed File System for the Spark Cluster. We access this using the <code>hdfs://</code> protocol. This is the filesystem that Spark uses by default. When we load Spark DataFrames, this is where the Parquet files belonging to them live.</li>
+<li><strong>DNAX</strong> S3 Bucket - contains ingested data and other data loaded and saved to a database in Spark. This is a separate S3 bucket. We interact with ingested Pheno and Geno Data using a special protocol called <code>dnax://</code>. Ingested data that is stored here is accessed through connecting to the DNAX database that holds it. Part of why Cohort Browser works with very large data is that the ingested data is stored in this bucket.</li>
+<li><strong>Driver Node</strong> File System - one waypoint for getting things into and out of the Hadoop File System and to/from Project Storage. Since we run JupyterLab on the Driver Node, we use <code>hdfs dfs -put</code>/<code>hdfs dfs -get</code> to transfer to/from the Driver Node to the Hadoop File system (see below), and use <code>dx download</code> to work with Project Storage files, and <code>dx upload</code> to transfer files back into project storage.</li>
+</ul>
+<p>Whenever possible, <em>we want to avoid using the Driver node to transfer files to any of the other filesystems</em>. That is because we are limited to the disk space and memory of the Driver node, and it is easy to run out of memory and disk space when using it to transfer files. To overcome this, there are direct connections between HDFS and the Project Storage using dxFUSE that will let us stream the data.</p>
+<p>Overall advice when working in a Spark Cluster:</p>
+<ol type="1">
+<li>Try to avoid transfers through the Driver node (<code>hdfs dfs -get</code>/<code>dx upload</code>), as you are limited to the memory/disk space of the Driver node. You can specify a file path directly from project storage by putting a <code>file:///mnt/project/</code> before the file path (<a href="#fig-from-project">Figure&nbsp;<span>4.3</span></a>).</li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-from-project" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p>
+</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-2">flowchart TD
+    subgraph F[From Project Storage]
+        A[Project Storage] --&gt;|dxFUSE|C[HDFS\nSpark Cluster]
+    end
+    C --&gt; D[DNAX\nS3 Storage]
+</pre>
+<div id="mermaid-tooltip-2" class="mermaidTooltip">
+
+</div>
+<p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4.3: From Project Storage to HDFS</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<ol start="2" type="1">
+<li>When possible, use dxFUSE with glob wildcards (such as <code>*.tar.gz</code> or <code>chr*</code>) to directly stream files into HDFS (Spark Cluster Storage) from project storage by using <code>file:///mnt/project/</code> URLs (<a href="#fig-dxfuse-glob">Figure&nbsp;<span>4.4</span></a>). For example, we could load a set of pVCF files as a Hail MatrixTable with <code>hl.read_vcf("file:///mnt/project/data/pVCF/*.vcf.gz")</code>)</li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-dxfuse-glob" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p>
+</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-3">flowchart TD
+    subgraph F[From Project Storage]
+        A[Project Storage] --&gt;|dxFUSE|C[HDFS\nSpark Cluster]
+    end
+    C --&gt; D[DNAX\nS3 Storage]
+</pre>
+<div id="mermaid-tooltip-3" class="mermaidTooltip">
+
+</div>
+<p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4.4: Load from Project Storage directly into HDFS.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<ol start="3" type="1">
+<li>If you need to get files out of HDFS into Project Storage, use dxFUSE in <code>-limitedWrite</code> mode to write into project storage by passing in <code>file:///mnt/project/</code> URLs to the <code>.write()</code> methods in Spark/Hail. You will need to remount dxFUSE in the JupyterLab container to do this (<a href="#fig-hdfs-project">Figure&nbsp;<span>4.5</span></a>).</li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-hdfs-project" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p>
+</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-4">flowchart TD
+    subgraph To Project Storage
+      A[Project Storage]
+      C[HDFS\nSpark Cluster] --&gt;|dxFUSE -limitedWrite|A
+    end
+</pre>
+<div id="mermaid-tooltip-4" class="mermaidTooltip">
+
+</div>
+<p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4.5: From HDFS to Project Storage.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<ol start="4" type="1">
+<li>If you need to persist your Spark DataFrame, use <code>dnax:///&lt;db_name&gt;/&lt;table_name&gt;</code> with <code>.write()</code> to write it into DNAX storage (for example, <code>mt.write("dnax:///my_db/geno.mt")</code>) (<a href="#fig-dnax">Figure&nbsp;<span>4.6</span></a>). When you need to retrieve a stored table in DNAX, use the same <code>dnax:///</code> URL to load it from DNAX (for example, <code>hl.read_matrix_table("dnax:///my_db/geno.mt"</code>).</li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-dnax" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p>
+</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-5">flowchart TD
+    C[HDFS\nSpark Cluster] --&gt;|dnax://my_db/geno.mt|D
+    D[DNAX\nS3 Storage] --&gt;|dnax://my_db/geno.mt|C
+</pre>
+<div id="mermaid-tooltip-5" class="mermaidTooltip">
+
+</div>
+<p></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4.6: Saving and Loading into DNAX.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<ol start="5" type="1">
+<li>More advanced usage - you can connect Spark to other S3 buckets using the <code>s3://</code> protocol. You may need to authenticate before connecting.</li>
+</ol>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Accessing Spark Databases on DNAnexus
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>One issue I see a lot of people get tripped up with is with Database Access. One thing to know is that <em>Spark databases cannot be moved from project to project</em>. Once the data is ingested into a database object, it can’t be copied to a new project.</p>
+<p><strong>For a user to access the data in a Spark Database, they must have at least VIEW level access to the project that contains it on the platform.</strong> This includes anyone who is utilizing your database/dataset in Cohort Browser.</p>
+<p>Note that Apollo <em>Datasets</em> (not <em>Databases</em>) can be copied to new projects. However, to actually access the data in Cohort Browser, the project that contains the database needs to be viewable by the user.</p>
+</div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Spark Cluster JupyterLab vs.&nbsp;Spark Apps
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Our main way of using Spark on DNAnexus is using the <a href="https://documentation.dnanexus.com/user/jupyter-notebooks/dxjupyterlab-spark-cluster">Spark JupyterLab app</a>. This app will let you specify the instance types used in the Spark Cluster, the number of nodes in your Spark cluster, as well as additional features such as Hail or Variant Effect Predictor. This should be your main way of working with Spark DataFrames that have been ingested into Apollo.</p>
+<p>You can also build <a href="https://documentation.dnanexus.com/developer/apps/developing-spark-apps">Spark Applets</a> that request a Spark Cluster. This is a more complicated venture, as it may require installing software on the worker nodes using a <a href="https://documentation.dnanexus.com/developer/apps/developing-spark-apps#bootstrapping">bootstrapping script</a>, distributing data using <a href="https://documentation.dnanexus.com/developer/apps/developing-spark-apps#distributing-input-data"><code>hdfs dfs -put</code></a>, and submitting Spark Jobs using <a href="https://documentation.dnanexus.com/developer/apps/developing-spark-apps/dx-spark-submit-utility"><code>dx-spark-submit</code></a>.</p>
+</div>
+</div>
+</section>
+<section id="balancing-cores-and-memory" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="balancing-cores-and-memory"><span class="header-section-number">4.5</span> Balancing Cores and Memory</h2>
+<p>Central to both Spark and Hail is tuning the number of cores and memory in each of our instances. This also needs to be balanced with the partition size for our data. Data can be repartitioned, although this <a href="https://towardsdatascience.com/should-i-repartition-836f7842298c">may be an expensive operation</a>.</p>
+<p>In general, the number of data partitions should be greater than the number of cores. Why? If there are less partitions than cores, then the remaining cores will be unused.</p>
+<p>There are a lot of other tuning considerations to keep in mind.</p>
+</section>
+<section id="the-spark-ui" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="the-spark-ui"><span class="header-section-number">4.6</span> The Spark UI</h2>
+<p>When you start up Spark JupyterLab, you will see that it will open at a particular url which has the format <code>https://JOB-ID.dnanexus.com</code>. To open the Spark UI, use that same URL, but with a <code>:8081</code> at the end of it. For example, the UI url would be <code>https://JOB-ID.dnanexus.com:8081</code>.</p>
+<p>Note that the Spark UI is not launched until you connect to Spark or Hail.</p>
+<p>The Spark UI is really helpful in understanding how Spark translates a series of operations into a Plan, and how it executes that plan.</p>
+</section>
+<section id="spark-and-lazy-evaluation" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="spark-and-lazy-evaluation"><span class="header-section-number">4.7</span> Spark and Lazy Evaluation</h2>
+<p>One thing that is extremely important to know is that Spark executes operations in a <em>Lazy</em> manner. This is opposed to a language like R or Python which executes commands right away (a <em>greedy</em> manner).</p>
+<p>There are a number of commands that make Spark immediately start calculating a result, including:</p>
+<ul>
+<li><code>.count()</code></li>
+<li><code>.show()</code></li>
+<li><code>.write()</code></li>
+<li><code>.collect()</code></li>
+</ul>
+<p>When we run Spark operations, we are usually building chains of operations. For example, we might want to <code>.filter()</code> on a column, <code>.select()</code> columns of data, or aggregate (summarize) columns.</p>
+<p>Spark builds up these chains of commands until it sees it needs to execute an operation. For example:</p>
+<pre><code>df.filter(df("sex_code")==2).select().show(5)</code></pre>
+</section>
+<section id="extracting-phenodata-with-dx-extract_dataset" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="extracting-phenodata-with-dx-extract_dataset"><span class="header-section-number">4.8</span> Extracting PhenoData with <code>dx extract_dataset</code></h2>
+<p>First of all, you may not need to use Spark JupyterLab if you just want to extract Pheno Data from a Dataset and you know the fields.</p>
+<p>There is a utility within <a href="https://documentation.dnanexus.com/downloads#dnanexus-platform-sdk">dx-toolkit</a> (the CLI tools for working with the DNAnexus platform) called <code>dx extract_dataset</code> that will retrieve pheno data in the form of a CSV. It uses Spark, but the Spark is executed by the <a href="https://documentation.dnanexus.com/user/spark/connect-to-thrift">Thrift Server</a> (the same Spark Cluster that also serves the data for Cohort Browser).</p>
+<p>You will need a list of entity/field ids to retrieve them. For more info, please refer to the R Notebook (<a href="dx_extract_dataset_R.html"><span>Chapter&nbsp;5</span></a>) and the Python Notebook ().</p>
+<p>However, there are good reasons to work with the Spark Database directly. Number one is that your Cohort query will not run on the Thrift Server. If your query is complex and takes more than two minutes to execute, the Thrift Server will timeout.</p>
+<p>In the case of a timeout, you will need to run your own Spark JupyterLab cluster and extract the data using <code>pyspark</code> (for Python users), or <code>sparklyr</code> (for R users) itself.</p>
+</section>
+<section id="connecting-with-pyspark-for-python-users" class="level2" data-number="4.9">
+<h2 data-number="4.9" class="anchored" data-anchor-id="connecting-with-pyspark-for-python-users"><span class="header-section-number">4.9</span> Connecting with <code>PySpark</code> (For Python Users)</h2>
+<p>The first thing we’ll do to connect to the Spark database is connect to it by starting a Spark Session. Make sure you only do this once. If you try to connect twice, Spark will throw an error.</p>
+<p>If this happens, make sure to restart your notebook kernel.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyspark</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sc <span class="op">=</span> pyspark.SparkContext()</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>spark <span class="op">=</span> pyspark.sql.SparkSession(sc)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="running-sparksql-queries-in-pyspark" class="level3" data-number="4.9.1">
+<h3 data-number="4.9.1" class="anchored" data-anchor-id="running-sparksql-queries-in-pyspark"><span class="header-section-number">4.9.1</span> Running SparkSQL Queries in PySpark</h3>
+<p>The basic template for running Spark Queries is this:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>retrieve_sql <span class="op">=</span> <span class="st">'select .... from .... '</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> spark.sql(retrieve_sql)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="koalas-is-the-pandas-version-of-spark" class="level3" data-number="4.9.2">
+<h3 data-number="4.9.2" class="anchored" data-anchor-id="koalas-is-the-pandas-version-of-spark"><span class="header-section-number">4.9.2</span> Koalas is the Pandas version of Spark</h3>
+<p>If you are familiar with Pandas, the Koalas module (from Databricks) provides a Pandas-like interface to SparkSQL queries. This way, you don’t have to execute native Spark commands or SparkSQL queries.</p>
+<p>Once you have a Spark DataFrame, you can convert it to a Koalas one by using the <code>.to_koalas()</code> method.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> koalas <span class="im">as</span> ks</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>df_koalas <span class="op">=</span> df.to_koalas()</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Once we have a Koalas DataFrame, we can use <code>.query()</code> much like for a Pandas DataFrame</p>
+</section>
+</section>
+<section id="connecting-with-sparklyr-for-r-users" class="level2" data-number="4.10">
+<h2 data-number="4.10" class="anchored" data-anchor-id="connecting-with-sparklyr-for-r-users"><span class="header-section-number">4.10</span> Connecting with <code>sparklyr</code> (For R Users)</h2>
+<p>You’ll need to install the package <code>sparklyr</code> along with its dependencies to work with the Spark DataFrames directly with R.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>port <span class="ot">&lt;-</span> <span class="fu">Sys.getenv</span>(<span class="st">"SPARK_MASTER_PORT"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>master <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">"spark://master:"</span>, port, <span class="at">sep =</span> <span class="st">''</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">=</span> <span class="fu">spark_connect</span>(master)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>retrieve_sql <span class="ot">&lt;-</span> <span class="st">'select .... from .... '</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">dbGetQuery</span>(sc, retrieve_sql)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./ukb-rap.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Work Effectively on the UK Biobank Research Analysis Platform</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./dx_extract_dataset_R.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><code>dx extract_dataset</code> in R</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
