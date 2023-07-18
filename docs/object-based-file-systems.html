@@ -210,23 +210,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="toc-section-number">1.1</span>  Learning Objectives</a></li>
-  <li><a href="#terminology" id="toc-terminology" class="nav-link" data-scroll-target="#terminology"><span class="toc-section-number">1.2</span>  Terminology</a></li>
-  <li><a href="#review-posix-filesystems" id="toc-review-posix-filesystems" class="nav-link" data-scroll-target="#review-posix-filesystems"><span class="toc-section-number">1.3</span>  Review: POSIX Filesystems</a></li>
-  <li><a href="#object-based-filesystems-are-different" id="toc-object-based-filesystems-are-different" class="nav-link" data-scroll-target="#object-based-filesystems-are-different"><span class="toc-section-number">1.4</span>  Object Based Filesystems are different</a></li>
-  <li><a href="#comparing-posix-and-object-based-file-systems" id="toc-comparing-posix-and-object-based-file-systems" class="nav-link" data-scroll-target="#comparing-posix-and-object-based-file-systems"><span class="toc-section-number">1.5</span>  Comparing POSIX and Object Based File Systems</a></li>
-  <li><a href="#tracing-the-journey-of-a-file-object-onto-the-platform" id="toc-tracing-the-journey-of-a-file-object-onto-the-platform" class="nav-link" data-scroll-target="#tracing-the-journey-of-a-file-object-onto-the-platform"><span class="toc-section-number">1.6</span>  Tracing the journey of a file object onto the platform</a></li>
-  <li><a href="#copying-files-from-one-project-to-another" id="toc-copying-files-from-one-project-to-another" class="nav-link" data-scroll-target="#copying-files-from-one-project-to-another"><span class="toc-section-number">1.7</span>  Copying Files from One Project to Another</a>
+  <li><a href="#who-this-chapter-is-for" id="toc-who-this-chapter-is-for" class="nav-link active" data-scroll-target="#who-this-chapter-is-for"><span class="toc-section-number">1.1</span>  Who This Chapter is For</a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives"><span class="toc-section-number">1.2</span>  Learning Objectives</a></li>
+  <li><a href="#terminology" id="toc-terminology" class="nav-link" data-scroll-target="#terminology"><span class="toc-section-number">1.3</span>  Terminology</a></li>
+  <li><a href="#review-posix-filesystems" id="toc-review-posix-filesystems" class="nav-link" data-scroll-target="#review-posix-filesystems"><span class="toc-section-number">1.4</span>  Review: POSIX Filesystems</a></li>
+  <li><a href="#object-based-filesystems-are-different" id="toc-object-based-filesystems-are-different" class="nav-link" data-scroll-target="#object-based-filesystems-are-different"><span class="toc-section-number">1.5</span>  Object Based Filesystems are different</a></li>
+  <li><a href="#comparing-posix-and-object-based-file-systems" id="toc-comparing-posix-and-object-based-file-systems" class="nav-link" data-scroll-target="#comparing-posix-and-object-based-file-systems"><span class="toc-section-number">1.6</span>  Comparing POSIX and Object Based File Systems</a></li>
+  <li><a href="#tracing-the-journey-of-a-file-object-onto-the-platform" id="toc-tracing-the-journey-of-a-file-object-onto-the-platform" class="nav-link" data-scroll-target="#tracing-the-journey-of-a-file-object-onto-the-platform"><span class="toc-section-number">1.7</span>  Tracing the journey of a file object onto the platform</a></li>
+  <li><a href="#copying-files-from-one-project-to-another" id="toc-copying-files-from-one-project-to-another" class="nav-link" data-scroll-target="#copying-files-from-one-project-to-another"><span class="toc-section-number">1.8</span>  Copying Files from One Project to Another</a>
   <ul class="collapse">
-  <li><a href="#advantages-of-object-based-filesystems" id="toc-advantages-of-object-based-filesystems" class="nav-link" data-scroll-target="#advantages-of-object-based-filesystems"><span class="toc-section-number">1.7.1</span>  Advantages of Object Based Filesystems</a></li>
-  <li><a href="#disadvantages-of-object-based-filesystems" id="toc-disadvantages-of-object-based-filesystems" class="nav-link" data-scroll-target="#disadvantages-of-object-based-filesystems"><span class="toc-section-number">1.7.2</span>  Disadvantages of Object Based Filesystems</a></li>
+  <li><a href="#advantages-of-object-based-filesystems" id="toc-advantages-of-object-based-filesystems" class="nav-link" data-scroll-target="#advantages-of-object-based-filesystems"><span class="toc-section-number">1.8.1</span>  Advantages of Object Based Filesystems</a></li>
+  <li><a href="#disadvantages-of-object-based-filesystems" id="toc-disadvantages-of-object-based-filesystems" class="nav-link" data-scroll-target="#disadvantages-of-object-based-filesystems"><span class="toc-section-number">1.8.2</span>  Disadvantages of Object Based Filesystems</a></li>
   </ul></li>
-  <li><a href="#always-add-project-ids-to-your-file-ids" id="toc-always-add-project-ids-to-your-file-ids" class="nav-link" data-scroll-target="#always-add-project-ids-to-your-file-ids"><span class="toc-section-number">1.8</span>  Always add project IDs to your File IDs</a></li>
-  <li><a href="#batch-tagging" id="toc-batch-tagging" class="nav-link" data-scroll-target="#batch-tagging"><span class="toc-section-number">1.9</span>  Batch Tagging</a></li>
-  <li><a href="#use-case-use-tags-for-archiving" id="toc-use-case-use-tags-for-archiving" class="nav-link" data-scroll-target="#use-case-use-tags-for-archiving"><span class="toc-section-number">1.10</span>  Use Case: Use tags for archiving</a></li>
-  <li><a href="#what-about-dxfuse" id="toc-what-about-dxfuse" class="nav-link" data-scroll-target="#what-about-dxfuse"><span class="toc-section-number">1.11</span>  What about dxFUSE?</a>
+  <li><a href="#always-add-project-ids-to-your-file-ids" id="toc-always-add-project-ids-to-your-file-ids" class="nav-link" data-scroll-target="#always-add-project-ids-to-your-file-ids"><span class="toc-section-number">1.9</span>  Always add project IDs to your File IDs</a></li>
+  <li><a href="#batch-tagging" id="toc-batch-tagging" class="nav-link" data-scroll-target="#batch-tagging"><span class="toc-section-number">1.10</span>  Batch Tagging</a></li>
+  <li><a href="#use-case-use-tags-for-archiving" id="toc-use-case-use-tags-for-archiving" class="nav-link" data-scroll-target="#use-case-use-tags-for-archiving"><span class="toc-section-number">1.11</span>  Use Case: Use tags for archiving</a></li>
+  <li><a href="#what-about-dxfuse" id="toc-what-about-dxfuse" class="nav-link" data-scroll-target="#what-about-dxfuse"><span class="toc-section-number">1.12</span>  What about dxFUSE?</a>
   <ul class="collapse">
-  <li><a href="#dxfuse--limitedwrite" id="toc-dxfuse--limitedwrite" class="nav-link" data-scroll-target="#dxfuse--limitedwrite"><span class="toc-section-number">1.11.1</span>  dxFUSE: <code>-limitedWrite</code></a></li>
+  <li><a href="#dxfuse--limitedwrite" id="toc-dxfuse--limitedwrite" class="nav-link" data-scroll-target="#dxfuse--limitedwrite"><span class="toc-section-number">1.12.1</span>  dxFUSE: <code>-limitedWrite</code></a></li>
   </ul></li>
   </ul>
 </nav>
@@ -252,17 +253,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </header>
 
 <p>Project storage on the DNAnexus platform is <em>object-based</em>. This kind of filesystem is probably very different from other file systems you’ve experienced.</p>
-<section id="learning-objectives" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">1.1</span> Learning Objectives</h2>
-<p>The goal of this chapter is to show how the DNAnexus filesystem is different from your previous experiences, and to highlight ways to work successfully on the platform given this filesystem. Specifically you will be able to:</p>
+<section id="who-this-chapter-is-for" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="who-this-chapter-is-for"><span class="header-section-number">1.1</span> Who This Chapter is For</h2>
+<ul>
+<li>You are a bioinformatician used to working on path-based file systems and you find object based file systems confusing</li>
+<li>You are a data manager or engineer wanting to adapt your data policies to the DNAnexus platform.</li>
+</ul>
+</section>
+<section id="learning-objectives" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">1.2</span> Learning Objectives</h2>
+<p>The goal of this chapter is to show how the DNAnexus filesystem is different from your previous experiences, and to highlight ways to work successfully on the platform given these differences. Specifically you will be able to:</p>
 <ol type="1">
 <li><strong>Compare</strong> and <strong>contrast</strong> differences between object-based file systems and POSIX filesystems</li>
 <li><strong>Explain</strong> the role of metadata and folders in organizing data and outputs</li>
 <li><strong>Tag</strong> and <strong>utilize</strong> tags for selecting files and separating output from multiple jobs.</li>
 </ol>
 </section>
-<section id="terminology" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="terminology"><span class="header-section-number">1.2</span> Terminology</h2>
+<section id="terminology" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="terminology"><span class="header-section-number">1.3</span> Terminology</h2>
+<p>There is a lot of terminology in talking about file systems. Check back here if you’re not sure of the definition of something.</p>
 <ul>
 <li><strong>POSIX</strong> filesystem - What we think of when we think of Linux filesystems. A set of standards that define how files are created and managed. POSIX filesystems have <em>paths</em> and <em>files</em>.</li>
 <li><strong>Data</strong> - The actual file contents. For example, for a CSV file, the actual header and rows correspond to the data.</li>
@@ -272,8 +281,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><strong>Database Engine</strong> - software that allows for rapid searching and retrieving objects.</li>
 </ul>
 </section>
-<section id="review-posix-filesystems" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="review-posix-filesystems"><span class="header-section-number">1.3</span> Review: POSIX Filesystems</h2>
+<section id="review-posix-filesystems" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="review-posix-filesystems"><span class="header-section-number">1.4</span> Review: POSIX Filesystems</h2>
 <p>You may be familiar with <em>POSIX</em> (Portable Operating System Interface) file systems as a way to organize your data in folders. The <em>POSIX</em> standard basically defines the filesystem API so that they will be compatible with other file systems.</p>
 <p>In POSIX filesystems, the main way to find/refer to a file is through its <em>path</em>. What does this mean?</p>
 <p>For example, if my file is called <code>chr1.vcf.gz</code> and it is located in the directory <code>/Geno_Data</code>, we’d refer to it using the <em>full path</em>:</p>
@@ -285,8 +294,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In the same folder. That violates our ability to find a file in the system.</p>
 <p><a href="https://www.computerweekly.com/feature/Posix-vs-object-storage-How-much-longer-for-Posix" class="uri">https://www.computerweekly.com/feature/Posix-vs-object-storage-How-much-longer-for-Posix</a> <a href="https://grimoire.carcano.ch/blog/posix-compliant-filesystems/" class="uri">https://grimoire.carcano.ch/blog/posix-compliant-filesystems/</a></p>
 </section>
-<section id="object-based-filesystems-are-different" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="object-based-filesystems-are-different"><span class="header-section-number">1.4</span> Object Based Filesystems are different</h2>
+<section id="object-based-filesystems-are-different" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="object-based-filesystems-are-different"><span class="header-section-number">1.5</span> Object Based Filesystems are different</h2>
 <p>In contrast, <em>object-based filesystems</em> do not organize data like a POSIX filesystem. Each file object (such as a csv file, or a BAM file) has a unique identifier that identifies the data object. This unique identifier (like <code>file-aagejFHEJSEI</code>) serves as the main pointer to locate the data object, rather than a path. We’ll see that we can define paths and folders for DNAnexus file objects, but they are stored as part of the metadata for file objects.</p>
 <p>File objects also have metadata that can be attached to them. This metadata can be:</p>
 <table class="table">
@@ -336,8 +345,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>I know, this can be very distressing for most people. You can have two objects with the same file name, but they are considered distinct objects because they have unique identifiers.</p>
 <p><a href="https://www.ibm.com/cloud/blog/object-vs-file-vs-block-storage" class="uri">https://www.ibm.com/cloud/blog/object-vs-file-vs-block-storage</a></p>
 </section>
-<section id="comparing-posix-and-object-based-file-systems" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="comparing-posix-and-object-based-file-systems"><span class="header-section-number">1.5</span> Comparing POSIX and Object Based File Systems</h2>
+<section id="comparing-posix-and-object-based-file-systems" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="comparing-posix-and-object-based-file-systems"><span class="header-section-number">1.6</span> Comparing POSIX and Object Based File Systems</h2>
 <table class="table">
 <thead>
 <tr class="header">
@@ -370,8 +379,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 </section>
-<section id="tracing-the-journey-of-a-file-object-onto-the-platform" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="tracing-the-journey-of-a-file-object-onto-the-platform"><span class="header-section-number">1.6</span> Tracing the journey of a file object onto the platform</h2>
+<section id="tracing-the-journey-of-a-file-object-onto-the-platform" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="tracing-the-journey-of-a-file-object-onto-the-platform"><span class="header-section-number">1.7</span> Tracing the journey of a file object onto the platform</h2>
 <p>When a file uploaded, file objects go through three stages before they are available. These stages are:</p>
 <ol type="1">
 <li><strong>Open</strong> - Files are still being transferred via <code>dx upload</code> or the Upload Agent <code>ua</code>.</li>
@@ -400,10 +409,10 @@ archivalState         "live"
 Size                  2.09 MB, sponsored by DNAnexus
 cloudAccount          "cloudaccount-dnanexus"</code></pre>
 </section>
-<section id="copying-files-from-one-project-to-another" class="level2" data-number="1.7">
-<h2 data-number="1.7" class="anchored" data-anchor-id="copying-files-from-one-project-to-another"><span class="header-section-number">1.7</span> Copying Files from One Project to Another</h2>
+<section id="copying-files-from-one-project-to-another" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="copying-files-from-one-project-to-another"><span class="header-section-number">1.8</span> Copying Files from One Project to Another</h2>
 <p>Copying has an important definition on the platform: <em>it means copying a file from one project to another project.</em> It doesn’t refer to duplicating a file within a project.</p>
-<p>When we copy a file from one project to another, a new physical copy is not made. The reference to the original file is copied. The data is identical and points to the same location on the platform, and the metadata is copied to the new project.</p>
+<p>When we copy a file from one project to another, the process doesn’t make a new physical copy. The reference to the original file is copied. The data is identical and points to the same location on the platform, and the metadata is copied to the new project.</p>
 <p>This is quite nice in that you are not doubly charged for storage on the platform. You do have the ability to <a href="https://documentation.dnanexus.com/developer/api/data-containers/cloning#specification">clone files</a> into a different project - if you clone a file, a new physical copy of the data is created.</p>
 <p>Once the metadata is copied into the new project, there is no syncing of the metadata between the two projects. User 1 is free to modify the metadata in Project A (the original project) and changes are not made to the metadata in Project B (the derived project).</p>
 <div class="callout-note callout callout-style-default callout-captioned">
@@ -421,8 +430,8 @@ Regions on the DNAnexus Platform
 <p><a href="https://documentation.dnanexus.com/developer/api/regions" class="uri">https://documentation.dnanexus.com/developer/api/regions</a></p>
 </div>
 </div>
-<section id="advantages-of-object-based-filesystems" class="level3" data-number="1.7.1">
-<h3 data-number="1.7.1" class="anchored" data-anchor-id="advantages-of-object-based-filesystems"><span class="header-section-number">1.7.1</span> Advantages of Object Based Filesystems</h3>
+<section id="advantages-of-object-based-filesystems" class="level3" data-number="1.8.1">
+<h3 data-number="1.8.1" class="anchored" data-anchor-id="advantages-of-object-based-filesystems"><span class="header-section-number">1.8.1</span> Advantages of Object Based Filesystems</h3>
 <p>The DNAnexus platform is only one example of an object-based filesystem. Other examples include Amazon S3 (Simple Storage Service), Microsoft Azure Blob Storage, and Google Cloud Storage.</p>
 <p>Why does the world run on object based filesystems? There are a lot of advantages.</p>
 <ul>
@@ -432,8 +441,8 @@ Regions on the DNAnexus Platform
 <li><strong>File operations are simplified.</strong> Compared to POSIX filesystems, there are only a few <a href="https://www.enterprisestorageforum.com/management/object-storage-vs-posix-storage-something-in-the-middle-please/">object filesystem commands</a>: PUT, GET, DELETE, POST, HEAD.</li>
 </ul>
 </section>
-<section id="disadvantages-of-object-based-filesystems" class="level3" data-number="1.7.2">
-<h3 data-number="1.7.2" class="anchored" data-anchor-id="disadvantages-of-object-based-filesystems"><span class="header-section-number">1.7.2</span> Disadvantages of Object Based Filesystems</h3>
+<section id="disadvantages-of-object-based-filesystems" class="level3" data-number="1.8.2">
+<h3 data-number="1.8.2" class="anchored" data-anchor-id="disadvantages-of-object-based-filesystems"><span class="header-section-number">1.8.2</span> Disadvantages of Object Based Filesystems</h3>
 <p>Coming from folder-based/POSIX filesystems, it can be a bit of a mind-bender getting used to object-based filesystems. Some of the disadvantages of Object Based Filesystems include:</p>
 <ul>
 <li><strong>Objects are immutable</strong>. Once an object is created, you are not able to modify it or edit it in place. If you modify a file on a worker, you can’t overwrite the original file object. A new file object must be created. (If you work with JupyterLab and save a notebook, a new file object is created in the place of the old file object. The old file object persists in a folder called <code>.Notebook_archive</code>.)</li>
@@ -443,8 +452,8 @@ Regions on the DNAnexus Platform
 </ul>
 </section>
 </section>
-<section id="always-add-project-ids-to-your-file-ids" class="level2" data-number="1.8">
-<h2 data-number="1.8" class="anchored" data-anchor-id="always-add-project-ids-to-your-file-ids"><span class="header-section-number">1.8</span> Always add project IDs to your File IDs</h2>
+<section id="always-add-project-ids-to-your-file-ids" class="level2" data-number="1.9">
+<h2 data-number="1.9" class="anchored" data-anchor-id="always-add-project-ids-to-your-file-ids"><span class="header-section-number">1.9</span> Always add project IDs to your File IDs</h2>
 <p>In <a href="https://laderast.github.io/bash_for_bioinformatics/">Bash for Bioinformatics</a>, we already discovered one way of working with files on the platform: <a href="https://laderast.github.io/bash_for_bioinformatics/05-batch-processing.html#sec-dx-find"><code>dx find data</code></a>. This is our main tool for selecting files with metadata.</p>
 <p>When we work with files outside of our current project, we might reference it by a file-id. Using file IDs by themselves are a global operation and we need to be careful when we use this!</p>
 <p>Why is this so? There is a search tree when we use a file ID that is not in our project and without a project context. <a href="https://documentation.dnanexus.com/user/projects/path-resolution">The search over metadata</a> is looking for a file object based on just file ID.</p>
@@ -456,8 +465,8 @@ Regions on the DNAnexus Platform
 <p>The lesson here is <strong>when using file-ids, it is safer to put the project-id in front of your file id such as below</strong>:</p>
 <pre><code>project-XXXXX:file-YYYYYYYYY</code></pre>
 </section>
-<section id="batch-tagging" class="level2" data-number="1.9">
-<h2 data-number="1.9" class="anchored" data-anchor-id="batch-tagging"><span class="header-section-number">1.9</span> Batch Tagging</h2>
+<section id="batch-tagging" class="level2" data-number="1.10">
+<h2 data-number="1.10" class="anchored" data-anchor-id="batch-tagging"><span class="header-section-number">1.10</span> Batch Tagging</h2>
 <p>So, we need to tag files. Remember, we can leverage <code>xargs</code> for tagging multiple files. In this example, we pipe the output of <code>dx find data</code> into <code>xargs</code> to batch tag them.</p>
 <div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">dx</span> find data <span class="at">--name</span> <span class="st">"*.bam"</span> <span class="at">--brief</span> <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-I%</span> sh <span class="at">-c</span> <span class="st">"dx tag % 'bam'"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -474,22 +483,22 @@ project-GJ496B00FZfxPV5VG36FybvY:file-FpQKQk00FgkGV3Vb3jJ8xqGV
 </code></pre>
 <p>Using the <code>dx find data/xargs/dx tag</code> combination with various input parameters to <code>dx find data</code> such as <code>--name</code>, <code>--created-before</code>, <code>--created-after</code>, <code>--class</code>, will help us to batch tag files and other objects on the platform.</p>
 </section>
-<section id="use-case-use-tags-for-archiving" class="level2" data-number="1.10">
-<h2 data-number="1.10" class="anchored" data-anchor-id="use-case-use-tags-for-archiving"><span class="header-section-number">1.10</span> Use Case: Use tags for archiving</h2>
+<section id="use-case-use-tags-for-archiving" class="level2" data-number="1.11">
+<h2 data-number="1.11" class="anchored" data-anchor-id="use-case-use-tags-for-archiving"><span class="header-section-number">1.11</span> Use Case: Use tags for archiving</h2>
 <p>Let’s do something concrete and useful in our project: tag files we no longer need for archiving.</p>
 <p>Say there are files we want to archive. We can use <code>dx tag</code> or the DNAnexus UI to tag these files with a specific tag, such as <code>to_archive</code>. This can be done by users.</p>
 <p>An administrator can then run a monthly job that archives the files with these tags using <code>dx api &lt;project-id&gt; archive --tag to_archive</code>.</p>
 </section>
-<section id="what-about-dxfuse" class="level2" data-number="1.11">
-<h2 data-number="1.11" class="anchored" data-anchor-id="what-about-dxfuse"><span class="header-section-number">1.11</span> What about dxFUSE?</h2>
+<section id="what-about-dxfuse" class="level2" data-number="1.12">
+<h2 data-number="1.12" class="anchored" data-anchor-id="what-about-dxfuse"><span class="header-section-number">1.12</span> What about dxFUSE?</h2>
 <p>(See <a href="https://laderast.github.io/bash_for_bioinformatics/04-doing-work-with-dx-run.html#sec-dxfuse">Bash for Bioinformatics</a> for a introduction to dxFUSE.)</p>
 <p>You might ask about the role of <a href="https://github.com/dnanexus/dxfuse">dxFUSE</a> with the Object Based Filesystem.</p>
 <p>In short, dxFUSE makes the Object Based Filesystem of DNAnexus act like a POSIX filesystem. Specifically, if there are multiple objects with the same name within a folder, it provides a way to <a href="https://github.com/dnanexus/dxfuse">specify these objects using file paths</a>.</p>
 <p>One important thing to remember: dxFUSE is only mounted once when you start the JupyterLab App. You will have to use the <code>dxfuse</code> command to remount it to see any files you’ve added to project storage after opening JupyterLab.</p>
 <pre><code>dxfuse -</code></pre>
-<section id="dxfuse--limitedwrite" class="level3" data-number="1.11.1">
-<h3 data-number="1.11.1" class="anchored" data-anchor-id="dxfuse--limitedwrite"><span class="header-section-number">1.11.1</span> dxFUSE: <code>-limitedWrite</code></h3>
-<p>For the most part, dxFUSE is read-only from project storage. However, it has a <code>-limitedWrite</code> option that is mostly used from writing from Spark into project storage.</p>
+<section id="dxfuse--limitedwrite" class="level3" data-number="1.12.1">
+<h3 data-number="1.12.1" class="anchored" data-anchor-id="dxfuse--limitedwrite"><span class="header-section-number">1.12.1</span> dxFUSE: <code>-limitedWrite</code></h3>
+<p>For the most part, dxFUSE is read-only from project storage. However, it has a <code>-limitedWrite</code> option that is mostly used from writing from the Hadoop File System (HDFS) on a Spark Cluster into project storage.</p>
 <pre><code>dxfuse -limitedWrite</code></pre>
 <p>Once you have remounted with <code>-limitedWrite</code>, you’ll be able to specify <code>file:///mnt/project</code> urls in your <code>.write()</code> command. This is especially useful when calculating and saving BGEN Index files.</p>
 

@@ -2,9 +2,14 @@
 
 Project storage on the DNAnexus platform is *object-based*. This kind of filesystem is probably very different from other file systems you've experienced.
 
+## Who This Chapter is For
+
+- You are a bioinformatician used to working on path-based file systems and you find object based file systems confusing
+- You are a data manager or engineer wanting to adapt your data policies to the DNAnexus platform. 
+
 ## Learning Objectives
 
-The goal of this chapter is to show how the DNAnexus filesystem is different from your previous experiences, and to highlight ways to work successfully on the platform given this filesystem. Specifically you will be able to:
+The goal of this chapter is to show how the DNAnexus filesystem is different from your previous experiences, and to highlight ways to work successfully on the platform given these differences. Specifically you will be able to:
 
 1. **Compare** and **contrast** differences between object-based file systems and POSIX filesystems
 1. **Explain** the role of metadata and folders in organizing data and outputs
@@ -12,6 +17,8 @@ The goal of this chapter is to show how the DNAnexus filesystem is different fro
 
 
 ## Terminology
+
+There is a lot of terminology in talking about file systems. Check back here if you're not sure of the definition of something.
 
 - **POSIX** filesystem - What we think of when we think of Linux filesystems. A set of standards that define how files are created and managed. POSIX filesystems have *paths* and *files*.
 - **Data** - The actual file contents. For example, for a CSV file, the actual header and rows correspond to the data.
