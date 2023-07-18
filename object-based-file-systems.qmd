@@ -56,11 +56,11 @@ File objects also have metadata that can be attached to them. This metadata can 
 |Metadata Type|Example|Code Example|
 |-------|----------------------|---|
 |ID|`project-XXXXX:file-YYYYYY`|`dx mv file-YYYY raw_data/`| 
-|name|`chr1.tar.gz`|`dx find data --name chr1.tar.gz`
-|Path|`/raw_data/chr1.tar.gz`|
-|Creation Date||
-|Tags|`report`, `run1`|
-|Properties|`eid = 1153xxx`|
+|name|`chr1.tar.gz`|`dx find data --name chr1.tar.gz`|
+|Path|`/raw_data/chr1.tar.gz`|`dx find data --path /raw_data/`|
+|Creation Date|`2021-12-01`|`dx find data --created-after 2021-12-01`|
+|Tags|`report`, `run1`|`dx tag file-xxxxxx report`|
+|Properties|`eid = 1153xxx`|`dx find data --property eid=1153xxx`|
 
 On the DNAnexus platform, both the *filename* and its path are considered **metadata**. This *metadata* is considered as part of the object, along with the *data* portion of the object. 
 
@@ -79,7 +79,7 @@ I know, this can be very distressing for most people. You can have two objects w
 |File ID|Represented by Full Path|Represented by Object ID|
 |Storage|Data with limited metadata|Metadata+Data|
 |Path/Filename|Must be Unique|Can be duplicated|
-|Metadata|Limited|Rich, can be freely modified|
+|Metadata|Limited|Rich, can be freely modified after creation|
 
 
 ## Tracing the journey of a file object onto the platform
@@ -118,7 +118,7 @@ cloudAccount          "cloudaccount-dnanexus"
 
 Copying has an important definition on the platform: *it means copying a file from one project to another project.* It doesn't refer to duplicating a file within a project.
 
-When we copy a file from one project to another, a new physical copy is not made. The reference to the original file is copied. The data is identical and points to the same location on the platform, and the metadata is copied to the new project.
+When we copy a file from one project to another, the process doesn't make a new physical copy. The reference to the original file is copied. The data is identical and points to the same location on the platform, and the metadata is copied to the new project.
 
 This is quite nice in that you are not doubly charged for storage on the platform. You do have the ability to [clone files](https://documentation.dnanexus.com/developer/api/data-containers/cloning#specification) into a different project - if you clone a file, a new physical copy of the data is created.  
 
@@ -229,12 +229,10 @@ dxfuse -
 
 ### dxFUSE: `-limitedWrite`
 
-For the most part, dxFUSE is read-only from project storage. However, it has a `-limitedWrite` option that is mostly used from writing from Spark into project storage.
+For the most part, dxFUSE is read-only from project storage. However, it has a `-limitedWrite` option that is mostly used from writing from the Hadoop File System (HDFS) on a Spark Cluster into project storage.
 
 ```
 dxfuse -limitedWrite
 ```
 
 Once you have remounted with `-limitedWrite`, you'll be able to specify `file:///mnt/project` urls in your `.write()` command. This is especially useful when calculating and saving BGEN Index files.
-
-

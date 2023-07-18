@@ -32,7 +32,7 @@ Here are the main differences with UK Biobank and the Core DNAnexus Platform.
 1. On UKB RAP, you are limited to sharing projects within your own application ID. All billing information is attached to the application ID, rather than to an organization.
 1. On UKB RAP, data is *dispensed* when requested at project creation or refresh. This is both the pheno data (the `dataset`) and the Bulk, or file based data.
 1. On UKB RAP, The participant identifiers (`eid`s) are different across applications because of the psuedonymization process.
-1. On UKB RAP, there is a `Bulk/` File Folder that contains many of the files you want to analyze.
+1. On UKB RAP, there is a `Bulk/` File Folder that contains many of the files you want to analyze. This includes pVCF files, but also metabolomics data, imaging data, accelerometer data, and proteomics data, as well.
 
 :::{.callout-note}
 ## Don't forget about UK Biobank Community!
@@ -47,6 +47,7 @@ Just know that you're part of a huge group of researchers who are learning to us
 When you [file an access application with UK Biobank](https://dnanexus.gitbook.io/uk-biobank-rap/frequently-asked-questions#what-is-an-access-application), you need to supply a list of fields that you will use in your research.  
 
 ![UKB Application Process](images/ukb_application.png)
+
 ## Data Dispensal
 
 The [data dispensal process](https://dnanexus.gitbook.io/uk-biobank-rap/getting-started/creating-a-project#dispensing-data) begins when you create a RAP project within your application ID. When you request data to be dispensed, it may take 20 minutes to several hours for the data to appear in your project, depending on the data fields you have requested in your application.
@@ -229,33 +230,58 @@ For working in your project:
 1. Run `renv::snapshot()` in your RStudio project.
 1. Use the `dx-toolkit` snapshot functionality in `dx-toolkit` to save (`dx backup-folder`) your project into RAP Storage. (`dx-backup-folder -d /.Backups/my_project.tar.gz`)
 
+For example, in an RStudio Project we can run this command in the terminal:
+
 ```
 dx-backup-folder -d /.Backups/rstudio_test_project.tar.gz
 ```
+
+In this command, we're backing up the current RStudio Project folder into a file called `/.Backups/rstudio_test_project.tar.gz`  on RAP storage. We're using the `-d` (destination) option to do this. This will give us the following response:
 
 ```
 Folder . was successfully saved to /.Backups/rstudio_test_project.tar.gz ( file-GBFf5vQJ9Zz93fGk0X8pV2Bf )
 ```
 
-To resume a project:
+To resume an RStudio project:
 
-1. To resume your work, restore (`dx restore-folder`) your project from RAP Storage.
+1. To resume your work, restore (`dx restore-folder`) your RStudio project from RAP Storage.
+1. Open up the `.rproj` file in RStudio to resume your RStudio project.
 1. To install more packages, use `renv::activate()`, `install.packages()`, and then `renv::snapshot()`. 
 1. Use `dx backup-folder` to save your work.
 
 
+For example, we can use this command in our terminal to expand our `my_project.tar.gz` into a project folder called `my_project`:
+
 ```
-dx-restore-folder my_project.tar.gz -d my_project
+dx-restore-folder /.Backups/my_project.tar.gz -d my_project
 ```
+
+Once we click on the `.rproj` folder in our project, we can resume our work.
+
+If we want to add new packages, we can run the following in the RStudio console:
+
+```
+renv::activate()
+```
+
+Then we can `install.packages()` as usual. 
+
+Then we do our work, and then when we're done, we'll use:
+
+````
+renv::snapshot()
+```
+
+to save our packages into our Project. Then we can use `dx-backup-folder` as usual.
 
 :::{.callout-note}
 ## What is `renv`?
 
-`renv` is a R Package that implements virtual environments for your RStudio project. 
+[`renv`](https://rstudio.github.io/renv/articles/renv.html) is a R Package that implements virtual environments for your RStudio project. 
 
 In short, a virtual environment allows you to completely reproduce the **software environment** (all the packages with their version numbers) in your project. 
 
-Each RStudio Project has its own library of packages. This is also handy in that you can work with multiple projects that each have their own version of a package.
+How does `renv` work? Each RStudio Project has its own library of packages, which is modified as you install packages in your project. This is also handy in that you can work with multiple projects that each have their own version of a package.
 :::
 
 
