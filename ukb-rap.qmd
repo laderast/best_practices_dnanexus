@@ -2,10 +2,10 @@
 
 ## Who This Chapter is For
 
-- You are a bioinformatician who wants to run pipelines or custom software on the UK Biobank data. 
-- You are a data scientist or epidemiologist and you want to run analyses in RStudio on UKB RAP.
-- You are a bioinformatician or data scientist who wants to work in Jupyter notebooks using JupyterLab on UKB RAP.
-- You want to explore the UKB Data using the Cohort Browser platform on UKB RAP. 
+- You are a *bioinformatician* who wants to *run pipelines* or *custom software* on the UK Biobank data. 
+- You are a *data scientist* or *epidemiologist* and you want to run analyses in RStudio on UKB RAP on either the pheno data or other data fields.
+- You are a *bioinformatician* or *data scientist* who wants to work in Jupyter notebooks using JupyterLab on UKB RAP.
+- You *want to explore* the UKB Pheno Data using the Cohort Browser platform on UKB RAP. 
 
 ## Introduction
 

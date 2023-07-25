@@ -5,7 +5,7 @@ Successful project management at scale on the DNAnexus platform does require pla
 ## Who this Chapter is For
 
 - You are an administrator or executive at your organization looking for a high-level strategy for managing data and projects on the DNAnexus platform
-- You are an administrator or data engineer who wants specific tips on organizing data on the DNAnexus platform
+- You are an administrator or data engineer who wants specific tips or strategies on organizing data on the DNAnexus platform for your organization. 
 
 ## Learning Objectives
 

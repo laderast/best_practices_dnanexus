@@ -1,0 +1,73 @@
+---
+title: "UK Biobank Cheatsheet"
+---
+
+
+
+## Learning Path: Administrator
+
+Goals: 
+- Set up a UKB Project for your organization. 
+- Apply for data access fields. 
+- Manage members in your project. 
+- Redispense data into your project when data is refreshed. 
+
+
+|Resource|Type|
+|--------|----|
+|Cloud Computing For Scientists|Webinar|
+|UKB RAP Doc: Accessing the Research Analysis Platform|Documentation|
+|UKB RAP Documentation: Creating a Project|Documentation|
+|UKB RAP Doc: Updating Dispensed Data|Documentation|
+|UKB RAP Doc: UK Biobank data on RAP|Documentation|
+|Bash for Bioinformatics: Cloud Computing|Book Chapter|
+|UKB Overview|Webinar|
+
+## Learning Path: Clinician
+
+Goals: 
+- Assess and validate cohort definitions built within Cohort Browser. 
+- Compare and visualize differences in phenotype covariates between cohorts
+
+|Resource|Type|Why it's Useful|
+|--------|----|---------------|
+|Cloud Computing For Scientists|Webinar|
+|Bash for Bioinformatics: Cloud Computing|Book Chapter|
+|UKB Overview|Webinar|
+
+## Learning Path: Epidemiologist/Statistician
+
+Goals: 
+- Assess cohorts and conduct statistical analysis on Phenotype Data. 
+- Build cohorts with cohort browser for assessment by clinician and further validation. 
+- Run Analysis in a JupyterLab notebook with R, Python or Stata using phenotypic data. 
+- Use RStudio on the platform.
+
+|Resource|Type|Why it's Useful|
+|--------|----|---------------|
+|Bash for Bioinformatics: Cloud Computing|Book Chapter|
+|JupyterLab Part 1|||
+|JupyterLab Part 2||
+|Analyzing Data with RStudio|Webinar||
+
+
+## Learning Path: Bioinformatician
+
+Goals: Need to get familiar with adapting HPC skills for running cloud-based jobs. Leverage genomic data in downstream analysis. Run existing workflows on data in UKB RAP storage in a project. Conduct GWAS analysis in Hail or Regenie given the stored genotype data. 
+
+|Resource|Type|Why it's Useful|
+|--------|----|---------------|
+|Cloud Computing For HPC Users|Webinar||
+|UKB Overview|Webinar||
+|Bash for Bioinformatics|Online Book|Contains recipes for automating processes on UKB RAP using bash and the CLI|
+|GWAS Guide|Online Guide|Using the already built Regenie app on the platform for GWAS|
+|GWAS using Swiss Army Knife and the dx-toolkit|Online Guide|Preparing Geno/Pheno Data on RAP|
+
+## Learning Path: Machine Learning Engineer
+
+Goals: Integrate already processed genotype/phenotype data to build and deploy statistical or machine learning models.
+
+|Resource|Type|Why it's Useful For You|
+|--------|----|---------------|
+|Cloud Computing For HPC Users|Webinar|Translate your skills in running HPC jobs to UKB RAP|
+|||
