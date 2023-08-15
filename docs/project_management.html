@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.335">
+<meta name="generator" content="quarto-1.3.433">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -17,7 +17,7 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
 </style>
@@ -57,7 +57,8 @@ ul.task-list li input[type="checkbox"] {
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script src="site_libs/quarto-diagram/mermaid.min.js"></script>
@@ -71,11 +72,16 @@ ul.task-list li input[type="checkbox"] {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Project and File Management</span></h1>
-      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
-        <i class="bi bi-chevron-right"></i>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./project_management.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Project and File Management</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
       </button>
     </div>
   </nav>
@@ -83,90 +89,100 @@ ul.task-list li input[type="checkbox"] {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Best Practices on the DNAnexus Platform</a> 
     </div>
       </div>
-      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
         </div>
-      </div>
+        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./object-based-file-systems.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Object Based File Systems</span></a>
+  <a href="./object-based-file-systems.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Object Based File Systems</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./project_management.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Project and File Management</span></a>
+  <a href="./project_management.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Project and File Management</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ukb-rap.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Work Effectively on the UK Biobank Research Analysis Platform (UKB RAP)</span></a>
+  <a href="./ukb-rap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Work Effectively on the UK Biobank Research Analysis Platform (UKB RAP)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./spark-on-dnanexus.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Spark on the DNAnexus Platform</span></a>
+  <a href="./spark-on-dnanexus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Spark on the DNAnexus Platform</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./dx_extract_dataset_R.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><code>dx extract_dataset</code> in R</span></a>
+  <a href="./dx_extract_dataset_R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title"><code>dx extract_dataset</code> in R</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./hail-skills.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Hail Skills and Concepts</span></a>
+  <a href="./hail-skills.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Hail Skills and Concepts</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./hail-gwas.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">GWAS using Hail</span></a>
+  <a href="./hail-gwas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">GWAS using Hail</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
   </div>
 </li>
     </ul>
     </div>
 </nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#who-this-chapter-is-for" id="toc-who-this-chapter-is-for" class="nav-link active" data-scroll-target="#who-this-chapter-is-for"><span class="toc-section-number">2.1</span>  Who this Chapter is For</a></li>
-  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives"><span class="toc-section-number">2.2</span>  Learning Objectives</a></li>
-  <li><a href="#checklist-for-successful-project-management" id="toc-checklist-for-successful-project-management" class="nav-link" data-scroll-target="#checklist-for-successful-project-management"><span class="toc-section-number">2.3</span>  Checklist for Successful Project Management</a></li>
-  <li><a href="#starting-point-the-organization-or-org" id="toc-starting-point-the-organization-or-org" class="nav-link" data-scroll-target="#starting-point-the-organization-or-org"><span class="toc-section-number">2.4</span>  Starting Point: the Organization (or Org)</a></li>
-  <li><a href="#org-owned-projects" id="toc-org-owned-projects" class="nav-link" data-scroll-target="#org-owned-projects"><span class="toc-section-number">2.5</span>  Org-owned projects</a></li>
-  <li><a href="#a-base-project-a-data-project-for-all-your-orgs-data" id="toc-a-base-project-a-data-project-for-all-your-orgs-data" class="nav-link" data-scroll-target="#a-base-project-a-data-project-for-all-your-orgs-data"><span class="toc-section-number">2.6</span>  A Base Project: A Data Project for All Your Org’s Data</a></li>
-  <li><a href="#uploading-batch-files-with-the-upload-agent" id="toc-uploading-batch-files-with-the-upload-agent" class="nav-link" data-scroll-target="#uploading-batch-files-with-the-upload-agent"><span class="toc-section-number">2.7</span>  Uploading Batch Files with the Upload Agent</a></li>
-  <li><a href="#copying-files-from-one-project-to-another" id="toc-copying-files-from-one-project-to-another" class="nav-link" data-scroll-target="#copying-files-from-one-project-to-another"><span class="toc-section-number">2.8</span>  Copying Files from One Project to Another</a></li>
-  <li><a href="#full-diagram" id="toc-full-diagram" class="nav-link" data-scroll-target="#full-diagram"><span class="toc-section-number">2.9</span>  Full Diagram</a></li>
-  <li><a href="#some-rules-of-thumb-for-data-files-in-a-project" id="toc-some-rules-of-thumb-for-data-files-in-a-project" class="nav-link" data-scroll-target="#some-rules-of-thumb-for-data-files-in-a-project"><span class="toc-section-number">2.10</span>  Some Rules of Thumb for Data Files in a Project</a></li>
-  <li><a href="#project-administration" id="toc-project-administration" class="nav-link" data-scroll-target="#project-administration"><span class="toc-section-number">3</span>  Project Administration</a>
+  <li><a href="#who-this-chapter-is-for" id="toc-who-this-chapter-is-for" class="nav-link active" data-scroll-target="#who-this-chapter-is-for"><span class="header-section-number">2.1</span> Who this Chapter is For</a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives"><span class="header-section-number">2.2</span> Learning Objectives</a></li>
+  <li><a href="#checklist-for-successful-project-management" id="toc-checklist-for-successful-project-management" class="nav-link" data-scroll-target="#checklist-for-successful-project-management"><span class="header-section-number">2.3</span> Checklist for Successful Project Management</a></li>
+  <li><a href="#starting-point-the-organization-or-org" id="toc-starting-point-the-organization-or-org" class="nav-link" data-scroll-target="#starting-point-the-organization-or-org"><span class="header-section-number">2.4</span> Starting Point: the Organization (or Org)</a></li>
+  <li><a href="#org-owned-projects" id="toc-org-owned-projects" class="nav-link" data-scroll-target="#org-owned-projects"><span class="header-section-number">2.5</span> Org-owned projects</a></li>
+  <li><a href="#a-base-project-a-data-project-for-all-your-orgs-data" id="toc-a-base-project-a-data-project-for-all-your-orgs-data" class="nav-link" data-scroll-target="#a-base-project-a-data-project-for-all-your-orgs-data"><span class="header-section-number">2.6</span> A Base Project: A Data Project for All Your Org’s Data</a></li>
+  <li><a href="#uploading-batch-files-with-the-upload-agent" id="toc-uploading-batch-files-with-the-upload-agent" class="nav-link" data-scroll-target="#uploading-batch-files-with-the-upload-agent"><span class="header-section-number">2.7</span> Uploading Batch Files with the Upload Agent</a></li>
+  <li><a href="#copying-files-from-one-project-to-another" id="toc-copying-files-from-one-project-to-another" class="nav-link" data-scroll-target="#copying-files-from-one-project-to-another"><span class="header-section-number">2.8</span> Copying Files from One Project to Another</a></li>
+  <li><a href="#full-diagram" id="toc-full-diagram" class="nav-link" data-scroll-target="#full-diagram"><span class="header-section-number">2.9</span> Full Diagram</a></li>
+  <li><a href="#some-rules-of-thumb-for-data-files-in-a-project" id="toc-some-rules-of-thumb-for-data-files-in-a-project" class="nav-link" data-scroll-target="#some-rules-of-thumb-for-data-files-in-a-project"><span class="header-section-number">2.10</span> Some Rules of Thumb for Data Files in a Project</a></li>
+  <li><a href="#project-administration" id="toc-project-administration" class="nav-link" data-scroll-target="#project-administration"><span class="header-section-number">3</span> Project Administration</a>
   <ul class="collapse">
-  <li><a href="#project-level-roles" id="toc-project-level-roles" class="nav-link" data-scroll-target="#project-level-roles"><span class="toc-section-number">3.1</span>  Project Level Roles</a></li>
-  <li><a href="#a-suggested-project-structure" id="toc-a-suggested-project-structure" class="nav-link" data-scroll-target="#a-suggested-project-structure"><span class="toc-section-number">3.2</span>  A Suggested Project Structure</a></li>
-  <li><a href="#tags-know-them-love-them-use-them" id="toc-tags-know-them-love-them-use-them" class="nav-link" data-scroll-target="#tags-know-them-love-them-use-them"><span class="toc-section-number">3.3</span>  Tags: Know Them, Love Them, Use Them</a></li>
-  <li><a href="#dx-tag" id="toc-dx-tag" class="nav-link" data-scroll-target="#dx-tag"><span class="toc-section-number">3.4</span>  <code>dx tag</code></a></li>
-  <li><a href="#always-add-a-project-context-to-your-file-ids" id="toc-always-add-a-project-context-to-your-file-ids" class="nav-link" data-scroll-target="#always-add-a-project-context-to-your-file-ids"><span class="toc-section-number">3.5</span>  Always Add a Project Context to your File IDs</a></li>
+  <li><a href="#project-level-roles" id="toc-project-level-roles" class="nav-link" data-scroll-target="#project-level-roles"><span class="header-section-number">3.1</span> Project Level Roles</a></li>
+  <li><a href="#a-suggested-project-structure" id="toc-a-suggested-project-structure" class="nav-link" data-scroll-target="#a-suggested-project-structure"><span class="header-section-number">3.2</span> A Suggested Project Structure</a></li>
+  <li><a href="#tags-know-them-love-them-use-them" id="toc-tags-know-them-love-them-use-them" class="nav-link" data-scroll-target="#tags-know-them-love-them-use-them"><span class="header-section-number">3.3</span> Tags: Know Them, Love Them, Use Them</a></li>
+  <li><a href="#dx-tag" id="toc-dx-tag" class="nav-link" data-scroll-target="#dx-tag"><span class="header-section-number">3.4</span> <code>dx tag</code></a></li>
+  <li><a href="#always-add-a-project-context-to-your-file-ids" id="toc-always-add-a-project-context-to-your-file-ids" class="nav-link" data-scroll-target="#always-add-a-project-context-to-your-file-ids"><span class="header-section-number">3.5</span> Always Add a Project Context to your File IDs</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -176,7 +192,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Project and File Management</span></h1>
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Project and File Management</span></h1>
 </div>
 
 
@@ -271,12 +287,12 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </tbody>
 </table>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Org/Project Terminology
 </div>
 </div>
@@ -313,12 +329,12 @@ Org/Project Terminology
 <h2 data-number="2.5" class="anchored" data-anchor-id="org-owned-projects"><span class="header-section-number">2.5</span> Org-owned projects</h2>
 <p>In general, you will want to create projects within your org. This can be done by the org administrators. This simplifies billing for both file storage and compute.</p>
 <p>Users can also create their own projects, but if they want to tie their project to the org’s billing, they will need to transfer ownership to the organization.</p>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 PHI, Projects, and Orgs
 </div>
 </div>
@@ -337,22 +353,19 @@ PHI, Projects, and Orgs
 <div class="cell">
 <div class="cell-output-display">
 <div>
-<p>
-</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-1">flowchart LR
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
   A(Admin) -- manages--&gt; B[Base Project\ncontains all\ndata]
   B --Dispensed\nby Admin--&gt;C[Project A]
   B --Dispensed\nby Admin--&gt;D[Project B]
   B --Dispensed\nby Admin--&gt;E[Project C]
   F(Uploader) --Uploads Data --&gt; B
 </pre>
-<div id="mermaid-tooltip-1" class="mermaidTooltip">
-
-</div>
-<p></p>
 </div>
 </div>
 </div>
-<p></p><figcaption class="figure-caption">Figure&nbsp;2.1: Using a base project to manage your Org’s data. All other projects will be derived from this base project.</figcaption><p></p>
+</div>
+<figcaption class="figure-caption">Figure&nbsp;2.1: Using a base project to manage your Org’s data. All other projects will be derived from this base project.</figcaption>
 </figure>
 </div>
 <p>One strategy for administering projects within your organization is to have a base project that contains all of your data (<a href="#fig-base-project">Figure&nbsp;<span>2.1</span></a>). Tagging incoming data as they are uploaded can simplify project management. Then using these tags, you can copy the relevant data files to your separate projects.</p>
@@ -373,12 +386,12 @@ PHI, Projects, and Orgs
 <p>Copying has very specific definition on the DNAnexus platform: <strong>it means copying a file from one project to another project.</strong> Copying doesn’t refer to duplicating a file within a project. You may be used to creating aliases or symbolic links within a project.</p>
 <p>When we copy a file from one project to another, a new physical copy is not made. The reference to the original file is copied. The data is identical and points to the same location on the platform, and the metadata is copied to the new project.</p>
 <p>This is quite nice in that you are not doubly charged for storage on the platform within your org. You do have the ability to <a href="https://documentation.dnanexus.com/developer/api/data-containers/cloning#specification">clone files</a> into a different project - that way a new physical copy of the data is created.</p>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 A Metadata Multiverse
 </div>
 </div>
@@ -389,12 +402,12 @@ A Metadata Multiverse
 <p>Regardless, the underlying file id for the file object will remain the same.</p>
 </div>
 </div>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Will I still be charged?
 </div>
 </div>
@@ -410,8 +423,8 @@ Will I still be charged?
 <div class="cell">
 <div class="cell-output-display">
 <div>
-<p>
-</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-2">flowchart LR
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
   A(Admin) -- manages--&gt; B[Base Project\ncontains all\ndata]
   B --Dispensed\nby Admin--&gt;C[Project A]
   B --Dispensed\nby Admin--&gt;D[Project B]
@@ -420,10 +433,7 @@ Will I still be charged?
   D --admin--&gt;G
   E --contributor--&gt;H(Person 2)
 </pre>
-<div id="mermaid-tooltip-2" class="mermaidTooltip">
-
 </div>
-<p></p>
 </div>
 </div>
 </div>
@@ -432,12 +442,12 @@ Will I still be charged?
 <h2 data-number="2.10" class="anchored" data-anchor-id="some-rules-of-thumb-for-data-files-in-a-project"><span class="header-section-number">2.10</span> Some Rules of Thumb for Data Files in a Project</h2>
 <p>Given this structure, you will want to avoid having too many files within a project.</p>
 <p>A good rule of thumb is to shoot for around 10,000 objects total in a project. Going larger than this may impact the speed of your file searches.</p>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Destructive Processes on the DNAnexus platform
 </div>
 </div>
@@ -462,8 +472,8 @@ Destructive Processes on the DNAnexus platform
 <div class="cell">
 <div class="cell-output-display">
 <div>
-<p>
-</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-3">flowchart LR
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
   B[Base Project\ncontains all data] --Dispensed\nby Admin--&gt;C[Project A]
   B --Dispensed\nby Admin--&gt;D[Project B]
   B --Dispensed\nby Admin--&gt;E[Project C]
@@ -471,14 +481,11 @@ Destructive Processes on the DNAnexus platform
   D ---|admin|G
   E ---|contributor|H(Person 2)
 </pre>
-<div id="mermaid-tooltip-3" class="mermaidTooltip">
-
-</div>
-<p></p>
 </div>
 </div>
 </div>
-<p></p><figcaption class="figure-caption">Figure&nbsp;3.1: Possible roles within a project include <em>Admin</em>, <em>Contributor</em>, <em>Uploader</em>, and <em>Viewer</em>.</figcaption><p></p>
+</div>
+<figcaption class="figure-caption">Figure&nbsp;3.1: Possible roles within a project include <em>Admin</em>, <em>Contributor</em>, <em>Uploader</em>, and <em>Viewer</em>.</figcaption>
 </figure>
 </div>
 <p>There are multiple roles that can be assigned to members of a project. In order of access (with each role inheriting privileges of the ones above):</p>
@@ -585,9 +592,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -652,6 +673,92 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {

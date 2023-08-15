@@ -148,7 +148,9 @@ flowchart TD
 :::{.callout-note}
 ## Accessing Spark Databases on DNAnexus
 
-One issue I see a lot of people get tripped up with is with Database Access. One thing to know is that *Spark databases cannot be moved from project to project*. Once the data is ingested into a database object, it can't be copied to a new project.
+One issue I see a lot of people get tripped up with is with Database Access. One thing to know is that *Spark databases cannot be moved from project to project using the UI*. Once the data is ingested into a database object, it can't be copied to a new project. 
+
+You can use the `dx api` command: `dx api database-XXXXXX relocate '{"project": "project-YYYYY"}'` to relocate the database into another project. I don't recommend doing this unless you know what you are doing, especially when it comes to DNAnexus Datasets that connect to the individual databases.
 
 **For a user to access the data in a Spark Database, they must have at least VIEW level access to the project that contains it on the platform.** This includes anyone who is utilizing your database/dataset in Cohort Browser.
 
