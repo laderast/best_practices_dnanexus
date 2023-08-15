@@ -468,7 +468,7 @@ Spark Cluster JupyterLab vs.&nbsp;Spark Apps
 <h2 data-number="4.6" class="anchored" data-anchor-id="the-spark-ui"><span class="header-section-number">4.6</span> The Spark UI</h2>
 <p>When you start up Spark JupyterLab, you will see that it will open at a particular url which has the format <code>https://JOB-ID.dnanexus.com</code>. To open the Spark UI, use that same URL, but with a <code>:8081</code> at the end of it. For example, the UI url would be <code>https://JOB-ID.dnanexus.com:8081</code>.</p>
 <p>Note that the Spark UI is not launched until you connect to Spark or Hail.</p>
-<p>The Spark UI is really helpful in understanding how Spark translates a series of operations into a Plan, and how it executes that plan.</p>
+<p>The Spark UI is really helpful in understanding how Spark translates a series of operations into a Plan, and how it executes that plan. Certain operations must be carried out on the entire partitioned dataset, so will take more individual tasks to accomplish.</p>
 </section>
 <section id="spark-and-lazy-evaluation" class="level2" data-number="4.7">
 <h2 data-number="4.7" class="anchored" data-anchor-id="spark-and-lazy-evaluation"><span class="header-section-number">4.7</span> Spark and Lazy Evaluation</h2>
@@ -517,7 +517,7 @@ Spark Cluster JupyterLab vs.&nbsp;Spark Apps
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> koalas <span class="im">as</span> ks</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>df_koalas <span class="op">=</span> df.to_koalas()</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Once we have a Koalas DataFrame, we can use <code>.query()</code> much like for a Pandas DataFrame</p>
+<p>Once we have a Koalas DataFrame, we can use <code>.query()</code> much like for a Pandas DataFrame to build our filters.</p>
 </section>
 </section>
 <section id="connecting-with-sparklyr-for-r-users" class="level2" data-number="4.10">
@@ -530,6 +530,7 @@ Spark Cluster JupyterLab vs.&nbsp;Spark Apps
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>master <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">"spark://master:"</span>, port, <span class="at">sep =</span> <span class="st">''</span>)</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">=</span> <span class="fu">spark_connect</span>(master)</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Once we are connected, then we can run a SparkSQL query as follows.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>retrieve_sql <span class="ot">&lt;-</span> <span class="st">'select .... from .... '</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">dbGetQuery</span>(sc, retrieve_sql)</span>

@@ -180,9 +180,7 @@ When you start up Spark JupyterLab, you will see that it will open at a particul
 
 Note that the Spark UI is not launched until you connect to Spark or Hail. 
 
-The Spark UI is really helpful in understanding how Spark translates a series of operations into a Plan, and how it executes that plan. 
-
-
+The Spark UI is really helpful in understanding how Spark translates a series of operations into a Plan, and how it executes that plan. Certain operations must be carried out on the entire partitioned dataset, so will take more individual tasks to accomplish.
 
 ## Spark and Lazy Evaluation
 
@@ -237,8 +235,6 @@ retrieve_sql = 'select .... from .... '
 df = spark.sql(retrieve_sql)
 ```
 
-
-
 ### Koalas is the Pandas version of Spark
 
 If you are familiar with Pandas, the Koalas module (from Databricks) provides a Pandas-like interface to SparkSQL queries. This way, you don't have to execute native Spark commands or SparkSQL queries. 
@@ -250,7 +246,7 @@ import koalas as ks
 df_koalas = df.to_koalas()
 ```
 
-Once we have a Koalas DataFrame, we can use `.query()` much like for a Pandas DataFrame
+Once we have a Koalas DataFrame, we can use `.query()` much like for a Pandas DataFrame to build our filters.
 
 ## Connecting with `sparklyr` (For R Users)
 
@@ -263,6 +259,8 @@ port <- Sys.getenv("SPARK_MASTER_PORT")
 master <- paste("spark://master:", port, sep = '')
 sc = spark_connect(master)
 ```
+
+Once we are connected, then we can run a SparkSQL query as follows.
 
 ```{{r}}
 retrieve_sql <- 'select .... from .... '
