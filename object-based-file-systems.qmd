@@ -127,9 +127,17 @@ Copying has an important definition on the platform: *it means copying a file fr
 
 When we copy a file from one project to another, the process doesn't make a new physical copy. The reference to the original file is copied. The data is identical and points to the same location on the platform, and the metadata is copied to the new project.
 
-This is quite nice in that you are not doubly charged for storage on the platform. You do have the ability to [clone files](https://documentation.dnanexus.com/developer/api/data-containers/cloning#specification) into a different project - if you clone a file, a new physical copy of the data is created.  
+This is quite nice in that you are not doubly charged for storage on the platform. 
 
 One important point: once the metadata is copied into the new project, there is no syncing of the metadata between the two projects. User 1 is free to modify the metadata in Project A (the original project) and changes are not made to the metadata in Project B (the derived project). 
+
+:::{.callout-note}
+## What about cloning?
+
+The documentation talks about [cloning files](https://documentation.dnanexus.com/developer/api/data-containers/cloning#specification) into a different project - if you clone a file, it makes a new copy of the *metadata*. It does not create a new physical copy of the data.
+
+Copying files actually uses the `dx api file-XXXXX/clone` functionality underneath.
+:::
 
 :::{.callout-note}
 ## Regions on the DNAnexus Platform
@@ -220,7 +228,7 @@ Let's do something concrete and useful in our project: tag files we no longer ne
 
 Say there are files we want to archive. We can use `dx tag` or the DNAnexus UI to tag these files with a specific tag, such as `to_archive`. This can be done by users.
 
-An administrator can then run a monthly job that archives the files with these tags using `dx api <project-id> archive --tag to_archive`.
+An administrator can then run a monthly job that archives the files with these tags first selecting these files with `dx find files --tag to_archive` and [piping those file ids](https://laderast.github.io/bash_for_bioinformatics/05-batch-processing.html#sec-xargs2) into a `dx api <project-id> archive <file-id>` command.
 
 ## What about dxFUSE?
 
@@ -232,9 +240,6 @@ In short, dxFUSE makes the Object Based Filesystem of DNAnexus act like a POSIX 
 
 One important thing to remember: dxFUSE is only mounted once when you start the JupyterLab App. You will have to use the `dxfuse` command to remount it to see any files you've added to project storage after opening JupyterLab.
 
-```
-dxfuse -
-```
 
 ## Best Practice: Use dxFUSE file paths in your scripts
 
@@ -242,10 +247,11 @@ Given the ability to stream data from project storage, you might ask how to use 
 
 You can specify file paths in a project using `/mnt/project/` in your scripts.
 
-Here's an example:
+Here's a python example where we're loading a file called `penguins.csv` that is in the `/data/` folder in our project.
 
 ```
-
+import pandas as pd
+pd.read_csv("/mnt/project/data/penguins.csv")
 ```
 
 ### dxFUSE: `-limitedWrite`
@@ -258,5 +264,5 @@ dxfuse -limitedWrite
 
 Once you have remounted with `-limitedWrite`, you'll be able to specify `file:///mnt/project` urls in your `.write()` command. This is especially useful when calculating and saving BGEN Index files.
 
-We don't recommend using this with files that are outside of HDFS. It is mostly helpful when you are working with Hail and Spark and want to get results out of them. 
+We don't recommend using this with files that are outside of HDFS. It is mostly helpful when you are working with Hail and Spark and want to get results out of the Spark Cluster. 
 
