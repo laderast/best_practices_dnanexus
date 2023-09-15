@@ -492,6 +492,9 @@ project-GJ496B00FZfxPV5VG36FybvY:file-FpQKQk00FgkGV3Vb3jJ8xqGV
 <p>Let’s do something concrete and useful in our project: tag files we no longer need for archiving.</p>
 <p>Say there are files we want to archive. We can use <code>dx tag</code> or the DNAnexus UI to tag these files with a specific tag, such as <code>to_archive</code>. This can be done by users.</p>
 <p>An administrator can then run a monthly job that archives the files with these tags first selecting these files with <code>dx find files --tag to_archive</code> and <a href="https://laderast.github.io/bash_for_bioinformatics/05-batch-processing.html#sec-xargs2">piping those file ids</a> into a <code>dx api &lt;project-id&gt; archive &lt;file-id&gt;</code> command.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">dx</span> find data <span class="at">--tag</span> <span class="st">"to_archive"</span> <span class="at">--brief</span> <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-I%</span> sh <span class="at">-c</span> <span class="st">"dx api &lt;projectid&gt; archive %"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="what-about-dxfuse" class="level2" data-number="1.12">
 <h2 data-number="1.12" class="anchored" data-anchor-id="what-about-dxfuse"><span class="header-section-number">1.12</span> What about dxFUSE?</h2>

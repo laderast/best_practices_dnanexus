@@ -230,6 +230,13 @@ Say there are files we want to archive. We can use `dx tag` or the DNAnexus UI t
 
 An administrator can then run a monthly job that archives the files with these tags first selecting these files with `dx find files --tag to_archive` and [piping those file ids](https://laderast.github.io/bash_for_bioinformatics/05-batch-processing.html#sec-xargs2) into a `dx api <project-id> archive <file-id>` command.
 
+```{bash}
+#| eval: false
+
+dx find data --tag "to_archive" --brief | xargs -I% sh -c "dx api <projectid> archive %"
+```
+
+
 ## What about dxFUSE?
 
 (See [Bash for Bioinformatics](https://laderast.github.io/bash_for_bioinformatics/04-doing-work-with-dx-run.html#sec-dxfuse) for a introduction to dxFUSE.)

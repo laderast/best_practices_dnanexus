@@ -592,7 +592,7 @@
     "href": "object-based-file-systems.html#best-practice-use-tags-for-archiving",
     "title": "1  Object Based File Systems",
     "section": "1.11 Best Practice: Use tags for archiving",
-    "text": "1.11 Best Practice: Use tags for archiving\nLet’s do something concrete and useful in our project: tag files we no longer need for archiving.\nSay there are files we want to archive. We can use dx tag or the DNAnexus UI to tag these files with a specific tag, such as to_archive. This can be done by users.\nAn administrator can then run a monthly job that archives the files with these tags first selecting these files with dx find files --tag to_archive and piping those file ids into a dx api &lt;project-id&gt; archive &lt;file-id&gt; command."
+    "text": "1.11 Best Practice: Use tags for archiving\nLet’s do something concrete and useful in our project: tag files we no longer need for archiving.\nSay there are files we want to archive. We can use dx tag or the DNAnexus UI to tag these files with a specific tag, such as to_archive. This can be done by users.\nAn administrator can then run a monthly job that archives the files with these tags first selecting these files with dx find files --tag to_archive and piping those file ids into a dx api &lt;project-id&gt; archive &lt;file-id&gt; command.\n\ndx find data --tag \"to_archive\" --brief | xargs -I% sh -c \"dx api &lt;projectid&gt; archive %\""
   },
   {
     "objectID": "object-based-file-systems.html#best-practice-use-dxfuse-file-paths-in-your-scripts",
