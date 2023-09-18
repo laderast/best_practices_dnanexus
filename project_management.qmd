@@ -125,7 +125,7 @@ Copying has very specific definition on the DNAnexus platform: **it means copyin
 
 When we copy a file from one project to another, a new physical copy is not made. The reference to the original file is copied. The data is identical and points to the same location on the platform, and the metadata is copied to the new project.
 
-This is quite nice in that you are not doubly charged for storage on the platform within your org. You do have the ability to [clone files](https://documentation.dnanexus.com/developer/api/data-containers/cloning#specification) into a different project - that way a new physical copy of the data is created.   
+This is quite nice in that you are not doubly charged for storage on the platform within your org.    
 
 :::{.callout-note}
 ## A Metadata Multiverse
