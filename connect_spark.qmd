@@ -1,0 +1,109 @@
+---
+title: "Connecting and Querying Spark using PySpark"
+---
+
+In this chapter, we'll explore Spark databases using the Spark JupyterLab instances on the platform. 
+
+## Who this chapter is for
+
+- You are a *bioinformatician* new to Spark and want to understand how it is implemented on the DNAnexus platform
+- You are a clinical informatician and you want to understand how the phenotypic data is stored and retrieved from Spark to optimize your queries.
+
+
+## Prerequisites
+
+You'll need the following:
+
+- Spark JupyterLab with 4 nodes (I usually use `mem1_ssd1_v2_x4` instances)
+- Access to Pheno Data, either on the UK Biobank Research Analysis Platform, or on the Core DNAnexus platform (requires access to Apollo).
+
+## Connecting with `PySpark` (For Python Users)
+
+The first thing we'll do to connect to the Spark database is connect to it by starting a Spark Session. Make sure you only do this once. If you try to connect twice, Spark will throw an error. 
+
+If this happens, make sure to restart your notebook kernel.
+
+```{{python}}
+import pyspark
+sc = pyspark.SparkContext()
+spark = pyspark.sql.SparkSession(sc)
+```
+
+### Open Your Spark UI
+
+In addition to our Jupyter Notebook, we will also open up the Spark UI at our job-URL https://job-URL:8081/ - this is the interface that will let us understand how Spark is executing our queries over our data partitions. 
+
+### Running SparkSQL Queries in PySpark
+
+The basic template for running Spark Queries is this:
+
+```{{python}}
+retrieve_sql = 'select .... from .... '
+df = spark.sql(retrieve_sql)
+df.collect()
+```
+
+We first specify our SparkSQL statement as `retrieve_sql`. 
+
+### Listing Databases
+
+```{{python}}
+retrieve_sql = 'show databases'
+spark.sql(retrieve_sql)
+```
+
+
+
+## Creating a Database
+
+We can create a database using `CREATE DATABASE <db_name>`, where `db_name` is the name we want to name a database. 
+
+Actually, the most safe way is to use `CREATE DATABASE <db_name> IF NOT EXISTS`, since if our database name already exists, it won't throw an error.
+
+Creating a database will create a database object in the current project. These are created as type `record`. 
+
+## Creating a Table in our Database
+
+We can create a Table in our database using `CREATE TABLE`. 
+
+The alternate way to create a table is using `dnax://database-id/table_name` in Hail as our file location within our `MatrixTable.write()` method.
+
+
+### Koalas is the Pandas version of Spark
+
+If you are familiar with Pandas, the Koalas module (from Databricks) provides a Pandas-like interface to SparkSQL queries. This way, you don't have to execute native Spark commands or SparkSQL queries. 
+
+Once you have a Spark DataFrame, you can convert it to a Koalas one by using the `.to_koalas()` method. 
+
+```{{python}}
+import koalas as ks
+df_koalas = df.to_koalas()
+```
+
+Once we have a Koalas DataFrame, we can use `.query()` much like for a Pandas DataFrame to build our filters.
+
+```{{python}}
+
+
+```
+
+
+## Connecting with `sparklyr` (For R Users)
+
+You'll need to install the package `sparklyr` along with its dependencies to work with the Spark DataFrames directly with R.
+
+```{{r}}
+library(DBI)
+library(sparklyr)
+port <- Sys.getenv("SPARK_MASTER_PORT")
+master <- paste("spark://master:", port, sep = '')
+sc = spark_connect(master)
+```
+
+Once we are connected, then we can run a SparkSQL query as follows.
+
+```{{r}}
+retrieve_sql <- 'select .... from .... '
+df = dbGetQuery(sc, retrieve_sql)
+```
+

@@ -1,0 +1,18 @@
+---
+title: "Working with BiocHail in R"
+---
+
+```{r setup}
+library(BiocHail)
+library(ggplot2)
+```
+
+```{r}
+#BiocHail::hail_init_simple()
+
+hl <- reticulate::import("hail")
+```
+
+```{r}
+hl$
+```
